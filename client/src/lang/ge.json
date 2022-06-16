@@ -1,0 +1,21 @@
+{
+    "auth.sign.header.in": "Შებრძანდით",
+    "auth.sign.header.up": "Ახალი მომხმარებელი",
+    "auth.sign.label.email": "ფოსტა",
+    "auth.sign.label.password": "პაროლი",
+    "auth.sign.label.name": "სახელი",
+    "auth.sign.button.confirm": "დაადასტურეთ",
+    "auth.sign.validation.required.email": "თქვენი ელფოსტა აუცილებელია",
+    "auth.sign.validation.required.password": "თქვენი პაროლი საჭიროა",
+    "autn.sign.validation.required.name": "თქვენი სახელი აუცილებელია",
+    "auth.sign.validation.valid.email": "ელფოსტა არასწორია",
+    "auth.sign.validation.min.password": "პაროლი უნდა შედგებოდეს მინიმუმ 3 სიმბოლოსგან",
+    "nav.sign.in": "Შებრძანდით",
+    "nav.sign.up": "დარეგისტრირდით",
+    "nav.sign.out": "Სისტემიდან გამოსვლა",
+    "server.error.auth.auth": "ავტორიზაციის შეცდომა",
+    "server.error.forbidden.email": "ამ ელფოსტამ მიიღო",
+    "server.error.forbidden.name": "ეს სახელი მიიღო",
+    "server.error.server.server": "შეცდომის სერვერი",
+    "server.error.auth.data": "არასწორი ელექტრონული ფოსტა ან პაროლი"
+}

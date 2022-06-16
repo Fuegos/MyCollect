@@ -1,10 +1,11 @@
 import { Grid, Button, LinearProgress, Box, Typography } from '@mui/material'
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from 'react-redux'
-import { signUpUserAsync, clearErrorMessage } from '../redux/authUserSlice'
+import { signUpUserAsync, clearErrorType } from '../redux/authUserSlice'
 import ErrorAlert from '../../errors/ErrorAlert'
 import { signUpYupResolver } from '../validation/authUserValidation'
 import TextFieldController from '../../components/TextFieldController'
+import { FormattedMessage } from 'react-intl'
 
 export default function SignUp() {
 
@@ -22,7 +23,7 @@ export default function SignUp() {
 
     const isProccess = useSelector(state => state.authUser.isProccess)
 
-    const errorMessage = useSelector(state => state.authUser.errorMessage)
+    const errorType = useSelector(state => state.authUser.errorType)
 
     const signUp = data => {
         dispatch(signUpUserAsync(data))
@@ -34,12 +35,15 @@ export default function SignUp() {
                 <Grid container rowSpacing={2}>
                     <Grid item xs={12}>
                         <Typography variant="h4" gutterBottom component="div">
-                            New User
+                            <FormattedMessage
+                                id="auth.sign.header.up"
+                                defaultMessage="Sign Up"
+                            />
                         </Typography>
                     </Grid>
                     <ErrorAlert
-                        errorMessage={errorMessage}  
-                        clearErrorMessage={clearErrorMessage}
+                        errorType={errorType}  
+                        clearErrorType={clearErrorType}
                     />
                     <Grid item xs={12}>
                         <TextFieldController 
@@ -47,7 +51,10 @@ export default function SignUp() {
                             control={control}
                             defaultValue={defaultValues.name}
                             error={errors.name}
-                            label="Name"
+                            label={<FormattedMessage
+                                id="auth.sign.label.name"
+                                defaultMessage="Name"
+                            />}
                             variant="outlined"
                             fullWidth
                         />
@@ -58,7 +65,10 @@ export default function SignUp() {
                             control={control}
                             defaultValue={defaultValues.email}
                             error={errors.email}
-                            label="Email"
+                            label={<FormattedMessage
+                                id="auth.sign.label.email"
+                                defaultMessage="Email"
+                            />}
                             variant="outlined"
                             fullWidth
                         />
@@ -69,7 +79,10 @@ export default function SignUp() {
                             control={control}
                             defaultValue={defaultValues.password}
                             error={errors.password}
-                            label="Password"
+                            label={<FormattedMessage
+                                id="auth.sign.label.password"
+                                defaultMessage="Password"
+                            />}
                             variant="outlined"
                             type="password"
                             fullWidth
@@ -84,7 +97,10 @@ export default function SignUp() {
                                 type="submit"
                                 variant="contained"
                             >
-                                Confirm
+                                <FormattedMessage
+                                    id="auth.sign.button.confirm"
+                                    defaultMessage="Confirm"
+                                />
                             </Button>  
                         }
                     </Grid>

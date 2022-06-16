@@ -1,0 +1,21 @@
+{
+    "auth.sign.header.in": "Увійти",
+    "auth.sign.header.up": "Новий користувач",
+    "auth.sign.label.email": "Електронна адреса",
+    "auth.sign.label.password": "Пароль",
+    "auth.sign.label.name": "Ім'я",
+    "auth.sign.button.confirm": "Затверджувати",
+    "auth.sign.validation.required.email": "Введіть вашу електронну адресу",
+    "auth.sign.validation.required.password": "Введіть ваш пароль",
+    "autn.sign.validation.required.name": "Укажіть ваше ім’я",
+    "auth.sign.validation.valid.email": "Електронна адреса недійсна",
+    "auth.sign.validation.min.password": "Пароль має містити щонайменше 3 символи",
+    "nav.sign.in": "Увійти ",
+    "nav.sign.up": "Зареєструватися",
+    "nav.sign.out": "Вийти",
+    "server.error.auth.auth": "Помилка автентифікації",
+    "server.error.forbidden.email": "Ця електронна адреса зайнява",
+    "server.error.forbidden.name": "Це ім'я зайняло",
+    "server.error.server.server": "Помилка сервера",
+    "server.error.auth.data": "Невірна адреса електронної пошти або пароль"
+}

@@ -8,7 +8,7 @@ export const signUpUserAsync = createAsyncThunk(
         try {
             return await (await axios.post('/api/auth/sign/up', user)).data
         } catch(e) {
-            return rejectWithValue({ message: e.response.data.message})
+            return rejectWithValue({ type: e.response.data.type})
         }
     }
 )
@@ -24,7 +24,7 @@ export const checkTokenUserAsync = createAsyncThunk(
             }
             return await (await axios.get('/api/auth/token', token)).data
         } catch(e) {
-            return rejectWithValue({ message: e.response.data.message})
+            return rejectWithValue({ type: e.response.data.type})
         }
     }
 )
@@ -40,7 +40,7 @@ export const signInUserAsync = createAsyncThunk(
                 }
             })).data
         } catch(e) {
-            return rejectWithValue({ message: e.response.data.message})
+            return rejectWithValue({ type: e.response.data.type})
         }
     }
 )
@@ -51,12 +51,12 @@ export const authUserSlice = createSlice({
         email: "",
         name: "",
         isAuth: false,
-        errorMessage: "",
+        errorType: "",
         isProccess: false
     }, 
     reducers: {
-        clearErrorMessage: (state, action) => {
-            state.errorMessage = ""
+        clearErrorType: (state, action) => {
+            state.errorType = ""
         },
         signOutUser: (state, action) => {
             localStorage.removeItem("token")
@@ -72,7 +72,7 @@ export const authUserSlice = createSlice({
             state.isProccess = false
         },
         [signUpUserAsync.rejected]: (state, action) => {
-            state.errorMessage = action.payload.message
+            state.errorType = action.payload.type
             state.isProccess = false
         },
         [signUpUserAsync.pending]: (state, action) => {
@@ -93,7 +93,7 @@ export const authUserSlice = createSlice({
             state.isProccess = false
         },
         [signInUserAsync.rejected]: (state, action) => {
-            state.errorMessage = action.payload.message
+            state.errorType = action.payload.type
             state.isProccess = false
         },
         [signInUserAsync.pending]: (state, action) => {
@@ -102,6 +102,6 @@ export const authUserSlice = createSlice({
     }
 })
 
-export const { clearErrorMessage, signOutUser } = authUserSlice.actions
+export const { clearErrorType, signOutUser } = authUserSlice.actions
 
 export default authUserSlice.reducer

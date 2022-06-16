@@ -1,13 +1,14 @@
 import { Grid, IconButton, Alert, Collapse } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { useDispatch } from 'react-redux'
+import { FormattedMessage } from 'react-intl'
 
 
 export default function ErrorAlert(props) {
     const dispatch = useDispatch()
 
-    const isError = props.errorMessage !== ""
-    const message = props.errorMessage
+    const isError = props.errorType !== ""
+    const errorType = props.errorType
 
     return(
         isError &&
@@ -21,7 +22,7 @@ export default function ErrorAlert(props) {
                             color="inherit"
                             size="small"
                             onClick={() => {
-                                dispatch(props.clearErrorMessage())
+                                dispatch(props.clearErrorType())
                             }}
                         >
                             <CloseIcon fontSize="inherit" />
@@ -29,7 +30,10 @@ export default function ErrorAlert(props) {
                     }
                     sx={{ mb: 2 }}
                 >
-                    {message}
+                    <FormattedMessage
+                        id={errorType}
+                        defaultMessage="Wrong"
+                    />
                 </Alert>
             </Collapse>
         </Grid>

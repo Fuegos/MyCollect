@@ -1,10 +1,11 @@
 import { Grid, Button, LinearProgress, Box, Typography } from '@mui/material'
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from 'react-redux'
-import { clearErrorMessage, signInUserAsync } from '../redux/authUserSlice'
+import { clearErrorType, signInUserAsync } from '../redux/authUserSlice'
 import ErrorAlert from '../../errors/ErrorAlert'
 import { signInYupResolver } from '../validation/authUserValidation'
 import TextFieldController from '../../components/TextFieldController'
+import { FormattedMessage } from 'react-intl'
 
 export default function SignIn() {
     
@@ -21,7 +22,7 @@ export default function SignIn() {
 
     const isProccess = useSelector(state => state.authUser.isProccess)
 
-    const errorMessage = useSelector(state => state.authUser.errorMessage)
+    const errorType = useSelector(state => state.authUser.errorType)
 
     const signIn = data => {
         dispatch(signInUserAsync(data))
@@ -33,12 +34,15 @@ export default function SignIn() {
                 <Grid container rowSpacing={2}>
                     <Grid item xs={12}>
                         <Typography variant="h4" gutterBottom component="div">
-                            Sign In
+                            <FormattedMessage
+                                id="auth.sign.header.in"
+                                defaultMessage="Sign In"
+                            />
                         </Typography>
                     </Grid>
                     <ErrorAlert
-                        errorMessage={errorMessage}  
-                        clearErrorMessage={clearErrorMessage}
+                        errorType={errorType}  
+                        clearErrorType={clearErrorType}
                     />
                     <Grid item xs={12}>
                         <TextFieldController 
@@ -46,7 +50,10 @@ export default function SignIn() {
                             control={control}
                             defaultValue={defaultValues.email}
                             error={errors.email}
-                            label="Email"
+                            label={<FormattedMessage
+                                id="auth.sign.label.email"
+                                defaultMessage="Email"
+                            />}
                             variant="outlined"
                             fullWidth
                         />
@@ -57,7 +64,10 @@ export default function SignIn() {
                             control={control}
                             defaultValue={defaultValues.password}
                             error={errors.password}
-                            label="Password"
+                            label={<FormattedMessage
+                                id="auth.sign.label.password"
+                                defaultMessage="Password"
+                            />}
                             variant="outlined"
                             type="password"
                             fullWidth
@@ -72,7 +82,10 @@ export default function SignIn() {
                                 type="submit"
                                 variant="contained"
                             >
-                                Confirm
+                                <FormattedMessage
+                                    id="auth.sign.button.confirm"
+                                    defaultMessage="Confirm"
+                                />
                             </Button>  
                         }
                     </Grid>

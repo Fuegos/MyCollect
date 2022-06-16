@@ -1,0 +1,21 @@
+{
+    "auth.sign.header.in": "Sign In",
+    "auth.sign.header.up": "New User",
+    "auth.sign.label.email": "Email",
+    "auth.sign.label.password": "Password",
+    "auth.sign.label.name": "Name",
+    "auth.sign.button.confirm": "Confirm",
+    "auth.sign.validation.required.email": "Your email is required",
+    "auth.sign.validation.required.password": "Your password is required",
+    "autn.sign.validation.required.name": "Your name is required",
+    "auth.sign.validation.valid.email": "Email is invalid",
+    "auth.sign.validation.min.password": "Password must be at least 3 characters",
+    "nav.sign.in": "Sign In",
+    "nav.sign.up": "Sign Up",
+    "nav.sign.out": "Sign Out",
+    "server.error.auth.auth": "Error authentication",
+    "server.error.forbidden.email": "This email has took",
+    "server.error.forbidden.name": "This name has took",
+    "server.error.server.server": "Error server",
+    "server.error.auth.data": "Invalid email or password"
+}

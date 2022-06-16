@@ -5,6 +5,9 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { signOutUser } from '../authUser/redux/authUserSlice'
+import SelectorLand from '../lang/components/SelectorLang'
+import { FormattedMessage } from 'react-intl'
+
 
 export default function NavigationApp() {
     const navigate = useNavigate()
@@ -23,7 +26,10 @@ export default function NavigationApp() {
                             onClick={() => navigate('auth/sign/in')}
                             fullWidth
                         >
-                            Sign In
+                            <FormattedMessage
+                                id="nav.sign.in"
+                                defaultMessage="Sign In"
+                            />
                         </Button>
                     </Box>
                     <Box sx={{ flexGrow: 1, display: {  md: 'flex' } }}>
@@ -33,8 +39,14 @@ export default function NavigationApp() {
                             onClick={() => navigate('auth/sign/up')}
                             fullWidth
                         >
-                            Sign Up
+                            <FormattedMessage
+                                id="nav.sign.up"
+                                defaultMessage="Sign Up"
+                            />
                         </Button>
+                    </Box>
+                    <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
+                        <SelectorLand />
                     </Box>
                 </Toolbar>
             )
@@ -51,8 +63,14 @@ export default function NavigationApp() {
                             }}
                             fullWidth
                         >
-                            Sign Out
+                            <FormattedMessage
+                                id="nav.sign.out"
+                                defaultMessage="Sign Out"
+                            />
                         </Button>
+                    </Box>
+                    <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
+                        <SelectorLand />
                     </Box>
                 </Toolbar>
             )

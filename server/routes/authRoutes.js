@@ -9,10 +9,24 @@ require('dotenv').config()
 
 const router = express.Router()
 
-const CODE_ERRORS = {
-    "auth": 401,
-    "forbidden": 403,
-    "server": 500  
+const CODE_ERROR = {
+    auth: 401,
+    forbidden: 403,
+    server: 500  
+}
+
+const ERROR = {
+    auth: 'auth',
+    forbidden: 'forbidden',
+    server: 'server'
+}
+
+const SUBJECT = {
+    auth: 'auth',
+    email: 'email',
+    data: 'data',
+    name: 'name',
+    server: 'server'
 }
 
 const getUserByName = async name => await User.findOne({ name })
@@ -25,7 +39,7 @@ const setDateLoginUser = async user => await User.findByIdAndUpdate(user._id, {d
 
 const comparePassword = async user => await bcrypt.hash(user.password, 10)
 
-const sendErrorToClient = (res, error, message) => res.status(CODE_ERRORS[error]).json({ message })
+const sendErrorToClient = (res, error, type) => res.status(error).json({ type: `server.error.${type}` })
 
 const authenticateUser = (res, user) => {
     const payload = {
@@ -39,7 +53,7 @@ const authenticateUser = (res, user) => {
         (err, token) => {
             if(err) {
                 console.error(err)
-                return sendErrorToClient(res, 'auth', 'Error authentication')
+                return sendErrorToClient(res, CODE_ERROR.auth, `${ERROR.auth}.${SUBJECT.auth}`)
             }
             return res.json({
                 email: user.email,
@@ -54,10 +68,10 @@ router.post('/api/auth/sign/up', async (req, res) => {
     try {
         const user = req.body
         if(await getUserByName(user.name)) {
-            return sendErrorToClient(res, 'forbidden', 'This name has took')
+            return sendErrorToClient(res, CODE_ERROR.forbidden, `${ERROR.forbidden}.${SUBJECT.name}`)
         }
         if(await getUserByEmail(user.email)) {
-            return sendErrorToClient(res, 'forbidden', 'This email has took')
+            return sendErrorToClient(res, CODE_ERROR.forbidden, `${ERROR.forbidden}.${SUBJECT.email}`)
         }
         user.password = await comparePassword(user)
         User.create(user).then(createdUser => {
@@ -66,7 +80,7 @@ router.post('/api/auth/sign/up', async (req, res) => {
         })
     } catch(e) {
         console.error(e)
-        return sendErrorToClient(res, 'server', 'Error server')
+        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
     }
 })
 
@@ -76,22 +90,22 @@ router.get('/api/auth/token', (req, res) => {
         if(token) {
             jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
                 if(err) {
-                    return sendErrorToClient(res, 'auth', 'Error authentication')
+                    return sendErrorToClient(res, CODE_ERROR.auth, `${ERROR.auth}.${SUBJECT.auth}`)
                 }
                 const user = await getUserById(decoded.id)
                 if(user) {
                     setDateLoginUser(user)
                     return authenticateUser(res, user)
                 } else {
-                    return sendErrorToClient(res, 'auth', 'Error authentication')
+                    return sendErrorToClient(res, CODE_ERROR.auth, `${ERROR.auth}.${SUBJECT.auth}`)
                 }
             })
         } else {
-            return sendErrorToClient(res, 'auth', 'Error authentication')
+            return sendErrorToClient(res, CODE_ERROR.auth, `${ERROR.auth}.${SUBJECT.auth}`)
         }
     } catch(e) {
         console.error(e)
-        return sendErrorToClient(res, 'server', 'Error server')
+        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
     }
 })
 
@@ -100,18 +114,18 @@ router.get('/api/auth/sign/in', async (req, res) => {
         const userParams = req.query
         const user = await getUserByEmail(userParams.email)
         if(!user) {
-            return sendErrorToClient(res, 'auth', 'Invalid email or password')
+            return sendErrorToClient(res, CODE_ERROR.auth, `${ERROR.auth}.${SUBJECT.data}`)
         }
         bcrypt.compare(userParams.password, user.password).then(result => {
             if(!result) {
-                return sendErrorToClient(res, 'auth', 'Invalid email or password')
+                return sendErrorToClient(res, CODE_ERROR.auth, `${ERROR.auth}.${SUBJECT.data}`)
             }
             setDateLoginUser(user)
             return authenticateUser(res, user)
         })
     } catch(e) {
         console.error(e)
-        return sendErrorToClient(res, 'server', 'Error server')
+        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
     }
 })
 
