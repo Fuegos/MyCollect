@@ -13,6 +13,7 @@
     "nav.sign.in": "Შებრძანდით",
     "nav.sign.up": "დარეგისტრირდით",
     "nav.sign.out": "Სისტემიდან გამოსვლა",
+    "nav.theme": "მუქი რეჟიმი",
     "server.error.auth.auth": "ავტორიზაციის შეცდომა",
     "server.error.forbidden.email": "ამ ელფოსტამ მიიღო",
     "server.error.forbidden.name": "ეს სახელი მიიღო",

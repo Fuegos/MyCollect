@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { signOutUser } from '../authUser/redux/authUserSlice'
 import SelectorLand from '../lang/components/SelectorLang'
+import SelectorThemeMode from '../themeMode/components/SelectorThemeMode'
 import { FormattedMessage } from 'react-intl'
 
 
@@ -48,6 +49,9 @@ export default function NavigationApp() {
                     <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
                         <SelectorLand />
                     </Box>
+                    <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
+                        <SelectorThemeMode />
+                    </Box>
                 </Toolbar>
             )
         } else {
@@ -72,11 +76,13 @@ export default function NavigationApp() {
                     <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
                         <SelectorLand />
                     </Box>
+                    <Box sx={{ flexGrow: 1, display: { md: 'flex' } }}>
+                        <SelectorThemeMode />
+                    </Box>
                 </Toolbar>
             )
         }
     }
-
 
     return (
         <AppBar position="static">

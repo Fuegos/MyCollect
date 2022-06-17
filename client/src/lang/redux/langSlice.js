@@ -1,12 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { langValues, langDefault } from '../data/dataLangs'
 
-const localLang = ['en', 'uk', 'ge'].includes(localStorage.getItem('lang')) 
-                    && localStorage.getItem('lang')
+const localLang = langValues.includes(localStorage.getItem('lang')) 
+    && localStorage.getItem('lang')
 
 export const langSlice = createSlice({
     name: 'lang',
     initialState: {
-        lang: localLang || 'en'
+        lang: localLang || langDefault
     },
     reducers: {
         choseLanguage: (state, action) => {

@@ -13,6 +13,7 @@
     "nav.sign.in": "Sign In",
     "nav.sign.up": "Sign Up",
     "nav.sign.out": "Sign Out",
+    "nav.theme": "Dark mode",
     "server.error.auth.auth": "Error authentication",
     "server.error.forbidden.email": "This email has took",
     "server.error.forbidden.name": "This name has took",

@@ -13,6 +13,7 @@
     "nav.sign.in": "Увійти ",
     "nav.sign.up": "Зареєструватися",
     "nav.sign.out": "Вийти",
+    "nav.theme": "Темний режим",
     "server.error.auth.auth": "Помилка автентифікації",
     "server.error.forbidden.email": "Ця електронна адреса зайнява",
     "server.error.forbidden.name": "Це ім'я зайняло",

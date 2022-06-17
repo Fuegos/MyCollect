@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl'
 const nameYup = Yup.string()
     .required(
         <FormattedMessage
-            id="auth.sign.validation.required.name"
+            id="autn.sign.validation.required.name"
             defaultMessage="Wrong"
         />
     )
