@@ -14,6 +14,8 @@
     "nav.sign.up": "Sign Up",
     "nav.sign.out": "Sign Out",
     "nav.theme": "Dark mode",
+    "nav.my.collections": "My Collections",
+    "nav.admin": "Admin Panel",
     "server.error.auth.auth": "Error authentication",
     "server.error.forbidden.email": "This email has took",
     "server.error.forbidden.name": "This name has took",
