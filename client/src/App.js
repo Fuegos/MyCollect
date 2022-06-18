@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material';
 import { langMessages } from './lang/data/dataLangs';
+import AdminPage from './admin/container/AdminPage';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
                     <Routes>
                         <Route path="auth/*" element={<AuthPage />}/>
                         <Route path="success" element={<PageSuccess />}/>
+                        <Route path="admin" element={<AdminPage />}/>
                         <Route path="*" element={<Navigate replace to="auth/sign/in" />}/>
                     </Routes>
                 </BrowserRouter>

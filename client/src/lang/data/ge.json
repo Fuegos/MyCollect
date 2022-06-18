@@ -20,5 +20,18 @@
     "server.error.forbidden.email": "ამ ელფოსტამ მიიღო",
     "server.error.forbidden.name": "ეს სახელი მიიღო",
     "server.error.server.server": "შეცდომის სერვერი",
-    "server.error.auth.data": "არასწორი ელექტრონული ფოსტა ან პაროლი"
+    "server.error.auth.data": "არასწორი ელექტრონული ფოსტა ან პაროლი",
+    "admin.table.header.email": "ფოსტა",
+    "admin.table.header.name": "სახელი",
+    "admin.table.header.date.login": "შესვლის თარიღი",
+    "admin.table.header.date.registration": "რეგისტრაციის თარიღი",
+    "admin.table.header.status": "სტატუსი",
+    "admin.table.header.role": "როლი",
+    "admin.toolbar.delete": "წაშლა",
+    "admin.toolbar.header": "მომხმარებლები",
+    "admin.toolbar.block": "ბლოკირება",
+    "admin.toolbar.unblock": "განბლოკვა",
+    "admin.toolbar.assign": "ადმინისტრატორის დანიშვნა",
+    "admin.toolbar.unassign": "ადმინისტრატორის მინიჭების გაუქმება",
+    "admin.toolbar.selected": "{num} შერჩეული"
 }

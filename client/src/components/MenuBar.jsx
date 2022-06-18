@@ -84,7 +84,9 @@ export default function MenuBar() {
         </MenuItem>
     
     const adminPanel = isAuth &&
-        <MenuItem>
+        <MenuItem
+            onClick={() => navigate('admin')}
+        >
             <ListItemIcon>
                 <AdminPanelSettingsIcon />
             </ListItemIcon>

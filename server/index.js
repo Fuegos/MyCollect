@@ -4,6 +4,7 @@ const path = require('path')
 const mongoose = require('mongoose')
 
 const authRoutes = require('./routes/authRoutes')
+const adminRoutes = require('./routes/adminRoutes')
 
 require('dotenv').config()
 
@@ -13,6 +14,7 @@ const urlencodeParser = bodyParser.urlencoded({ extended: false })
 app.use(bodyParser.json(), urlencodeParser);
 
 app.use("/", authRoutes)
+app.use("/", adminRoutes)
 
 app.use(express.static(path.join(__dirname, '../client', 'build')))
 
