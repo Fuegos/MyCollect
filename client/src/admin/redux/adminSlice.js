@@ -13,14 +13,51 @@ export const getUsersAsync = createAsyncThunk(
     }
 )
 
+export const changeStatusUsersAsync = createAsyncThunk(
+    'admin/users/change/status',
+    async ({users, status}, { rejectWithValue }) => {
+        try {
+            await axios.put(`/api/admin/users/status/${status}`, users)
+            return { users, status }
+        } catch(e) {
+            return rejectWithValue({ type: e.response.data.type})
+        }
+    }
+)
+
+export const changeRoleUsersAsync = createAsyncThunk(
+    'admin/users/change/role',
+    async ({users, role}, { rejectWithValue }) => {
+        try {
+            await axios.put(`/api/admin/users/role/${role}`, users)
+            return { users, role }
+        } catch(e) {
+            return rejectWithValue({ type: e.response.data.type})
+        }
+    }
+)
+
+export const deleteUsersAsync = createAsyncThunk(
+    'admin/users/delete',
+    async (users, { rejectWithValue }) => {
+        try {
+            await axios.delete(`/api/admin/users`, {data: users})
+            return users
+        } catch(e) {
+            return rejectWithValue({ type: e.response.data.type})
+        }
+    }
+)
+
 
 export const adminSlice = createSlice({
     name: 'admin',
     initialState: {
         users: [],
-        isProccess: false,
+        isProccessUsers: false,
         errorType: "",
-        selectedUsers: []
+        selectedUsers: [],
+        isProccessToolBar: false
     }, 
     reducers: {
         addSelectedUser: (state, action) => {
@@ -38,16 +75,61 @@ export const adminSlice = createSlice({
     },
     extraReducers: {
         [getUsersAsync.fulfilled]: (state, action) => {
-            state.isProccess = false
+            state.isProccessUsers = false
             state.users = action.payload
         },
         [getUsersAsync.rejected]: (state, action) => {
             state.errorType = action.payload.type
-            state.isProccess = false
+            state.isProccessUsers = false
         },
         [getUsersAsync.pending]: (state, action) => {
-            state.isProccess = true
-        }
+            state.isProccessUsers = true
+        },
+        [changeStatusUsersAsync.fulfilled]: (state, action) => {
+            state.isProccessToolBar = false
+            state.users = state.users.map(u => {
+                if(action.payload.users.some(p => p._id === u._id)) {
+                    u.status = action.payload.status
+                }
+                return u
+            })
+            state.selectedUsers = []
+        },
+        [changeStatusUsersAsync.rejected]: (state, action) => {
+            state.isProccessToolBar = false
+        },
+        [changeStatusUsersAsync.pending]: (state, action) => {
+            state.isProccessToolBar = true
+        },
+        [changeRoleUsersAsync.fulfilled]: (state, action) => {
+            state.isProccessToolBar = false
+            state.users = state.users.map(u => {
+                if(action.payload.users.some(p => p._id === u._id)) {
+                    u.role = action.payload.role
+                }
+                return u
+            })
+            state.selectedUsers = []
+        },
+        [changeRoleUsersAsync.rejected]: (state, action) => {
+            state.isProccessToolBar = false
+        },
+        [changeRoleUsersAsync.pending]: (state, action) => {
+            state.isProccessToolBar = true
+        },
+        [deleteUsersAsync.fulfilled]: (state, action) => {
+            state.isProccessToolBar = false
+            state.users = state.users.filter(
+                u => action.payload.every(p => p._id !== u._id)
+            )
+            state.selectedUsers = []
+        },
+        [deleteUsersAsync.rejected]: (state, action) => {
+            state.isProccessToolBar = false
+        },
+        [deleteUsersAsync.pending]: (state, action) => {
+            state.isProccessToolBar = true
+        },
     }
 })
 

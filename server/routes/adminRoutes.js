@@ -1,5 +1,6 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
+const mongoose = require('mongoose')
 
 const User = require('../models/user')
 const router = express.Router()
@@ -31,7 +32,52 @@ router.get('/api/admin/users', (req, res) => {
         User.find({}, "_id name email dateRegistration dateLogin status role").then(users => {
             return res.json(users)
         })
-    } catch {
+    } catch(e) {
+        console.error(e)
+        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
+    }
+})
+
+router.put('/api/admin/users/status/:status', (req, res) => {
+    try {
+        User.updateMany(
+            {
+                _id: {
+                    $in: req.body.map(u => u._id)
+                }
+            },
+            { status: req.params.status }
+        ).then(result => res.json(result))
+    } catch(e) {
+        console.error(e)
+        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
+    }
+})
+
+router.put('/api/admin/users/role/:role', (req, res) => {
+    try {
+        User.updateMany(
+            {
+                _id: {
+                    $in: req.body.map(u => u._id)
+                }
+            },
+            { role: req.params.role }
+        ).then(result => res.json(result))
+    } catch(e) {
+        console.error(e)
+        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
+    }
+})
+
+router.delete('/api/admin/users', (req, res) => {
+    try {
+        User.deleteMany({
+            _id: {
+                $in: req.body.map(u => u._id)
+            }
+        }).then(result => res.json(result))
+    } catch(e) {
         console.error(e)
         return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
     }

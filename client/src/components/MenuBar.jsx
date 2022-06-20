@@ -16,6 +16,7 @@ export default function MenuBar() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const isAuth = useSelector(state => state.authUser.isAuth)
+    const isAdmin = useSelector(state => state.authUser.isAdmin)
     
 
     const [anchorEl, setAnchorEl] = React.useState(null)
@@ -83,7 +84,7 @@ export default function MenuBar() {
             />
         </MenuItem>
     
-    const adminPanel = isAuth &&
+    const adminPanel = isAuth && isAdmin &&
         <MenuItem
             onClick={() => navigate('admin')}
         >

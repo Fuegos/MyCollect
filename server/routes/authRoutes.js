@@ -2,6 +2,7 @@ const express = require('express')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 
+
 const User = require('../models/user')
 //const verifyJWT = require('../verifyJWT')
 
@@ -58,6 +59,7 @@ const authenticateUser = (res, user) => {
             return res.json({
                 email: user.email,
                 name: user.name,
+                isAdmin: user.role === 'admin',
                 token: "Bearer " + token
             })
         }

@@ -51,6 +51,7 @@ export const authUserSlice = createSlice({
         email: "",
         name: "",
         isAuth: false,
+        isAdmin: false,
         errorType: "",
         isProccess: false
     }, 
@@ -68,6 +69,7 @@ export const authUserSlice = createSlice({
             localStorage.setItem("token", action.payload.token)
             state.email = action.payload.email
             state.name = action.payload.name
+            state.isAdmin = action.payload.isAdmin
             state.isAuth = true
             state.isProccess = false
         },
@@ -82,6 +84,7 @@ export const authUserSlice = createSlice({
         [checkTokenUserAsync.fulfilled]: (state, action) => {
             state.email = action.payload.email
             state.name = action.payload.name
+            state.isAdmin = action.payload.isAdmin
             state.isAuth = true
         },
 
@@ -89,6 +92,7 @@ export const authUserSlice = createSlice({
             localStorage.setItem("token", action.payload.token)
             state.email = action.payload.email
             state.name = action.payload.name
+            state.isAdmin = action.payload.isAdmin
             state.isAuth = true
             state.isProccess = false
         },

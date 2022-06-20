@@ -1,16 +1,20 @@
 import { alpha } from '@mui/material/styles'
-import { Toolbar, Typography, Tooltip, IconButton } from '@mui/material'
+import { Toolbar, Typography, Tooltip, IconButton, LinearProgress } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddModeratorIcon from '@mui/icons-material/AddModerator'
 import RemoveModeratorIcon from '@mui/icons-material/RemoveModerator'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { FormattedMessage } from 'react-intl'
+import { changeRoleUsersAsync, changeStatusUsersAsync, deleteUsersAsync } from '../redux/adminSlice';
 
 
 export default function ToolBar() {
     const numSelected = useSelector(state => state.admin.selectedUsers.length)
+    const selectedUsers = useSelector(state => state.admin.selectedUsers)
+    const isProccessToolBar = useSelector(state => state.admin.isProccessToolBar)
+    const dispatch = useDispatch()
 
     const deleteButton = numSelected > 0 &&
         <Tooltip 
@@ -21,7 +25,9 @@ export default function ToolBar() {
                 />
             }
         >
-            <IconButton>
+            <IconButton
+                onClick={() => dispatch(deleteUsersAsync(selectedUsers))}
+            >
                 <DeleteIcon />
             </IconButton>
         </Tooltip>
@@ -35,7 +41,13 @@ export default function ToolBar() {
                 />
             }
         >
-            <IconButton>
+            <IconButton
+                onClick={
+                    () => dispatch(changeStatusUsersAsync(
+                        { users: selectedUsers, status: 'blocked' }
+                    ))
+                }
+            >
                 <VisibilityOffIcon />
             </IconButton>
         </Tooltip>
@@ -49,7 +61,13 @@ export default function ToolBar() {
                 />
             }
         >
-            <IconButton>
+            <IconButton
+                onClick={
+                    () => dispatch(changeStatusUsersAsync(
+                        {users: selectedUsers, status: 'active'}
+                    ))
+                }
+            >
                 <VisibilityIcon />
             </IconButton>
         </Tooltip>
@@ -63,7 +81,13 @@ export default function ToolBar() {
                 />
             }
         >
-            <IconButton>
+            <IconButton
+                onClick={
+                    () => dispatch(changeRoleUsersAsync(
+                        { users: selectedUsers, role: 'admin' }
+                    ))
+                }
+            >
                 <AddModeratorIcon />
             </IconButton>
         </Tooltip>
@@ -77,11 +101,64 @@ export default function ToolBar() {
                 />
             }
         >
-            <IconButton>
+            <IconButton
+                onClick={
+                    () => dispatch(changeRoleUsersAsync(
+                        { users: selectedUsers, role: 'user' }
+                    ))
+                }
+            >
                 <RemoveModeratorIcon />
             </IconButton>
         </Tooltip>
 
+    const proccessToolBar = isProccessToolBar && 
+        <Typography
+            sx={{ flex: '1 1 100%' }}
+            color="inherit"
+            variant="subtitle1"
+            component="div"
+        >
+            <LinearProgress />
+        </Typography>
+        
+        
+
+    const toolBar = numSelected > 0 ? (
+        <>
+            <Typography
+                sx={{ flex: '1 1 100%' }}
+                color="inherit"
+                variant="subtitle1"
+                component="div"
+            >
+                <FormattedMessage
+                    id="admin.toolbar.selected"
+                    defaultMessage="{num} selected"
+                    values={{num: numSelected}}
+                />
+            </Typography>
+            {unblockButton}
+            {blockButton}
+            {assignAdminButton}
+            {unassignAdminButton}
+            {deleteButton}
+        </>
+    ) : (
+        <Typography
+            sx={{ flex: '1 1 100%' }}
+            variant="h6"
+            id="tableTitle"
+            component="div"
+        >
+            <FormattedMessage
+                id="admin.toolbar.header"
+                defaultMessage="Users"
+            />
+        </Typography>
+    )
+        
+    
     return (
         <Toolbar
             sx={{
@@ -93,37 +170,7 @@ export default function ToolBar() {
                 }),
             }}
         >
-            {numSelected > 0 ? (
-                <Typography
-                    sx={{ flex: '1 1 100%' }}
-                    color="inherit"
-                    variant="subtitle1"
-                    component="div"
-                >
-                    <FormattedMessage
-                        id="admin.toolbar.selected"
-                        defaultMessage="{num} selected"
-                        values={{num: numSelected}}
-                    />
-                </Typography>
-            ) : (
-                <Typography
-                    sx={{ flex: '1 1 100%' }}
-                    variant="h6"
-                    id="tableTitle"
-                    component="div"
-                >
-                    <FormattedMessage
-                        id="admin.toolbar.header"
-                        defaultMessage="Users"
-                    />
-                </Typography>
-            )}
-            {unblockButton}
-            {blockButton}
-            {assignAdminButton}
-            {unassignAdminButton}
-            {deleteButton}
+            { proccessToolBar || toolBar }
         </Toolbar>
     )
 }
