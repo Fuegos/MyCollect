@@ -3,11 +3,13 @@ import PageSuccess from './PageSuccess';
 import AuthPage from './authUser/container/AuthPage'
 import NavigationBar from './components/NavigationBar'
 import { IntlProvider } from "react-intl"
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material';
 import { langMessages } from './lang/data/dataLangs';
 import AdminPage from './admin/container/AdminPage';
+import { useEffect } from "react"
+import { checkTokenUserAsync } from "./authUser/redux/authUserSlice"
 
 
 function App() {
@@ -18,6 +20,12 @@ function App() {
             mode: themeMode
         }
     })
+
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(checkTokenUserAsync())
+    }, [])
     
     return (
         <IntlProvider locale={language} messages={langMessages[language]}>
@@ -29,7 +37,7 @@ function App() {
                         <Route path="auth/*" element={<AuthPage />}/>
                         <Route path="success" element={<PageSuccess />}/>
                         <Route path="admin" element={<AdminPage />}/>
-                        <Route path="*" element={<Navigate replace to="auth/sign/in" />}/>
+                        <Route path="*" element={<Navigate replace to="success" />}/>
                     </Routes>
                 </BrowserRouter>
             </ThemeProvider>

@@ -19,6 +19,8 @@
     "server.error.auth.auth": "ავტორიზაციის შეცდომა",
     "server.error.forbidden.email": "ამ ელფოსტამ მიიღო",
     "server.error.forbidden.name": "ეს სახელი მიიღო",
+    "server.error.forbidden.block": "დაბლოკილი ხარ",
+    "server.error.forbidden.admin": "ეს ქმედება აკრძალულია",
     "server.error.server.server": "შეცდომის სერვერი",
     "server.error.auth.data": "არასწორი ელექტრონული ფოსტა ან პაროლი",
     "admin.table.header.email": "ფოსტა",

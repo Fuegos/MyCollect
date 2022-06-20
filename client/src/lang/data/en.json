@@ -19,6 +19,8 @@
     "server.error.auth.auth": "Error authentication",
     "server.error.forbidden.email": "This email has took",
     "server.error.forbidden.name": "This name has took",
+    "server.error.forbidden.block": "You are blocked",
+    "server.error.forbidden.admin": "This action is forbidden",
     "server.error.server.server": "Error server",
     "server.error.auth.data": "Invalid email or password",
     "admin.table.header.email": "Email",

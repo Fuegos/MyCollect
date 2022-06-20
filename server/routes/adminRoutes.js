@@ -1,33 +1,15 @@
 const express = require('express')
 const bcrypt = require('bcrypt')
 const mongoose = require('mongoose')
-
 const User = require('../models/user')
 const router = express.Router()
+const { CODE_ERROR, ERROR, SUBJECT } = require('../error/dataError')
+const { sendErrorToClient } = require('../error/handlerError')
+const checkAdmin = require('../middleware/checkAdmin')
+const checkAuth = require('../middleware/checkAuth')
 
-const CODE_ERROR = {
-    auth: 401,
-    forbidden: 403,
-    server: 500  
-}
 
-const ERROR = {
-    auth: 'auth',
-    forbidden: 'forbidden',
-    server: 'server'
-}
-
-const SUBJECT = {
-    auth: 'auth',
-    email: 'email',
-    data: 'data',
-    name: 'name',
-    server: 'server'
-}
-
-const sendErrorToClient = (res, error, type) => res.status(error).json({ type: `server.error.${type}` })
-
-router.get('/api/admin/users', (req, res) => {
+router.get('/api/admin/users', checkAuth, checkAdmin, (req, res) => {
     try {
         User.find({}, "_id name email dateRegistration dateLogin status role").then(users => {
             return res.json(users)
@@ -38,7 +20,7 @@ router.get('/api/admin/users', (req, res) => {
     }
 })
 
-router.put('/api/admin/users/status/:status', (req, res) => {
+router.put('/api/admin/users/status/:status', checkAuth, checkAdmin, (req, res) => {
     try {
         User.updateMany(
             {
@@ -54,7 +36,7 @@ router.put('/api/admin/users/status/:status', (req, res) => {
     }
 })
 
-router.put('/api/admin/users/role/:role', (req, res) => {
+router.put('/api/admin/users/role/:role', checkAuth, checkAdmin, (req, res) => {
     try {
         User.updateMany(
             {
@@ -70,7 +52,7 @@ router.put('/api/admin/users/role/:role', (req, res) => {
     }
 })
 
-router.delete('/api/admin/users', (req, res) => {
+router.delete('/api/admin/users', checkAuth, checkAdmin, (req, res) => {
     try {
         User.deleteMany({
             _id: {

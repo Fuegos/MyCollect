@@ -1,46 +1,16 @@
 const express = require('express')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-
-
 const User = require('../models/user')
-//const verifyJWT = require('../verifyJWT')
-
 require('dotenv').config()
-
 const router = express.Router()
+const { CODE_ERROR, ERROR, SUBJECT } = require('../error/dataError')
+const { sendErrorToClient } = require('../error/handlerError')
+const { getUserByName, getUserByEmail, getUserById, setDateLoginUser } = require('../mongodb/queries')
 
-const CODE_ERROR = {
-    auth: 401,
-    forbidden: 403,
-    server: 500  
-}
-
-const ERROR = {
-    auth: 'auth',
-    forbidden: 'forbidden',
-    server: 'server'
-}
-
-const SUBJECT = {
-    auth: 'auth',
-    email: 'email',
-    data: 'data',
-    name: 'name',
-    server: 'server'
-}
-
-const getUserByName = async name => await User.findOne({ name })
-
-const getUserByEmail = async email => await User.findOne({ email })
-
-const getUserById = async id => await User.findById( id )
-
-const setDateLoginUser = async user => await User.findByIdAndUpdate(user._id, {dateLogin: new Date()})
 
 const comparePassword = async user => await bcrypt.hash(user.password, 10)
 
-const sendErrorToClient = (res, error, type) => res.status(error).json({ type: `server.error.${type}` })
 
 const authenticateUser = (res, user) => {
     const payload = {
@@ -56,6 +26,9 @@ const authenticateUser = (res, user) => {
                 console.error(err)
                 return sendErrorToClient(res, CODE_ERROR.auth, `${ERROR.auth}.${SUBJECT.auth}`)
             }
+            if(user.status === 'blocked') {
+                return sendErrorToClient(res, CODE_ERROR.forbidden, `${ERROR.forbidden}.${SUBJECT.block}`)
+            }
             return res.json({
                 email: user.email,
                 name: user.name,
@@ -65,6 +38,7 @@ const authenticateUser = (res, user) => {
         }
     )
 }
+
 
 router.post('/api/auth/sign/up', async (req, res) => {
     try {

@@ -6,7 +6,12 @@ export const getUsersAsync = createAsyncThunk(
     'admin/users',
     async (_, { rejectWithValue }) => {
         try {
-            return await (await axios.get('/api/admin/users')).data
+            const token = {
+                headers: {
+                    "x-access-token": localStorage.getItem("token")
+                }
+            }
+            return await (await axios.get('/api/admin/users', token)).data
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -17,7 +22,12 @@ export const changeStatusUsersAsync = createAsyncThunk(
     'admin/users/change/status',
     async ({users, status}, { rejectWithValue }) => {
         try {
-            await axios.put(`/api/admin/users/status/${status}`, users)
+            const token = {
+                headers: {
+                    "x-access-token": localStorage.getItem("token")
+                }
+            }
+            await axios.put(`/api/admin/users/status/${status}`, users, token)
             return { users, status }
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
@@ -29,7 +39,12 @@ export const changeRoleUsersAsync = createAsyncThunk(
     'admin/users/change/role',
     async ({users, role}, { rejectWithValue }) => {
         try {
-            await axios.put(`/api/admin/users/role/${role}`, users)
+            const token = {
+                headers: {
+                    "x-access-token": localStorage.getItem("token")
+                }
+            }
+            await axios.put(`/api/admin/users/role/${role}`, users, token)
             return { users, role }
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
@@ -41,7 +56,10 @@ export const deleteUsersAsync = createAsyncThunk(
     'admin/users/delete',
     async (users, { rejectWithValue }) => {
         try {
-            await axios.delete(`/api/admin/users`, {data: users})
+            const headers = {
+                    "x-access-token": localStorage.getItem("token")
+            }
+            await axios.delete(`/api/admin/users`, {data: users, headers})
             return users
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
@@ -71,6 +89,9 @@ export const adminSlice = createSlice({
         },
         removeAllSelectedUsers: (state, action) => {
             state.selectedUsers = []
+        },
+        clearErrorType: (state, action) => {
+            state.errorType = ""
         }
     },
     extraReducers: {
@@ -97,6 +118,7 @@ export const adminSlice = createSlice({
         },
         [changeStatusUsersAsync.rejected]: (state, action) => {
             state.isProccessToolBar = false
+            state.errorType = action.payload.type
         },
         [changeStatusUsersAsync.pending]: (state, action) => {
             state.isProccessToolBar = true
@@ -113,6 +135,7 @@ export const adminSlice = createSlice({
         },
         [changeRoleUsersAsync.rejected]: (state, action) => {
             state.isProccessToolBar = false
+            state.errorType = action.payload.type
         },
         [changeRoleUsersAsync.pending]: (state, action) => {
             state.isProccessToolBar = true
@@ -126,6 +149,7 @@ export const adminSlice = createSlice({
         },
         [deleteUsersAsync.rejected]: (state, action) => {
             state.isProccessToolBar = false
+            state.errorType = action.payload.type
         },
         [deleteUsersAsync.pending]: (state, action) => {
             state.isProccessToolBar = true
@@ -133,6 +157,6 @@ export const adminSlice = createSlice({
     }
 })
 
-export const { addSelectedUser, removeSelectedUser, addAllSelectedUsers, removeAllSelectedUsers } = adminSlice.actions
+export const { addSelectedUser, removeSelectedUser, addAllSelectedUsers, removeAllSelectedUsers, clearErrorType } = adminSlice.actions
 
 export default adminSlice.reducer

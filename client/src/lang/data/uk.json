@@ -19,6 +19,8 @@
     "server.error.auth.auth": "Помилка автентифікації",
     "server.error.forbidden.email": "Ця електронна адреса зайнява",
     "server.error.forbidden.name": "Це ім'я зайняло",
+    "server.error.forbidden.block": "Ви заблоковані",
+    "server.error.forbidden.admin": "Ця дія заборонена",
     "server.error.server.server": "Помилка сервера",
     "server.error.auth.data": "Невірна адреса електронної пошти або пароль",
     "admin.table.header.email": "Електронна адреса",

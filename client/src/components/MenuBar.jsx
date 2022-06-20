@@ -18,7 +18,6 @@ export default function MenuBar() {
     const isAuth = useSelector(state => state.authUser.isAuth)
     const isAdmin = useSelector(state => state.authUser.isAdmin)
     
-
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
     const handleClick = (event) => {
@@ -27,7 +26,6 @@ export default function MenuBar() {
     const handleClose = () => {
         setAnchorEl(null)
     }
-
 
     const signIn =  !isAuth &&
         <MenuItem onClick={() => navigate('auth/sign/in')}>
