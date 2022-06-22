@@ -19,7 +19,7 @@ const checkAuth = (req, res, next) => {
                 if(user.status === 'blocked') {
                     return sendErrorToClient(res, CODE_ERROR.forbidden, `${ERROR.forbidden}.${SUBJECT.block}`)
                 }
-                req.isAdmin = user.role === 'admin'
+                req.user = user
                 next()
             })
         } else {

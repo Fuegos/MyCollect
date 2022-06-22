@@ -10,6 +10,7 @@ import { langMessages } from './lang/data/dataLangs';
 import AdminPage from './admin/container/AdminPage';
 import { useEffect } from "react"
 import { checkTokenUserAsync } from "./authUser/redux/authUserSlice"
+import CollectionsPage from './collections/container/CollectionsPage';
 
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
                         <Route path="auth/*" element={<AuthPage />}/>
                         <Route path="success" element={<PageSuccess />}/>
                         <Route path="admin" element={<AdminPage />}/>
+                        <Route path="collections" element={<CollectionsPage />}/>
                         <Route path="*" element={<Navigate replace to="success" />}/>
                     </Routes>
                 </BrowserRouter>

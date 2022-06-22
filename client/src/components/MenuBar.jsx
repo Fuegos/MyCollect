@@ -71,7 +71,9 @@ export default function MenuBar() {
         </MenuItem>
 
     const myCollections = isAuth && 
-        <MenuItem>
+        <MenuItem
+            onClick={() => navigate('collections')}
+        >
             <ListItemIcon>
                 <CollectionsBookmarkIcon />
             </ListItemIcon>
