@@ -10,8 +10,7 @@ export const createCollectionAsync = createAsyncThunk(
                     "x-access-token": localStorage.getItem("token")
                 }
             }
-            await axios.post('/api/collection/add', collection, token)
-            return collection
+            return await (await axios.post('/api/collection/add', collection, token)).data
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -70,6 +69,7 @@ export const collectionsSlice = createSlice({
     extraReducers: {
         [createCollectionAsync.fulfilled]: (state, action) => {
             state.isProccess = false
+            state.isOpenedDialog = false
             state.collections.push(action.payload)
         },
         [createCollectionAsync.pending]: (state, action) => {

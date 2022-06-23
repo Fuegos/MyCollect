@@ -20,7 +20,7 @@ const collectionSchema = new Schema({
     },
     theme: {
         type: Schema.Types.ObjectId, 
-        ref: 'theme',
+        ref: 'hobby',
         required: true
     },
     owner: {

@@ -23,7 +23,6 @@ export default function ModifyCollection() {
     }
 
     const modifyCollection = data => {
-        console.log(data)
         dispatch(createCollectionAsync(data))
     }
 
@@ -32,7 +31,6 @@ export default function ModifyCollection() {
     }, [])
 
     return (
-        
             <Dialog open={isOpenedDialog} onClose={() => dispatch(closeDialog())}>
             <form onSubmit={handleSubmit(modifyCollection)} noValidate>
                 <DialogTitle>
@@ -62,7 +60,7 @@ export default function ModifyCollection() {
                                     name="theme"
                                     control={control}
                                     options={themes}
-                                    getOptionLabel={o => o.name}
+                                    getOptionLabel={o => o.title}
                                     error={errors.theme}
                                     label={
                                         <FormattedMessage
@@ -95,7 +93,6 @@ export default function ModifyCollection() {
                 <DialogActions>
                     <Button 
                         type='submit'
-                        onClick={() => dispatch(closeDialog())}
                     >
                         <FormattedMessage
                             id="collections.button.confirm"

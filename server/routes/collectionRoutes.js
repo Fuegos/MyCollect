@@ -1,11 +1,13 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const request = require('request')
 const router = express.Router()
 const { CODE_ERROR, ERROR, SUBJECT } = require('../error/dataError')
 const { sendErrorToClient } = require('../error/handlerError')
 const checkAuth = require('../middleware/checkAuth')
 const Collection = require('../models/collection')
-const Theme = require('../models/theme')
+const Hobby = require('../models/hobby')
+require('dotenv').config()
 
 router.post('/api/collection/add', checkAuth, (req, res) => {
     try {
@@ -19,7 +21,7 @@ router.post('/api/collection/add', checkAuth, (req, res) => {
 
 router.get('/api/collection/themes', checkAuth, (req, res) => {
     try {
-        Theme.find({}).then(themes => res.json(themes))
+        Hobby.find({category: 'Collection'}, "_id title").then(result => res.json(result))
     } catch(e) {
         console.error(e)
         return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
@@ -32,7 +34,6 @@ router.get('/api/collections', checkAuth, (req, res) => {
         .populate('owner')
         .populate('theme')
         .then(collections => {
-            console.log(collections)
             res.json(collections)
         })
     } catch(e) {
