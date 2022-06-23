@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { List, ListItem, ListItemText, ListItemAvatar, Avatar } from '@mui/material'
-import ImageIcon from '@mui/icons-material/Image';
+import { ListItem, ListItemText, ListItemAvatar, Avatar } from '@mui/material'
+import ImageIcon from '@mui/icons-material/Image'
+import ReactMarkdown from 'react-markdown'
 
 export default function Collection(props) {
     const collection = props.collection
@@ -13,7 +14,6 @@ export default function Collection(props) {
             </ListItemAvatar>
             <ListItemText 
                 primary={collection.name} 
-                secondary={collection.description} 
             />
         </ListItem>
     )

@@ -1,4 +1,4 @@
-import { List, ListItem, ListItemText, ListItemAvatar, Avatar } from '@mui/material'
+import { List } from '@mui/material'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCollectionsAsync } from '../redux/collectionsSlice'

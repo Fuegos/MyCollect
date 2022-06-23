@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Box, Grid, Autocomplete, TextField } from '@mui/material'
 import TextFieldController from '../../components/TextFieldController'
 import { FormattedMessage } from 'react-intl'
-import { Controller, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from 'react-redux';
 import { closeDialog, createCollectionAsync, getThemesAsync } from '../redux/collectionsSlice';
 import { collectionYupResolver } from '../validation/collectionValidation';
@@ -85,6 +85,8 @@ export default function ModifyCollection() {
                                     }
                                     variant="outlined"
                                     fullWidth
+                                    multiline
+                                    rows={5}
                                 />
                             </Grid>
                         </Grid>
