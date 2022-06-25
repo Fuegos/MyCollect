@@ -3,13 +3,27 @@ import axios from "axios"
 
 export const createCollectionAsync = createAsyncThunk(
     'collection/add',
-    async (collection, { rejectWithValue }) => {
+    async ({collection, fileImg}, { rejectWithValue }) => {
         try {
+            const tokenUpload = {
+                headers: {
+                    "x-access-token": localStorage.getItem("token"),
+                    "Content-Type": "multipart/form-data"
+                }
+            }
+
             const token = {
                 headers: {
                     "x-access-token": localStorage.getItem("token")
                 }
             }
+
+            if(fileImg) {
+                const uploadData = new FormData()
+                uploadData.append("file", fileImg, "file")
+                collection.img = await (await axios.post('/api/collection/upload/img', uploadData, tokenUpload)).data.img
+            }
+            
             return await (await axios.post('/api/collection/add', collection, token)).data
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})

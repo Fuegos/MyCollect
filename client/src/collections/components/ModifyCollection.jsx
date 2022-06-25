@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Box, Grid, Autocomplete, TextField } from '@mui/material'
 import TextFieldController from '../../components/TextFieldController'
 import { FormattedMessage } from 'react-intl'
-import { useForm } from "react-hook-form"
+import { Controller, useForm } from "react-hook-form"
 import { useDispatch, useSelector } from 'react-redux';
 import { closeDialog, createCollectionAsync, getThemesAsync } from '../redux/collectionsSlice';
 import { collectionYupResolver } from '../validation/collectionValidation';
 import AutocompleteController from '../../components/AutocompleteController';
+import { DropzoneAreaBase } from "mui-file-dropzone"
 
 
 export default function ModifyCollection() {
@@ -23,12 +24,20 @@ export default function ModifyCollection() {
     }
 
     const modifyCollection = data => {
-        dispatch(createCollectionAsync(data))
+        const fileImg = data.img && data.img[0].file
+        const collection = {
+            name: data.name,
+            theme: data.theme,
+            description: data.description
+        }
+
+        dispatch(createCollectionAsync({ collection, fileImg }))
     }
 
     useEffect(() => {
         dispatch(getThemesAsync())
     }, [])
+
 
     return (
             <Dialog open={isOpenedDialog} onClose={() => dispatch(closeDialog())}>
@@ -87,6 +96,23 @@ export default function ModifyCollection() {
                                     fullWidth
                                     multiline
                                     rows={5}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Controller 
+                                    name='img'
+                                    control={control}
+                                    render={({field}) =>
+                                        <DropzoneAreaBase
+                                            {...field}
+                                            acceptedFiles={["image/jpeg", "image/png", "image/jpg"]}
+                                            filesLimit={1}
+                                            onAdd={file => field.onChange(file)}
+                                            fileObjects={field.value}
+                                            showAlerts={false}
+                                            onDelete={() => field.onChange([])}
+                                        /> 
+                                    }
                                 />
                             </Grid>
                         </Grid>

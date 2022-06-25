@@ -17,7 +17,8 @@ const SUBJECT = {
     name: 'name',
     server: 'server',
     block: 'block',
-    admin: 'admin'
+    admin: 'admin',
+    upload: 'upload'
 }
 
 module.exports = {

@@ -7,7 +7,7 @@ const collectionSchema = new Schema({
         type: String,
         default: shortid.generate
     },
-    imgUrl: {
+    img: {
         type: String
     },
     name: {

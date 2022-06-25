@@ -5,12 +5,17 @@ import ReactMarkdown from 'react-markdown'
 
 export default function Collection(props) {
     const collection = props.collection
+
+    const avatar = props.collection.img ?
+        <Avatar src={props.collection.img} /> :
+        <Avatar>
+            <ImageIcon />
+        </Avatar>
+
     return (
         <ListItem>
             <ListItemAvatar>
-                <Avatar>
-                    <ImageIcon />
-                </Avatar>
+                { avatar }
             </ListItemAvatar>
             <ListItemText 
                 primary={collection.name} 
