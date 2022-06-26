@@ -42,10 +42,10 @@ export default function ModifyCollection() {
             name: data.name,
             theme: data.theme,
             description: data.description,
-            img: editableCollection.img
+            img: editableCollection && editableCollection.img
         }
 
-        dispatch(modifyCollectionAsync({ _id: editableCollection._id, collection, newImg }))
+        dispatch(modifyCollectionAsync({ _id: editableCollection && editableCollection._id, collection, newImg }))
     }
 
     useEffect(() => {
@@ -68,13 +68,17 @@ export default function ModifyCollection() {
     }, [editableCollection])
 
     return (
-        <Dialog open={isOpenedDialog} onClose={() => dispatch(closeDialog())}>
+        <Dialog 
+            open={isOpenedDialog} 
+            onClose={() => dispatch(closeDialog())}
+            fullWidth
+        >
             <form onSubmit={handleSubmit(modifyCollection)} noValidate>
                 <DialogTitle>
                     Add collection
                 </DialogTitle>
                 <DialogContent>
-                    <Box mx={10} mt={5}>
+                    <Box mx={2} mt={2}>
                         <Stack 
                             direction="column"
                             spacing={2}

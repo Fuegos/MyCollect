@@ -19,7 +19,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ReactMarkdown from 'react-markdown'
 import { useDispatch } from 'react-redux';
-import { openDialog, setEditableCollection } from '../redux/collectionsSlice';
+import { openDialog, setEditableCollection, deleteCollectionAsync } from '../redux/collectionsSlice';
 
 export default function Collection(props) {
     const collection = props.collection
@@ -88,7 +88,11 @@ export default function Collection(props) {
                         </ListItemIcon>
                         Settings
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem 
+                        onClick={() => {
+                            handleClose()
+                            dispatch(deleteCollectionAsync(collection))
+                    }}>
                         <ListItemIcon>
                             <DeleteIcon />
                         </ListItemIcon>

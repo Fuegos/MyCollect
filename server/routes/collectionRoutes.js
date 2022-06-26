@@ -12,6 +12,17 @@ const Image = require('../models/image')
 require('dotenv').config()
 const shortid = require('shortid')
 
+const deleteImage = (res, filename) => {
+    cloudinary.uploader.destroy(filename, async (error, result) => {
+        if(error) {
+            console.error(error)
+            return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
+        } else {
+            return await Image.findOneAndRemove({filename})   
+        }
+    })
+}
+
 
 router.post('/api/collection/upload/img', checkAuth, uploadCloud.single('file'), (req, res) => {
     try {
@@ -25,14 +36,7 @@ router.post('/api/collection/upload/img', checkAuth, uploadCloud.single('file'),
 
 router.delete('/api/collection/delete/img', checkAuth, (req, res) => {
     try {
-        cloudinary.uploader.destroy(req.body.filename, (error, result) => {
-            if(error) {
-                console.error(error)
-                return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
-            } else {
-                Image.findOneAndRemove({filename: req.body.filename}).then(() => res.json(result))   
-            }
-        })
+        return res.json(deleteImage(res, req.body.filename))
     } catch(e) {
         console.error(e)
         return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
@@ -47,6 +51,20 @@ router.post('/api/collection/modify', checkAuth, (req, res) => {
             .populate('theme')
             .populate('img')
             .then(result => res.json(result))
+    } catch(e) {
+        console.error(e)
+        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
+    }
+})
+
+router.delete('/api/collection/delete', checkAuth, (req, res) => {
+    try {
+        if(req.body.img) {
+            deleteImage(res, req.body.img.filename)
+        }
+        Collection.findByIdAndDelete(req.body._id)
+        .then(result => res.json(result))
+        
     } catch(e) {
         console.error(e)
         return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)

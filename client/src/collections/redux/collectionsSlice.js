@@ -38,6 +38,21 @@ export const modifyCollectionAsync = createAsyncThunk(
     }
 )
 
+export const deleteCollectionAsync = createAsyncThunk(
+    'collection/delete',
+    async(collection, { rejectWithValue }) => {
+        try {
+            const headers = {
+                "x-access-token": localStorage.getItem("token")
+            }
+            await axios.delete('/api/collection/delete', { data: collection, headers})
+            return collection
+        } catch(e) {
+            return rejectWithValue({ type: e.response.data.type})
+        }
+    }
+)
+
 export const getThemesAsync = createAsyncThunk(
     'collection/themes',
     async (_, { rejectWithValue }) => {
@@ -110,6 +125,9 @@ export const collectionsSlice = createSlice({
         [modifyCollectionAsync.rejected]: (state, action) => {
             state.isProccess = false
             state.errorType = action.payload.type
+        },
+        [deleteCollectionAsync.fulfilled]: (state, action) => {
+            state.collections = state.collections.filter(c => c._id !== action.payload._id)
         },
         [getThemesAsync.fulfilled]: (state, action) => {
             state.themes = action.payload
