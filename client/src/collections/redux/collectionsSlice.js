@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from "axios"
 
-export const createCollectionAsync = createAsyncThunk(
-    'collection/add',
-    async ({collection, fileImg}, { rejectWithValue }) => {
+export const modifyCollectionAsync = createAsyncThunk(
+    'collection/modify',
+    async ({_id, collection, newImg}, { rejectWithValue }) => {
         try {
             const tokenUpload = {
                 headers: {
@@ -18,13 +18,20 @@ export const createCollectionAsync = createAsyncThunk(
                 }
             }
 
-            if(fileImg) {
+            const headers = {
+                "x-access-token": localStorage.getItem("token")
+            }
+
+            if(newImg) {
+                if(collection.img) {
+                    await axios.delete('/api/collection/delete/img', {data: collection.img, headers})
+                }
                 const uploadData = new FormData()
-                uploadData.append("file", fileImg, "file")
-                collection.img = await (await axios.post('/api/collection/upload/img', uploadData, tokenUpload)).data.img
+                uploadData.append("file", newImg, "file")
+                collection.img = await (await axios.post('/api/collection/upload/img', uploadData, tokenUpload)).data
             }
             
-            return await (await axios.post('/api/collection/add', collection, token)).data
+            return await (await axios.post('/api/collection/modify', {_id, collection}, token)).data
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -70,26 +77,37 @@ export const collectionsSlice = createSlice({
         collections: [],
         themes: [],
         isProccess: false,
-        isOpenedDialog: false
+        isOpenedDialog: false,
+        editableCollection: null
     }, 
     reducers: {
         openDialog: (state, action) => {
             state.isOpenedDialog = true
         },
         closeDialog: (state, action) => {
+            state.editableCollection = null
             state.isOpenedDialog = false
+        },
+        setEditableCollection: (state, action) => {
+            state.editableCollection = action.payload
         }
     },
     extraReducers: {
-        [createCollectionAsync.fulfilled]: (state, action) => {
+        [modifyCollectionAsync.fulfilled]: (state, action) => {
             state.isProccess = false
             state.isOpenedDialog = false
-            state.collections.push(action.payload)
+            state.editableCollection = null
+            const index = state.collections.map(c => c._id).indexOf(action.payload._id)
+            if (index > -1) {
+                state.collections.splice(index, 1, action.payload)
+            } else {
+                state.collections.push(action.payload)
+            }
         },
-        [createCollectionAsync.pending]: (state, action) => {
+        [modifyCollectionAsync.pending]: (state, action) => {
             state.isProccess = true
         },
-        [createCollectionAsync.rejected]: (state, action) => {
+        [modifyCollectionAsync.rejected]: (state, action) => {
             state.isProccess = false
             state.errorType = action.payload.type
         },
@@ -102,6 +120,6 @@ export const collectionsSlice = createSlice({
     }
 })
 
-export const { openDialog, closeDialog } = collectionsSlice.actions
+export const { openDialog, closeDialog, setEditableCollection } = collectionsSlice.actions
 
 export default collectionsSlice.reducer

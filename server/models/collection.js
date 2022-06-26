@@ -8,7 +8,8 @@ const collectionSchema = new Schema({
         default: shortid.generate
     },
     img: {
-        type: String
+        type: Schema.Types.ObjectId,
+        ref: 'image'
     },
     name: {
         type: String,

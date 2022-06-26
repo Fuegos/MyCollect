@@ -2,7 +2,7 @@ import React from "react"
 import { TextField, FormHelperText } from '@mui/material'
 import { Controller } from "react-hook-form"
 
-export default function TextFieldController({ name, control, defaultValue, error, ...rest}) {
+export default function TextFieldController({ name, control, defaultValue = "", error, ...rest}) {
 
     return(
         <React.Fragment>

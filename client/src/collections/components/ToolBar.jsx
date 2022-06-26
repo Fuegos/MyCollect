@@ -1,5 +1,5 @@
-import AddBoxIcon from '@mui/icons-material/AddBox'
-import { Box, Typography, Tooltip, IconButton } from '@mui/material'
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
+import { Typography, Tooltip, IconButton, Stack } from '@mui/material'
 import { useDispatch } from 'react-redux'
 import { openDialog } from '../redux/collectionsSlice'
 import { FormattedMessage } from 'react-intl'
@@ -8,8 +8,15 @@ export default function ToolBar() {
     const dispatch = useDispatch()
     
     return (
-        <Box sx={{ width: '100%'}}>
-            <Typography variant="h4" gutterBottom component="div">
+        <Stack 
+            direction='row'
+            justifyContent="flex-start"
+            alignItems="center"
+            spacing={2}
+            ml={4} 
+            mt={2}
+        >
+            <Typography variant="h4" >
                 <FormattedMessage
                     id="collections.list.header"
                     defaultMessage="Collections"
@@ -26,9 +33,9 @@ export default function ToolBar() {
                 <IconButton
                     onClick={() => dispatch(openDialog())}
                 >
-                    <AddBoxIcon />
+                    <AddCircleOutlineIcon fontSize='large' />
                 </IconButton>
             </Tooltip>
-        </Box>
+        </Stack>
     )
 }

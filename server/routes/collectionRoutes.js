@@ -7,25 +7,46 @@ const { sendErrorToClient } = require('../error/handlerError')
 const checkAuth = require('../middleware/checkAuth')
 const Collection = require('../models/collection')
 const Hobby = require('../models/hobby')
-const fileUploader = require('../cloudinary/cloudinary.config')
+const { uploadCloud, cloudinary } = require('../cloudinary/cloudinary.config')
+const Image = require('../models/image')
 require('dotenv').config()
+const shortid = require('shortid')
 
-router.post('/api/collection/upload/img', checkAuth, fileUploader.single('file'), (req, res) => {
+
+router.post('/api/collection/upload/img', checkAuth, uploadCloud.single('file'), (req, res) => {
     try {
-        if (!req.file) {
-            return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.upload}`)
-        }
-        return res.json({ img: req.file.path })
+        Image.create({ path: req.file.path, filename: req.file.filename })
+            .then(result => res.json(result))
     } catch(e) {
         console.error(e)
         return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
     }
 })
 
-router.post('/api/collection/add', checkAuth, (req, res) => {
+router.delete('/api/collection/delete/img', checkAuth, (req, res) => {
     try {
-        req.body.owner = req.user
-        Collection.create(req.body).then(result => res.json(result))
+        cloudinary.uploader.destroy(req.body.filename, (error, result) => {
+            if(error) {
+                console.error(error)
+                return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
+            } else {
+                Image.findOneAndRemove({filename: req.body.filename}).then(() => res.json(result))   
+            }
+        })
+    } catch(e) {
+        console.error(e)
+        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
+    }
+})
+
+router.post('/api/collection/modify', checkAuth, (req, res) => {
+    try {
+        req.body.collection.owner = req.user
+        Collection.findByIdAndUpdate(req.body._id ?? shortid.generate(), req.body.collection, { upsert: true, new: true })
+            .populate('owner')
+            .populate('theme')
+            .populate('img')
+            .then(result => res.json(result))
     } catch(e) {
         console.error(e)
         return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
@@ -46,6 +67,7 @@ router.get('/api/collections', checkAuth, (req, res) => {
         Collection.find({ owner: req.user })
         .populate('owner')
         .populate('theme')
+        .populate('img')
         .then(collections => {
             res.json(collections)
         })
