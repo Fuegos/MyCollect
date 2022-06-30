@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 import { 
     ListItem, 
     ListItemText, 
@@ -18,8 +18,17 @@ import SettingsIcon from '@mui/icons-material/Settings'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import ReactMarkdown from 'react-markdown'
-import { useDispatch } from 'react-redux';
-import { openDialog, setEditableCollection, deleteCollectionAsync } from '../redux/collectionsSlice';
+import { FormattedMessage } from 'react-intl'
+import { useDispatch } from 'react-redux'
+import { 
+    openDialog as openDialogCollection, 
+    setEditableCollection, 
+    deleteCollectionAsync 
+} from '../redux/collectionsSlice'
+import {
+    openDialog as openDialogSettings,
+    getSettingFieldsAsync
+} from '../redux/settingFieldsSlice'
 
 export default function Collection(props) {
     const collection = props.collection
@@ -75,18 +84,28 @@ export default function Collection(props) {
                     <MenuItem onClick={() => {
                         handleClose()
                         dispatch(setEditableCollection(collection))
-                        dispatch(openDialog())
+                        dispatch(openDialogCollection())
                     }}>
                         <ListItemIcon>
                             <EditIcon />
                         </ListItemIcon>
-                        Edit
+                        <FormattedMessage
+                            id="collection.menu.edit"
+                            defaultMessage="Edit"
+                        />
                     </MenuItem>
-                    <MenuItem onClick={handleClose}>
+                    <MenuItem 
+                        onClick={() => {
+                        handleClose()
+                        dispatch(getSettingFieldsAsync(collection))
+                    }}>
                         <ListItemIcon>
                             <SettingsIcon />
                         </ListItemIcon>
-                        Settings
+                        <FormattedMessage
+                            id="collection.menu.settings"
+                            defaultMessage="Settings"
+                        />
                     </MenuItem>
                     <MenuItem 
                         onClick={() => {
@@ -96,7 +115,10 @@ export default function Collection(props) {
                         <ListItemIcon>
                             <DeleteIcon />
                         </ListItemIcon>
-                        Delete
+                        <FormattedMessage
+                            id="collection.menu.delete"
+                            defaultMessage="Delete"
+                        />
                     </MenuItem>
                 </Menu>
             </ListItemSecondaryAction>

@@ -3,8 +3,9 @@ const shortid = require('shortid')
 const Schema = mongoose.Schema
 
 const userSchema = new Schema({
-    _id: {
+    shortId: {
         type: String,
+        unique: true,
         default: shortid.generate
     },
     name: {

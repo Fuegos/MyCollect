@@ -43,7 +43,7 @@ export default function User(props) {
                 />
             </TableCell>
             <TableCell component="th" scope="row">
-                {user._id}
+                {user.shortId}
             </TableCell>
             <TableCell>{user.name}</TableCell>
             <TableCell>{user.email}</TableCell>

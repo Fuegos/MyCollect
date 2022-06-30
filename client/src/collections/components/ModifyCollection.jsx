@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { 
     Button, 
     Dialog, 
@@ -12,10 +12,10 @@ import {
 import TextFieldController from '../../components/TextFieldController'
 import { FormattedMessage } from 'react-intl'
 import { Controller, useForm } from "react-hook-form"
-import { useDispatch, useSelector } from 'react-redux';
-import { closeDialog, modifyCollectionAsync, getThemesAsync } from '../redux/collectionsSlice';
-import { collectionYupResolver } from '../validation/collectionValidation';
-import AutocompleteController from '../../components/AutocompleteController';
+import { useDispatch, useSelector } from 'react-redux'
+import { closeDialog, modifyCollectionAsync, getThemesAsync } from '../redux/collectionsSlice'
+import { collectionYupResolver } from '../validation/collectionValidation'
+import AutocompleteController from '../../components/AutocompleteController'
 import { DropzoneAreaBase } from "mui-file-dropzone"
 import { PhotoCamera } from '@mui/icons-material'
 
@@ -45,7 +45,11 @@ export default function ModifyCollection() {
             img: editableCollection && editableCollection.img
         }
 
-        dispatch(modifyCollectionAsync({ _id: editableCollection && editableCollection._id, collection, newImg }))
+        dispatch(
+            modifyCollectionAsync(
+                { _id: editableCollection && editableCollection._id, collection, newImg }
+            )
+        )
     }
 
     useEffect(() => {
@@ -75,7 +79,10 @@ export default function ModifyCollection() {
         >
             <form onSubmit={handleSubmit(modifyCollection)} noValidate>
                 <DialogTitle>
-                    Add collection
+                    <FormattedMessage
+                        id="collection.modify.header"
+                        defaultMessage="Modify Collection"
+                    />
                 </DialogTitle>
                 <DialogContent>
                     <Box mx={2} mt={2}>
@@ -89,7 +96,7 @@ export default function ModifyCollection() {
                                 error={errors.name}
                                 label={
                                     <FormattedMessage
-                                        id="collections.label.name"
+                                        id="collection.modify.label.name"
                                         defaultMessage="Name"
                                     />
                                 }
@@ -104,7 +111,7 @@ export default function ModifyCollection() {
                                 error={errors.theme}
                                 label={
                                     <FormattedMessage
-                                        id="collections.label.theme"
+                                        id="collection.modify.label.theme"
                                         defaultMessage="Theme"
                                     />
                                 }
@@ -116,7 +123,7 @@ export default function ModifyCollection() {
                                 error={errors.description}
                                 label={
                                     <FormattedMessage
-                                        id="collections.label.description"
+                                        id="collection.modify.label.description"
                                         defaultMessage="Description"
                                     />
                                 }
@@ -154,7 +161,7 @@ export default function ModifyCollection() {
                         type='submit'
                     >
                         <FormattedMessage
-                            id="collections.button.confirm"
+                            id="collection.modify.button.confirm"
                             defaultMessage="Confirm"
                         />
                     </Button>

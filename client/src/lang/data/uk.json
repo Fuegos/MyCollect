@@ -35,5 +35,20 @@
     "admin.toolbar.unblock": "Розблокувати",
     "admin.toolbar.assign": "Призначити адміністратора",
     "admin.toolbar.unassign": "Скасувати призначення адміністратора",
-    "admin.toolbar.selected": "{num} вибрано"
+    "admin.toolbar.selected": "{num} вибрано",
+    "collection.menu.edit": "Редагувати",
+    "collection.menu.settings": "Налаштування",
+    "collection.menu.delete": "Видалити",
+    "collection.setting.fields.header": "Налаштування полів для елементів",
+    "collection.setting.fields.button.save": "Зберегти",
+    "collection.setting.fields.button.cancel": "Скасувати",
+    "collection.modify.header": "Змінити колекцію",
+    "collection.modify.label.name": "Ім'я",
+    "collection.modify.label.theme": "Тема",
+    "collection.modify.label.description": "Опис",
+    "collection.modify.button.confirm": "Підтвердьте",
+    "collection.setting.field.label.type.field": "Тип поля",
+    "collection.setting.field.label.label": "Позначка",
+    "collection.list.header": "Ваші колекції",
+    "collection.button.add": "Додати колекцію"
 }

@@ -35,5 +35,20 @@
     "admin.toolbar.unblock": "განბლოკვა",
     "admin.toolbar.assign": "ადმინისტრატორის დანიშვნა",
     "admin.toolbar.unassign": "ადმინისტრატორის მინიჭების გაუქმება",
-    "admin.toolbar.selected": "{num} შერჩეული"
+    "admin.toolbar.selected": "{num} შერჩეული",
+    "collection.menu.edit": "რედაქტირება",
+    "collection.menu.settings": "პარამეტრები",
+    "collection.menu.delete": "წაშლა",
+    "collection.setting.fields.header": "ველების დაყენება ნივთებისთვის",
+    "collection.setting.fields.button.save": "Გადარჩენა",
+    "collection.setting.fields.button.cancel": "გაუქმება",
+    "collection.modify.header": "კოლექციის შეცვლა",
+    "collection.modify.label.name": "სახელი",
+    "collection.modify.label.theme": "თემა",
+    "collection.modify.label.description": "აღწერა",
+    "collection.modify.button.confirm": "დაადასტურეთ",
+    "collection.setting.field.label.type.field": "ტიპის ველი",
+    "collection.setting.field.label.label": "ლეიბლი",
+    "collection.list.header": "თქვენი კოლექციები",
+    "collection.button.add": "კოლექციის დამატება"
 }

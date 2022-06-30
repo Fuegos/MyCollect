@@ -1,12 +1,7 @@
 const mongoose = require('mongoose')
-const shortid = require('shortid')
 const Schema = mongoose.Schema
 
 const collectionSchema = new Schema({
-    _id: {
-        type: String,
-        default: shortid.generate
-    },
     img: {
         type: Schema.Types.ObjectId,
         ref: 'image'
@@ -25,7 +20,7 @@ const collectionSchema = new Schema({
         required: true
     },
     owner: {
-        type: Schema.Types.String, 
+        type: Schema.Types.ObjectId, 
         ref: 'user',
         required: true
     }

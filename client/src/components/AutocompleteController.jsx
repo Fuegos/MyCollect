@@ -2,13 +2,13 @@ import React from "react"
 import { Autocomplete, TextField, FormHelperText } from '@mui/material'
 import { Controller } from "react-hook-form"
 
-export default function AutocompleteController({ name, control, defaultValue, options, getOptionLabel, error, ...rest}) {
+export default function AutocompleteController({ name, control, defaultValue = null, options, getOptionLabel, error, ...rest}) {
     return(
         <React.Fragment>
             <Controller 
                 name={name}
                 control={control}
-                defaultValue={null}
+                defaultValue={defaultValue}
                 render={({field}) => 
                     <Autocomplete
                         {...field}

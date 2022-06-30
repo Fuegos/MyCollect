@@ -1,37 +1,23 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from "axios"
+import { 
+    getThemes,   
+    getCollections,
+    modifyCollection,
+    deleteCollection
+} from '../../axios/collectionAxios'
+import { 
+    DELETE_COLLECTION, 
+    GET_COLLECTIONS,  
+    GET_THEMES, 
+    MODIFY_COLLECTION
+} from '../../axios/routes/routes'
+
 
 export const modifyCollectionAsync = createAsyncThunk(
-    'collection/modify',
-    async ({_id, collection, newImg}, { rejectWithValue }) => {
+    MODIFY_COLLECTION.redux,
+    ({_id, collection, newImg}, { rejectWithValue }) => {
         try {
-            const tokenUpload = {
-                headers: {
-                    "x-access-token": localStorage.getItem("token"),
-                    "Content-Type": "multipart/form-data"
-                }
-            }
-
-            const token = {
-                headers: {
-                    "x-access-token": localStorage.getItem("token")
-                }
-            }
-
-            const headers = {
-                "x-access-token": localStorage.getItem("token")
-            }
-
-            if(newImg) {
-                if(collection.img) {
-                    await axios.delete('/api/collection/delete/img', {data: collection.img, headers})
-                }
-                const uploadData = new FormData()
-                uploadData.append("file", newImg, "file")
-                collection.img = await (await axios.post('/api/collection/upload/img', uploadData, tokenUpload)).data
-            }
-            
-            return await (await axios.post('/api/collection/modify', {_id, collection}, token)).data
+            return modifyCollection(_id, collection, newImg)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -39,14 +25,10 @@ export const modifyCollectionAsync = createAsyncThunk(
 )
 
 export const deleteCollectionAsync = createAsyncThunk(
-    'collection/delete',
-    async(collection, { rejectWithValue }) => {
+    DELETE_COLLECTION.redux,
+    (collection, { rejectWithValue }) => {
         try {
-            const headers = {
-                "x-access-token": localStorage.getItem("token")
-            }
-            await axios.delete('/api/collection/delete', { data: collection, headers})
-            return collection
+            return deleteCollection(collection)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -54,15 +36,10 @@ export const deleteCollectionAsync = createAsyncThunk(
 )
 
 export const getThemesAsync = createAsyncThunk(
-    'collection/themes',
-    async (_, { rejectWithValue }) => {
+    GET_THEMES.redux,
+    (_, { rejectWithValue }) => {
         try {
-            const token = {
-                headers: {
-                    "x-access-token": localStorage.getItem("token")
-                }
-            }
-            return await (await axios.get('/api/collection/themes', token)).data
+            return getThemes()
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -70,20 +47,16 @@ export const getThemesAsync = createAsyncThunk(
 )
 
 export const getCollectionsAsync = createAsyncThunk(
-    'collection/get',
-    async(_, { rejectWithValue }) => {
+    GET_COLLECTIONS.redux,
+    (_, { rejectWithValue }) => {
         try {
-            const token = {
-                headers: {
-                    "x-access-token": localStorage.getItem("token")
-                }
-            }
-            return await (await axios.get('/api/collections', token)).data
+            return getCollections()
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
     }
 )
+
 
 export const collectionsSlice = createSlice({ 
     name: 'collections',
@@ -138,6 +111,10 @@ export const collectionsSlice = createSlice({
     }
 })
 
-export const { openDialog, closeDialog, setEditableCollection } = collectionsSlice.actions
+export const { 
+    openDialog, 
+    closeDialog, 
+    setEditableCollection
+} = collectionsSlice.actions
 
 export default collectionsSlice.reducer

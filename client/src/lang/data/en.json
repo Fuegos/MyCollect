@@ -35,5 +35,20 @@
     "admin.toolbar.unblock": "Unblock",
     "admin.toolbar.assign": "Assign admin",
     "admin.toolbar.unassign": "Unassign admin",
-    "admin.toolbar.selected": "{num} selected"
+    "admin.toolbar.selected": "{num} selected",
+    "collection.menu.edit": "Edit",
+    "collection.menu.settings": "Settings",
+    "collection.menu.delete": "Delete",
+    "collection.setting.fields.header": "Setting Fields for Items",
+    "collection.setting.fields.button.save": "Save",
+    "collection.setting.fields.button.cancel": "Cancel",
+    "collection.modify.header": "Modify Collection",
+    "collection.modify.label.name": "Name",
+    "collection.modify.label.theme": "Theme",
+    "collection.modify.label.description": "Description",
+    "collection.modify.button.confirm": "Confirm",
+    "collection.setting.field.label.type.field": "Type Field",
+    "collection.setting.field.label.label": "Label",
+    "collection.list.header": "Your Collections",
+    "collection.button.add": "Add collection"
 }

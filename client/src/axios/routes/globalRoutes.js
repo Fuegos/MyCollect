@@ -1,0 +1,5 @@
+export const API = '/api'
+export const POST = '/create'
+export const GET = '/get'
+export const PUT = '/update'
+export const DELETE = '/delete'

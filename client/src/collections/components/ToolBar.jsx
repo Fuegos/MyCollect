@@ -18,14 +18,14 @@ export default function ToolBar() {
         >
             <Typography variant="h4" >
                 <FormattedMessage
-                    id="collections.list.header"
-                    defaultMessage="Collections"
+                    id="collection.list.header"
+                    defaultMessage="Your Collections"
                 />
             </Typography>
             <Tooltip 
                 title={
                     <FormattedMessage
-                        id="collections.add.button"
+                        id="collection.button.add"
                         defaultMessage="Add collection"
                     />
                 }

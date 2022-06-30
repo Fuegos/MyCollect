@@ -11,7 +11,7 @@ const checkAuth = require('../middleware/checkAuth')
 
 router.get('/api/admin/users', checkAuth, checkAdmin, (req, res) => {
     try {
-        User.find({}, "_id name email dateRegistration dateLogin status role").then(users => {
+        User.find({}, {password: 0}).then(users => {
             return res.json(users)
         })
     } catch(e) {
