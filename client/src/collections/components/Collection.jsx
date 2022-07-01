@@ -17,7 +17,6 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import SettingsIcon from '@mui/icons-material/Settings'
 import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
-import ReactMarkdown from 'react-markdown'
 import { FormattedMessage } from 'react-intl'
 import { useDispatch } from 'react-redux'
 import { 
@@ -29,11 +28,14 @@ import {
     openDialog as openDialogSettings,
     getSettingFieldsAsync
 } from '../redux/settingFieldsSlice'
+import { getItemsAsync } from '../../items/redux/itemsSlice'
+import { useNavigate } from 'react-router-dom'
 
 export default function Collection(props) {
     const collection = props.collection
 
     const dispatch = useDispatch()
+    const navigate = useNavigate()
 
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)
@@ -52,7 +54,14 @@ export default function Collection(props) {
 
     return (
         <ListItem>
-            <ListItemButton role={undefined} dense>
+            <ListItemButton 
+                role={undefined} 
+                dense
+                onClick={() => {
+                    dispatch(getItemsAsync(collection))
+                    navigate('items')
+                }}
+            >
                 <ListItemAvatar>
                     { avatar }
                 </ListItemAvatar>

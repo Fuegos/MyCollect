@@ -5,7 +5,7 @@ import themeModeReducer from '../themeMode/redux/themeModeSlice'
 import adminReducer from '../admin/redux/adminSlice'
 import collectionsReducer from '../collections/redux/collectionsSlice'
 import settingFieldsReducer from '../collections/redux/settingFieldsSlice'
-
+import itemsReducer from '../items/redux/itemsSlice'
 
 export default configureStore({
   reducer: {
@@ -14,6 +14,7 @@ export default configureStore({
     lang: langReducer,
     themeMode: themeModeReducer,
     collections: collectionsReducer,
-    settingFields: settingFieldsReducer
+    settingFields: settingFieldsReducer,
+    items: itemsReducer
   },
 })

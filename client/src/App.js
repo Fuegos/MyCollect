@@ -38,7 +38,7 @@ function App() {
                         <Route path="auth/*" element={<AuthPage />}/>
                         <Route path="success" element={<PageSuccess />}/>
                         <Route path="admin" element={<AdminPage />}/>
-                        <Route path="collections" element={<CollectionsPage />}/>
+                        <Route path="collections/*" element={<CollectionsPage />}/>
                         <Route path="*" element={<Navigate replace to="success" />}/>
                     </Routes>
                 </BrowserRouter>

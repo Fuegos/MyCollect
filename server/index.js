@@ -6,6 +6,7 @@ const mongoose = require('mongoose')
 const authRoutes = require('./routes/authRoutes')
 const adminRoutes = require('./routes/adminRoutes')
 const collectionRoutes = require('./routes/collectionRoutes')
+const itemRoutes = require('./routes/itemRoutes')
 
 require('dotenv').config()
 
@@ -17,6 +18,7 @@ app.use(bodyParser.json(), urlencodeParser);
 app.use("/", authRoutes)
 app.use("/", adminRoutes)
 app.use("/", collectionRoutes)
+app.use("/", itemRoutes)
 
 app.use(express.static(path.join(__dirname, '../client', 'build')))
 

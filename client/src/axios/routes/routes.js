@@ -11,5 +11,7 @@ export const GET_TYPE_FIELDS = creatorRoute(GET, '/type/fields')
 export const UPLOAD_IMAGE = creatorRoute(POST, '/image')
 export const DELETE_IMAGE = creatorRoute(DELETE, '/image')
 
+export const GET_COLLECTION_ITEMS = creatorRoute(GET, '/collection/items') 
+
 
 
