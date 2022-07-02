@@ -12,6 +12,5 @@ export const UPLOAD_IMAGE = creatorRoute(POST, '/image')
 export const DELETE_IMAGE = creatorRoute(DELETE, '/image')
 
 export const GET_COLLECTION_ITEMS = creatorRoute(GET, '/collection/items') 
-
-
-
+export const MODIFY_COLLECTION_ITEM = creatorRoute(POST, '/collection/item')
+export const GET_TAGS = creatorRoute(GET, '/tags')

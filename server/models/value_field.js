@@ -6,11 +6,6 @@ const valueFieldSchema = new Schema({
         type: Schema.Types.Mixed,
         required: true
     },
-    item: {
-        type: Schema.Types.ObjectId,
-        ref: 'item',
-        required: true
-    },
     fieldItem: {
         type: Schema.Types.ObjectId,
         ref: 'field_items',

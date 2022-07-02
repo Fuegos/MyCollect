@@ -1,9 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { 
-    getItems
+    getItems,
+    modifyItem,
+    getTags
 } from '../../axios/itemAxios'
 import {  
-    GET_COLLECTION_ITEMS
+    GET_COLLECTION_ITEMS, GET_TAGS, MODIFY_COLLECTION_ITEM
 } from '../../axios/routes/routes'
 
 
@@ -18,6 +20,28 @@ export const getItemsAsync = createAsyncThunk(
     }
 )
 
+export const getTagsAsync = createAsyncThunk(
+    GET_TAGS.redux,
+    (_, { rejectWithValue }) => {
+        try {
+            return getTags()
+        } catch(e) {
+            return rejectWithValue({ type: e.response.data.type})
+        }
+    }
+)
+
+export const modifyItemAsync = createAsyncThunk(
+    MODIFY_COLLECTION_ITEM.redux,
+    (item, { rejectWithValue }) => {
+        try {
+            return modifyItem(item)
+        } catch(e) {
+            return rejectWithValue({ type: e.response.data.type})
+        }
+    }
+)
+
 
 export const itemsSlice = createSlice({ 
     name: 'items',
@@ -25,28 +49,65 @@ export const itemsSlice = createSlice({
         errorType: "",
         items: [],
         isProccess: false,
-        collection: null
+        collection: null,
+        itemFields: [],
+        isOpenedDialog: false,
+        editableItem: null
     }, 
     reducers: {
-        
+        openDialog: (state, action) => {
+            state.isOpenedDialog = true
+        },
+        closeDialog: (state, action) => {
+            state.editableItem = null
+            state.isOpenedDialog = false
+        },
+        setEditableItem: (state, action) => {
+            state.editableItem = action.payload
+        }
     },
     extraReducers: {
         [getItemsAsync.fulfilled]: (state, action) => {
             state.items = action.payload.items
             state.collection = action.payload.collection
+            state.itemFields = action.payload.itemFields
             state.isProccess = false
         },
         [getItemsAsync.rejected]: (state, action) => {
             state.isProccess = false
+            state.errorType = action.payload.type
         },
         [getItemsAsync.pending]: (state, action) => {
             state.isProccess = true
+        },
+        [modifyItemAsync.fulfilled]: (state, action) => {
+            state.isProccess = false
+            state.isOpenedDialog = false
+            state.editableItem = null
+            const index = state.items.map(i => i._id).indexOf(action.payload._id)
+            if (index > -1) {
+                state.items.splice(index, 1, action.payload)
+            } else {
+                state.items.push(action.payload)
+            }
+        },
+        [modifyItemAsync.rejected]: (state, action) => {
+            state.isProccess = false
+            state.errorType = action.payload.type
+        },
+        [modifyItemAsync.pending]: (state, action) => {
+            state.isProccess = true
+        },
+        [getTagsAsync.fulfilled]: (state, action) => {
+            state.tags = action.payload
         }
     }
 })
 
 export const { 
-    
+    openDialog,
+    closeDialog,
+    setEditableItem
 } = itemsSlice.actions
 
 export default itemsSlice.reducer

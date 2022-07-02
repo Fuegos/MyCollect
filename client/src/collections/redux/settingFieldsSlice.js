@@ -35,9 +35,9 @@ export const getSettingFieldsAsync = createAsyncThunk(
 
 export const modifySettingFieldsAsync = createAsyncThunk(
     MODIFY_COLLECTION_SETTING_FIELDS.redux,
-    (settingFields,{ rejectWithValue }) => {
+    ({settingFields, collection},{ rejectWithValue }) => {
         try {
-            return modifySettingFields(settingFields)
+            return modifySettingFields(settingFields, collection)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }

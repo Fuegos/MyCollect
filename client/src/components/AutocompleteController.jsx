@@ -2,7 +2,21 @@ import React from "react"
 import { Autocomplete, TextField, FormHelperText } from '@mui/material'
 import { Controller } from "react-hook-form"
 
-export default function AutocompleteController({ name, control, defaultValue = null, options, getOptionLabel, error, ...rest}) {
+export default function AutocompleteController({ 
+    name, 
+    control, 
+    defaultValue = null, 
+    filterSelectedOptions = false,
+    multiple = false,
+    freeSolo = false,
+    options, 
+    getOptionLabel, 
+    error,
+    renderTags,
+    isOptionEqualToValue,
+    limitTags,
+    ...rest
+}) {
     return(
         <React.Fragment>
             <Controller 
@@ -12,11 +26,16 @@ export default function AutocompleteController({ name, control, defaultValue = n
                 render={({field}) => 
                     <Autocomplete
                         {...field}
-                        onChange={(_, data) => field.onChange(data)}
+                        filterSelectedOptions={filterSelectedOptions}
+                        multiple={multiple}
+                        freeSolo={freeSolo}
+                        onChange={(e, data) => field.onChange(data)}
                         aria-describedby={`error-${name}`}
                         options={options}
                         getOptionLabel={getOptionLabel}
-                        isOptionEqualToValue={(option, value) => option.id === value.id}
+                        isOptionEqualToValue={isOptionEqualToValue}
+                        limitTags={limitTags}
+                        renderTags={renderTags}
                         renderInput={(params) => 
                             <TextField 
                                 {...params}

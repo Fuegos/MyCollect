@@ -44,7 +44,7 @@ export default function DialogSettings() {
     const collection = useSelector(state => state.settingFields.collection)
 
     const modifySettingFields = data => {
-        dispatch(modifySettingFieldsAsync(data))
+        dispatch(modifySettingFieldsAsync({ settingFields: data.settingFields, collection }))
     }
 
     useEffect(() => {

@@ -55,6 +55,6 @@ export const modifyCollection = async (_id, collection, newImg) => {
     return await (await axios.post(MODIFY_COLLECTION.axios, {_id, collection}, creatorOptions(token))).data
 }
 
-export const modifySettingFields = async settingFields => {
-    return await (await axios.post(MODIFY_COLLECTION_SETTING_FIELDS.axios, settingFields, creatorOptions(token))).data
+export const modifySettingFields = async (settingFields, collection) => {
+    return await (await axios.post(MODIFY_COLLECTION_SETTING_FIELDS.axios, {settingFields, collection}, creatorOptions(token))).data
 }

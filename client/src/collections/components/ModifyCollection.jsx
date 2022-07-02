@@ -109,6 +109,7 @@ export default function ModifyCollection() {
                                 options={themes}
                                 getOptionLabel={o => o.title}
                                 error={errors.theme}
+                                isOptionEqualToValue={(option, value) => option.id === value.id}
                                 label={
                                     <FormattedMessage
                                         id="collection.modify.label.theme"

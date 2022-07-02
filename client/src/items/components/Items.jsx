@@ -7,14 +7,6 @@ export default function Items() {
     const isProccess = useSelector(state => state.items.isProccess)
 
     return(
-        <Grid container mx={3} mt={3}>
-            {isProccess ?
-                <Grid item xs={12}>
-                    <LinearProgress />
-                </Grid> :
-                <CollectionInfo collection={collection} />
-            }
-            
-        </Grid>
+        <div></div>
     )
 }

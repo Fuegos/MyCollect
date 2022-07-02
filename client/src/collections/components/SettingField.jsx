@@ -24,6 +24,7 @@ export default function SettingField(props) {
                     options={props.options}
                     getOptionLabel={o => o.name}
                     error={props.errors?.settingFields?.[props.index]?.typeField}
+                    isOptionEqualToValue={(option, value) => option.id === value.id}
                     label = {
                         <FormattedMessage
                             id="collection.setting.field.label.type.field"

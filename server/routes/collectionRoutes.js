@@ -96,11 +96,12 @@ router.get('/api/collections', checkAuth, (req, res) => {
 
 router.post('/api/collection/setting/fields', checkAuth, (req, res) => {
     try {
+        console.log(req.body)
         const settingFields = req.body.settingFields
         settingFields.forEach(async f => {
             await FieldItems.findByIdAndUpdate(f._id ?? new mongoose.Types.ObjectId(), f, { upsert: true })
         })
-        const collection = settingFields[0].collectionRef
+        const collection = req.body.collection
         FieldItems.deleteMany({
             _id: { $nin: settingFields.map(f => f._id) },
             collectionRef: collection

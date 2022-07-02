@@ -19,6 +19,10 @@ const itemSchema = new Schema({
         required: true,
         default: shortid.generate
     },
+    fields: [{
+        type: Schema.Types.ObjectId,
+        ref: 'value_field',
+    }],
     collectionRef: {
         type: Schema.Types.ObjectId,
         ref: 'collection',
