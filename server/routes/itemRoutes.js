@@ -24,7 +24,13 @@ router.get('/api/collection/items', checkAuth, async (req, res) => {
         
         const items = await Item.find({collectionRef: collection})
                                 .populate('tags')
-                                .populate('fields')
+                                .populate({
+                                    path: 'fields',
+                                    populate: {
+                                        path: 'fieldItem',
+                                        model: FieldItems
+                                    }
+                                })
         
         return res.json({items, collection, itemFields})
     } catch(e) {
@@ -83,7 +89,13 @@ router.post('/api/collection/item', checkAuth, (req, res) => {
                 Item.findByIdAndUpdate(
                     item._id ?? new mongoose.Types.ObjectId(), item, { upsert: true, new: true }
                 ).populate('tags')
-                .populate('fields')
+                .populate({
+                    path: 'fields',
+                    populate: {
+                        path: 'fieldItem',
+                        model: FieldItems
+                    }
+                })
                 .populate('collectionRef')
                 .then(result => res.json(result))
             })
