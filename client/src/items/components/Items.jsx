@@ -7,7 +7,7 @@ import React from "react"
 import { FormattedMessage } from 'react-intl'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import EditIcon from '@mui/icons-material/Edit'
-import { openDialog, setEditableItem } from "../redux/itemsSlice"
+import { openDialog, setEditableItem, setSelectedItems } from "../redux/itemsSlice"
 
 export default function Items() {
     const collection = useSelector(state => state.items.collection)
@@ -16,6 +16,7 @@ export default function Items() {
     const items = useSelector(state => state.items.items)
     const lang = useSelector(state => state.lang.lang)
     const itemFields = useSelector(state => state.items.itemFields)
+    const selectedItems = useSelector(state => state.items.selectedItems)
 
     const columns = [
         {
@@ -116,7 +117,6 @@ export default function Items() {
             tags: i.tags
         }
         i.fields.forEach(f => {
-            console.log(f)
             item[f.fieldItem._id] = f.value
         })
         return item
@@ -128,6 +128,10 @@ export default function Items() {
             <DataGrid
                 rows={rows}
                 columns={columns}
+                onSelectionModelChange={newSelected => {
+                    dispatch(setSelectedItems(newSelected))
+                }}
+                selectionModel={selectedItems}
                 getRowId={row => row._id}
                 getRowHeight={() => 'auto'}
                 getEstimatedRowHeight={() => 10}

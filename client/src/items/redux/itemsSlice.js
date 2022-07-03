@@ -2,10 +2,14 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { 
     getItems,
     modifyItem,
-    getTags
+    getTags,
+    deleteItems
 } from '../../axios/itemAxios'
 import {  
-    GET_COLLECTION_ITEMS, GET_TAGS, MODIFY_COLLECTION_ITEM
+    DELETE_COLLECTION_ITEMS,
+    GET_COLLECTION_ITEMS, 
+    GET_TAGS, 
+    MODIFY_COLLECTION_ITEM
 } from '../../axios/routes/routes'
 
 
@@ -42,6 +46,17 @@ export const modifyItemAsync = createAsyncThunk(
     }
 )
 
+export const deleteItemsAsync = createAsyncThunk(
+    DELETE_COLLECTION_ITEMS.redux,
+    (items, { rejectWithValue }) => {
+        try {
+            return deleteItems(items)
+        } catch(e) {
+            return rejectWithValue({ type: e.response.data.type})
+        }
+    }
+)
+
 
 export const itemsSlice = createSlice({ 
     name: 'items',
@@ -52,7 +67,8 @@ export const itemsSlice = createSlice({
         collection: null,
         itemFields: [],
         isOpenedDialog: false,
-        editableItem: null
+        editableItem: null,
+        selectedItems: []
     }, 
     reducers: {
         openDialog: (state, action) => {
@@ -64,6 +80,9 @@ export const itemsSlice = createSlice({
         },
         setEditableItem: (state, action) => {
             state.editableItem = action.payload
+        },
+        setSelectedItems: (state, action) => {
+            state.selectedItems = action.payload
         }
     },
     extraReducers: {
@@ -100,6 +119,9 @@ export const itemsSlice = createSlice({
         },
         [getTagsAsync.fulfilled]: (state, action) => {
             state.tags = action.payload
+        },
+        [deleteItemsAsync.fulfilled]: (state, action) => {
+            state.items = state.items.filter(i => !action.payload.includes(i._id))
         }
     }
 })
@@ -107,7 +129,8 @@ export const itemsSlice = createSlice({
 export const { 
     openDialog,
     closeDialog,
-    setEditableItem
+    setEditableItem,
+    setSelectedItems
 } = itemsSlice.actions
 
 export default itemsSlice.reducer

@@ -2,7 +2,8 @@ import axios from "axios"
 import { 
     GET_COLLECTION_ITEMS, 
     GET_TAGS, 
-    MODIFY_COLLECTION_ITEM
+    MODIFY_COLLECTION_ITEM,
+    DELETE_COLLECTION_ITEMS
 } from "./routes/routes"
 import creatorOptions from "./creatorOptions"
 
@@ -20,4 +21,9 @@ export const modifyItem = async (item) => {
 
 export const getTags = async () => {
     return await (await axios.get(GET_TAGS.axios, creatorOptions(token))).data
+}
+
+export const deleteItems = async items => {
+    await axios.delete(DELETE_COLLECTION_ITEMS.axios, creatorOptions(token, items))
+    return items
 }

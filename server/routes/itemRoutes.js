@@ -48,9 +48,13 @@ router.get('/api/tags', checkAuth, async (req, res) => {
     }
 })
 
-router.delete('/api/collection/item', checkAuth, (req, res) => {
+router.delete('/api/collection/items', checkAuth, (req, res) => {
     try {
-        
+        Item.deleteMany({
+            _id: {
+                $in: req.body
+            }
+        }).then(result => res.json(result))
     } catch(e) {
         console.error(e)
         return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
