@@ -57,15 +57,25 @@ export default function ModifyItem() {
     useEffect(() => {
         clearErrors()
         if(editableItem) {
-            //setValue("name", editableCollection.name)
-            //setValue("theme", editableCollection.theme)
-            //setValue("description", editableCollection.description)
+            setValue("_id", editableItem._id)
+            setValue("name", editableItem.name)
+            setValue("tags", editableItem.tags)
+            
+            setValue('fields', itemFields.map(f => {
+                
+                const field = editableItem.fields.filter(ef => ef.fieldItem._id === f._id)[0]
+                console.log(field)
+                return {
+                    value: field && field.value, 
+                    fieldItem: f
+                }
+            }))
         } else {
-            //setValue("name", "")
-            //setValue("theme", null)
-            //setValue("description", "")
+            setValue("name", "")
+            setValue("tags", [])
+            setValue('fields', itemFields.map(f => {return {value: undefined, fieldItem: f}}))
         }
-        setValue('fields', itemFields.map(f => {return {value: undefined, fieldItem: f}}))
+        
     }, [editableItem])
 
     return (
@@ -116,7 +126,6 @@ export default function ModifyItem() {
                                 multiple={true}
                                 freeSolo={true}
                                 filterSelectedOptions={true}
-                                defaultValue={[]}
                                 limitTags={4}
                                 renderTags={(value, getTagProps) =>
                                     value.map((option, index) => (

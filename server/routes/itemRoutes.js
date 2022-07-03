@@ -48,6 +48,15 @@ router.get('/api/tags', checkAuth, async (req, res) => {
     }
 })
 
+router.delete('/api/collection/item', checkAuth, (req, res) => {
+    try {
+        
+    } catch(e) {
+        console.error(e)
+        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
+    }
+})
+
 
 router.post('/api/collection/item', checkAuth, (req, res) => {
     try {
@@ -100,8 +109,6 @@ router.post('/api/collection/item', checkAuth, (req, res) => {
                 .then(result => res.json(result))
             })
         })
-
-        
     } catch(e) {
         console.error(e)
         return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
