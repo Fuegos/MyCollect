@@ -8,11 +8,14 @@ import { FormattedMessage } from 'react-intl'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import EditIcon from '@mui/icons-material/Edit'
 import { openDialog, setEditableItem, setSelectedItems } from "../redux/itemsSlice"
+import { useNavigate } from "react-router-dom"
+
 
 export default function Items() {
     const collection = useSelector(state => state.items.collection)
     const isProccess = useSelector(state => state.items.isProccess)
     const dispatch = useDispatch()
+    const navigate = useNavigate()
     const items = useSelector(state => state.items.items)
     const lang = useSelector(state => state.lang.lang)
     const itemFields = useSelector(state => state.items.itemFields)
@@ -29,7 +32,11 @@ export default function Items() {
             width: 20,
             renderCell: params => (
                 <IconButton
-                    onClick={() => console.log(params.row._id)}
+                    onClick={() => {
+                        const selectedItem = items.filter(i => i._id === params.row._id)[0]
+                        dispatch(setEditableItem(selectedItem))
+                        navigate(selectedItem.shortId)
+                    }}
                 >
                     <VisibilityIcon />
                 </IconButton>

@@ -6,6 +6,7 @@ import { useSelector } from "react-redux"
 import CollectionInfo from "../components/CollectionInfo"
 import ToolBar from "../components/ToolBar"
 import ModifyItem from "../components/ModifyItem"
+import Item from "../components/Item"
 
 
 export default function ItemsPage() {
@@ -14,10 +15,8 @@ export default function ItemsPage() {
 
     return (
         <Routes>
-            <Route path='item' element={
-                <React.Fragment>
-
-                </React.Fragment>
+            <Route path=':shortId' element={
+                <Item />
             } />
             <Route path="*" element={
                 <Grid container mx={3} mt={3}>

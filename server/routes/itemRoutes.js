@@ -8,6 +8,7 @@ const Collection = require('../models/collection')
 const FieldItems = require('../models/field_items')
 const Item = require('../models/item')
 const Tag = require('../models/tag')
+const TypeField = require('../models/type_field')
 const ValueField = require('../models/value_field')
 require('dotenv').config()
 
@@ -28,7 +29,11 @@ router.get('/api/collection/items', checkAuth, async (req, res) => {
                                     path: 'fields',
                                     populate: {
                                         path: 'fieldItem',
-                                        model: FieldItems
+                                        model: FieldItems,
+                                        populate: {
+                                            path: 'typeField',
+                                            model: TypeField
+                                        }
                                     }
                                 })
         
@@ -106,7 +111,11 @@ router.post('/api/collection/item', checkAuth, (req, res) => {
                     path: 'fields',
                     populate: {
                         path: 'fieldItem',
-                        model: FieldItems
+                        model: FieldItems,
+                        populate: {
+                            path: 'typeField',
+                            model: TypeField
+                        }
                     }
                 })
                 .populate('collectionRef')
