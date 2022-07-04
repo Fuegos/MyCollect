@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { Box, Chip, Typography, Stack } from "@mui/material"
 import { FormattedMessage } from 'react-intl'
 import { useEffect } from "react"
+import Like from "../../like/Like"
 
 
 export default function Item() {
@@ -60,7 +61,9 @@ export default function Item() {
                     </Typography>
                 ))
             }
-            
+            <Box>
+                <Like />
+            </Box>
         </Box>
     )
 }

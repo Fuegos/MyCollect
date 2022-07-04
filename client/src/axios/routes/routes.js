@@ -19,4 +19,5 @@ export const DELETE_COLLECTION_ITEMS = creatorRoute(DELETE, '/collection/items')
 export const GET_COMMENTS = creatorRoute(GET, '/comments')
 export const ADD_COMMENT = creatorRoute(POST, '/comment')
 
-export const CREATE_SOCKET = creatorRoute(POST, '/socket')
+export const GET_LIKES = creatorRoute(GET, '/likes')
+export const MODIFY_LIKE = creatorRoute(POST, '/like')

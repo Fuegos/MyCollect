@@ -10,6 +10,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import { openDialog, setEditableItem, setSelectedItems } from "../redux/itemsSlice"
 import { useNavigate } from "react-router-dom"
 import { getCommentsAsync } from "../../comments/redux/commentsSlice"
+import { getLikesAsync } from "../../like/redux/likeSlice"
 
 
 export default function Items() {
@@ -37,6 +38,7 @@ export default function Items() {
                         const selectedItem = items.filter(i => i._id === params.row._id)[0]
                         dispatch(setEditableItem(selectedItem))
                         dispatch(getCommentsAsync(selectedItem))
+                        dispatch(getLikesAsync(selectedItem))
                         navigate(selectedItem.shortId)
                     }}
                 >

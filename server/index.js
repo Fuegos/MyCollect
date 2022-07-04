@@ -10,6 +10,7 @@ const adminRoutes = require('./routes/adminRoutes')
 const collectionRoutes = require('./routes/collectionRoutes')
 const itemRoutes = require('./routes/itemRoutes')
 const commentRoutes = require('./routes/commentRoutes')
+const likeRoutes = require('./routes/likeRoutes')
 
 require('dotenv').config()
 
@@ -30,6 +31,7 @@ app.use("/", adminRoutes)
 app.use("/", collectionRoutes)
 app.use("/", itemRoutes)
 app.use("/", commentRoutes)
+app.use("/", likeRoutes)
 
 app.use(express.static(path.join(__dirname, '../client', 'build')))
 
