@@ -7,6 +7,7 @@ import CollectionInfo from "../components/CollectionInfo"
 import ToolBar from "../components/ToolBar"
 import ModifyItem from "../components/ModifyItem"
 import Item from "../components/Item"
+import Comments from "../../comments/container/Comments"
 
 
 export default function ItemsPage() {
@@ -16,7 +17,10 @@ export default function ItemsPage() {
     return (
         <Routes>
             <Route path=':shortId' element={
-                <Item />
+                <React.Fragment>
+                    <Item />
+                    <Comments />
+                </React.Fragment>
             } />
             <Route path="*" element={
                 <Grid container mx={3} mt={3}>

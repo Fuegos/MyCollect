@@ -6,6 +6,8 @@ import adminReducer from '../admin/redux/adminSlice'
 import collectionsReducer from '../collections/redux/collectionsSlice'
 import settingFieldsReducer from '../collections/redux/settingFieldsSlice'
 import itemsReducer from '../items/redux/itemsSlice'
+import commentsReducer from '../comments/redux/commentsSlice'
+
 
 export default configureStore({
   reducer: {
@@ -15,6 +17,7 @@ export default configureStore({
     themeMode: themeModeReducer,
     collections: collectionsReducer,
     settingFields: settingFieldsReducer,
-    items: itemsReducer
+    items: itemsReducer,
+    comments: commentsReducer
   },
 })

@@ -15,3 +15,8 @@ export const GET_COLLECTION_ITEMS = creatorRoute(GET, '/collection/items')
 export const MODIFY_COLLECTION_ITEM = creatorRoute(POST, '/collection/item')
 export const GET_TAGS = creatorRoute(GET, '/tags')
 export const DELETE_COLLECTION_ITEMS = creatorRoute(DELETE, '/collection/items')
+
+export const GET_COMMENTS = creatorRoute(GET, '/comments')
+export const ADD_COMMENT = creatorRoute(POST, '/comment')
+
+export const CREATE_SOCKET = creatorRoute(POST, '/socket')

@@ -1,10 +1,12 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { Box, Chip, Typography, Stack } from "@mui/material"
 import { FormattedMessage } from 'react-intl'
+import { useEffect } from "react"
 
 
 export default function Item() {
     const selectedItem = useSelector(state => state.items.editableItem)
+
     const fields = selectedItem.fields.map(f => {
         if(f.fieldItem.typeField.name === 'Checkbox') {
             return {
@@ -28,7 +30,8 @@ export default function Item() {
             }
         }
     })
-    console.log(selectedItem, fields)
+
+    
 
     return (
         <Box sx={{ bgcolor: 'primary.main', color: 'primary.contrastText', p: 2, mt: 3, mx: 5 }}>
