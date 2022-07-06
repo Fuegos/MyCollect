@@ -1,18 +1,17 @@
-import { useDispatch, useSelector } from "react-redux"
+import { useSelector } from "react-redux"
 import { Box, Chip, Typography, Stack } from "@mui/material"
 import { FormattedMessage } from 'react-intl'
-import { useEffect } from "react"
 import Like from "../../like/Like"
 
 
 export default function Item() {
-    const selectedItem = useSelector(state => state.items.editableItem)
+    const item = useSelector(state => state.comments.item)
 
-    const fields = selectedItem.fields.map(f => {
-        if(f.fieldItem.typeField.name === 'Checkbox') {
+    const fields = item.fields.map(f => {
+        if(f.settingField.typeField.name === 'Checkbox') {
             return {
                 _id: f._id,
-                label: f.fieldItem.label,
+                label: f.settingField.label,
                 value: f.value ?
                     <FormattedMessage
                         id="component.yesno.yes"
@@ -26,7 +25,7 @@ export default function Item() {
         } else {
             return {
                 _id: f._id,
-                label: f.fieldItem.label,
+                label: f.settingField.label,
                 value: f.value
             }
         }
@@ -41,10 +40,10 @@ export default function Item() {
                 spacing={1}
             >
                 <Typography variant="h4" >
-                    {selectedItem.name}
+                    {item.name}
                 </Typography>
                 {
-                    selectedItem.tags.map(t => (
+                    item.tags.map(t => (
                         <Chip 
                             key={t._id}
                             label={t.name}

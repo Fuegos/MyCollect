@@ -18,7 +18,7 @@ export default function AddComment() {
     const item = useSelector(state => state.comments.item)
 
     const addComment = data => {
-        data.item = item
+        data.itemRef = item
         reset()
         dispatch(addCommentAsync(data))
     }

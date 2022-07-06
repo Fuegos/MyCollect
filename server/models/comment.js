@@ -10,19 +10,22 @@ const commentSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'user',
-        required: true
+        required: true,
+        autopopulate: true
     },
     dateSend: {
         type: Date,
         required: true,
         default: Date.now
     },
-    item: {
+    itemRef: {
         type: Schema.Types.ObjectId,
         ref: 'item',
         required: true
     }
 })
+
+commentSchema.plugin(require('mongoose-autopopulate'))
 
 const Comment = mongoose.model('comment', commentSchema)
 

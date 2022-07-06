@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { closeDialog, getTypeFieldsAsync, modifySettingFieldsAsync } from '../redux/settingFieldsSlice'
 import { settingFieldYupResolver } from '../validation/settingFieldValidation'
 import SettingField from './SettingField'
+import { ObjectID } from 'bson'
 
 
 export default function DialogSettings() {
@@ -41,10 +42,10 @@ export default function DialogSettings() {
     const isProccess = useSelector(state => state.settingFields.isProccess)
     const settingFields = useSelector(state => state.settingFields.settingFields)
     const typeFields = useSelector(state => state.settingFields.typeFields)
-    const collection = useSelector(state => state.settingFields.collection)
+    const collectionId = useSelector(state => state.settingFields.collectionId)
 
     const modifySettingFields = data => {
-        dispatch(modifySettingFieldsAsync({ settingFields: data.settingFields, collection }))
+        dispatch(modifySettingFieldsAsync({ settingFields: data.settingFields, collectionId }))
     }
 
     useEffect(() => {
@@ -80,7 +81,7 @@ export default function DialogSettings() {
                         >
                             {fields.map((f, index) => (
                                 <SettingField
-                                    key={index}
+                                    key={f._id}
                                     index={index}
                                     settingField={f} 
                                     remove={remove}
@@ -92,9 +93,9 @@ export default function DialogSettings() {
                             <IconButton
                                 onClick={
                                     () => append({
+                                        _id: new ObjectID(),
                                         typeField: null,
-                                        label: "",
-                                        collectionRef: collection
+                                        label: ""
                                     })
                                 }
                             >

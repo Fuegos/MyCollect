@@ -11,9 +11,9 @@ import {
 
 export const getLikesAsync = createAsyncThunk(
     GET_LIKES.redux,
-    (item, { rejectWithValue }) => {
+    async (itemId, { rejectWithValue }) => {
         try {
-            return getLikes(item._id)
+            return await getLikes(itemId)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -22,9 +22,9 @@ export const getLikesAsync = createAsyncThunk(
 
 export const modifyLikeAsync = createAsyncThunk(
     MODIFY_LIKE.redux,
-    (item, { rejectWithValue }) => {
+    async (itemId, { rejectWithValue }) => {
         try {
-            return modifyLike(item)
+            return await modifyLike(itemId)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -36,7 +36,7 @@ export const likeSlice = createSlice({
     name: 'like',
     initialState: {
         likes: [],
-        item: null
+        item: {}
     }, 
     reducers: {
         
@@ -46,8 +46,18 @@ export const likeSlice = createSlice({
             state.likes = action.payload.likes
             state.item = action.payload.item
         },
+        [getLikesAsync.rejected]: (state, action) => {
+            state.errorType = action.payload.type
+        },
         [modifyLikeAsync.fulfilled]: (state, action) => {
-            state.likes = action.payload
+            if(state.likes.some(l => l._id === action.payload._id)) {
+                state.likes = state.likes.filter(l => l._id !== action.payload._id)
+            } else {
+                state.likes.push(action.payload)
+            }
+        },
+        [modifyLikeAsync.rejected]: (state, action) => {
+            state.errorType = action.payload.type
         }
     }
 })

@@ -9,36 +9,37 @@ const Item = require('../models/item')
 require('dotenv').config()
 
 router.get('/api/likes', checkAuth, async (req, res) => {
-    try {
-        const item = await Item.findById(req.query.itemId)
+    const item = await Item.findOne(
+        { shortId: req.query.itemShortId }
+    )
 
-        const likes = await Like.find({item: item})
-                            .populate('user')
-        return res.json({likes, item})
-    } catch(e) {
-        console.error(e)
-        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
-    }
+    if(item === null) 
+        return sendErrorToClient(res, CODE_ERROR.notFound, `${ERROR.notFound}.${SUBJECT.item}`)
+
+    Like.find(
+        { itemRef: item }
+    ).then(likes => {
+        res.json({ item, likes })
+    })
 })
 
 router.post('/api/like', checkAuth, async (req, res) => {
-    try {
-        const recivedLike = {
-            item: req.body,
-            user: req.user
-        }
-        const like = await Like.findOne({item: recivedLike.item, user: recivedLike.user })
-        if(like) {
-            await Like.findByIdAndDelete(like._id)
-        } else {
-            await Like.create(recivedLike)
-        }
-        const likes = await Like.find({item: recivedLike.item})
-                            .populate('user')
-        return res.json(likes)
-    } catch(e) {
-        console.error(e)
-        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
+    const item = await Item.findById(req.body.itemId)
+
+    const recivedLike = {
+        user: req.user,
+        itemRef: item
+    }
+
+    const like = await Like.findOne({
+        user: recivedLike.user,
+        itemRef: recivedLike.itemRef
+    })
+
+    if(like) {
+        await Like.findByIdAndDelete(like._id).then(result => res.json(result))
+    } else {
+        await Like.create(recivedLike).then(result => res.json(result))
     }
 })
 

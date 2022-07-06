@@ -11,11 +11,11 @@ const token = {
     "x-access-token": localStorage.getItem("token")
 }
 
-export const getItems = async collectionId => {
-    return await (await axios.get(GET_COLLECTION_ITEMS.axios, creatorOptions(token, null, {collectionId}))).data
+export const getItems = async collectionShortId => {
+    return await (await axios.get(GET_COLLECTION_ITEMS.axios, creatorOptions(token, null, {collectionShortId}))).data
 }
 
-export const modifyItem = async (item) => {
+export const modifyItem = async item => {
     return await (await axios.post(MODIFY_COLLECTION_ITEM.axios, item, creatorOptions(token))).data
 }
 
@@ -23,7 +23,7 @@ export const getTags = async () => {
     return await (await axios.get(GET_TAGS.axios, creatorOptions(token))).data
 }
 
-export const deleteItems = async items => {
-    await axios.delete(DELETE_COLLECTION_ITEMS.axios, creatorOptions(token, items))
-    return items
+export const deleteItems = async itemIds => {
+    await axios.delete(DELETE_COLLECTION_ITEMS.axios, creatorOptions(token, itemIds))
+    return itemIds
 }

@@ -10,23 +10,22 @@ import {
     GET_TYPE_FIELDS
 } from '../../axios/routes/routes'
 
-
-export const getTypeFieldsAsync = createAsyncThunk(
-    GET_TYPE_FIELDS.redux,
-    async (_, { rejectWithValue }) => {
+export const getSettingFieldsAsync = createAsyncThunk(
+    GET_COLLECTION_SETTING_FIELDS.redux,
+    async (collectionId, { rejectWithValue }) => {
         try {
-            return getTypeFields()
+            return await getSettingFields(collectionId)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
     }
 )
 
-export const getSettingFieldsAsync = createAsyncThunk(
-    GET_COLLECTION_SETTING_FIELDS.redux,
-    async (collection, { rejectWithValue }) => {
+export const getTypeFieldsAsync = createAsyncThunk(
+    GET_TYPE_FIELDS.redux,
+    async (_, { rejectWithValue }) => {
         try {
-            return getSettingFields(collection)
+            return await getTypeFields()
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -35,9 +34,9 @@ export const getSettingFieldsAsync = createAsyncThunk(
 
 export const modifySettingFieldsAsync = createAsyncThunk(
     MODIFY_COLLECTION_SETTING_FIELDS.redux,
-    ({settingFields, collection},{ rejectWithValue }) => {
+    async ({settingFields, collectionId},{ rejectWithValue }) => {
         try {
-            return modifySettingFields(settingFields, collection)
+            return await modifySettingFields(settingFields, collectionId)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -52,7 +51,7 @@ export const settingFieldsSlice = createSlice({
         isOpenedDialog: false,
         settingFields: [],
         typeFields: [],
-        collection: null
+        collectionId: null
     }, 
     reducers: {
         openDialog: (state, action) => {
@@ -66,10 +65,16 @@ export const settingFieldsSlice = createSlice({
         [getTypeFieldsAsync.fulfilled]: (state, action) => {
             state.typeFields = action.payload
         },
+        [getTypeFieldsAsync.rejected]: (state, action) => {
+            state.errorType = action.payload.type
+        },
         [getSettingFieldsAsync.fulfilled]: (state, action) => {
             state.settingFields = action.payload.settingFields
-            state.collection = action.payload.collection
+            state.collectionId = action.payload.collectionId
             state.isOpenedDialog = true
+        },
+        [getSettingFieldsAsync.rejected]: (state, action) => {
+            state.errorType = action.payload.type
         },
         [modifySettingFieldsAsync.fulfilled]: (state, action) => {
             state.isOpenedDialog = false

@@ -1,38 +1,21 @@
-import { FormControlLabel, Switch } from '@mui/material'
-import { useEffect } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { IconButton } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { choseThemeMode } from '../redux/themeModeSlice'
-import { FormattedMessage } from 'react-intl'
+import DarkModeIcon from '@mui/icons-material/DarkMode'
+import WbSunnyIcon from '@mui/icons-material/WbSunny'
 
 export default function SelectorThemeMode() {
-    const { control, watch } = useForm()
     const dispatch = useDispatch()
-    const defaultIsDark = useSelector(state => state.themeMode.isDark)
-
-    useEffect(() => {
-        const subscription = watch(value => dispatch(choseThemeMode(value)))
-        return () => subscription.unsubscribe()
-    }, [watch])
+    const themeMode = useSelector(state => state.themeMode.mode)
 
     return (
-        <FormControlLabel 
-            control={
-                <Controller 
-                    name='isDark'
-                    control={control}
-                    defaultValue={defaultIsDark}
-                    render={({field}) => 
-                        <Switch {...field} checked={field.value}  color="default" />  
-                    }
-                />
-            } 
-            label={
-                <FormattedMessage
-                    id="nav.theme"
-                    defaultMessage="Dark mode"
-                />
-            } 
-        />
+        <IconButton
+            onClick={() => dispatch(choseThemeMode(themeMode))}
+        >
+            {themeMode === 'dark' ?
+                <DarkModeIcon fontSize='large' /> :
+                <WbSunnyIcon fontSize='large' />
+            }
+        </IconButton>
     )
 }

@@ -23,6 +23,8 @@
     "server.error.forbidden.admin": "Ця дія заборонена",
     "server.error.server.server": "Помилка сервера",
     "server.error.auth.data": "Невірна адреса електронної пошти або пароль",
+    "server.error.notFound.collection": "This collection is not found",
+    "server.error.notFound.item": "This item is not found",
     "admin.table.header.email": "Електронна адреса",
     "admin.table.header.name": "Ім'я",
     "admin.table.header.date.login": "Дата входу",

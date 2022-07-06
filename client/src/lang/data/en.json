@@ -23,6 +23,8 @@
     "server.error.forbidden.admin": "This action is forbidden",
     "server.error.server.server": "Error server",
     "server.error.auth.data": "Invalid email or password",
+    "server.error.notFound.collection": "This collection is not found",
+    "server.error.notFound.item": "This item is not found",
     "admin.table.header.email": "Email",
     "admin.table.header.name": "Name",
     "admin.table.header.date.login": "Date Login",

@@ -41,13 +41,13 @@ export default function ModifyItem() {
     const isProccess = useSelector(state => state.items.isProccess)
     const editableItem = useSelector(state => state.items.editableItem)
     const tags = useSelector(state => state.items.tags)
-    const itemFields = useSelector(state => state.items.itemFields)
+    const settingFields = useSelector(state => state.items.settingFields)
     const collection = useSelector(state => state.items.collection)
 
     const modifyItem = data => {
-        data.fields = data.fields.filter(f => f.value !== '' && f.value !== undefined)
-        data.collectionRef = collection
-        dispatch(modifyItemAsync(data))
+        data.fields = data.fields.filter(f => f.value !== '' && f.value !== undefined && f.value !== null)
+        console.log(data)
+        dispatch(modifyItemAsync(data, collection._id))
     }
 
     useEffect(() => {
@@ -56,24 +56,24 @@ export default function ModifyItem() {
 
     useEffect(() => {
         clearErrors()
-        if(editableItem) {
+        if(editableItem._id) {
             setValue("_id", editableItem._id)
             setValue("name", editableItem.name)
             setValue("tags", editableItem.tags)
+            setValue("collectionRef", editableItem.collectionRef)
             
-            setValue('fields', itemFields.map(f => {
-                
-                const field = editableItem.fields.filter(ef => ef.fieldItem._id === f._id)[0]
-                console.log(field)
+            setValue('fields', settingFields.map(f => {                
+                const field = editableItem.fields.filter(ef => ef.settingField._id === f._id)[0]
                 return {
                     value: field && field.value, 
-                    fieldItem: f
+                    settingField: f
                 }
             }))
         } else {
             setValue("name", "")
             setValue("tags", [])
-            setValue('fields', itemFields.map(f => {return {value: undefined, fieldItem: f}}))
+            setValue("collectionRef", collection)
+            setValue('fields', settingFields.map(f => {return {value: undefined, settingField: f}}))
         }
         
     }, [editableItem])
@@ -140,7 +140,7 @@ export default function ModifyItem() {
                             {
                                 fields.map((f, index) => 
                                     <ItemField 
-                                        key={f.fieldItem._id} 
+                                        key={f.settingField._id} 
                                         index={index}
                                         control={control} 
                                         field={f} 

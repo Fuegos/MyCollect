@@ -15,9 +15,9 @@ import {
 
 export const modifyCollectionAsync = createAsyncThunk(
     MODIFY_COLLECTION.redux,
-    ({_id, collection, newImg}, { rejectWithValue }) => {
+    async ({_id, collection, newImg}, { rejectWithValue }) => {
         try {
-            return modifyCollection(_id, collection, newImg)
+            return await modifyCollection(_id, collection, newImg)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -26,9 +26,9 @@ export const modifyCollectionAsync = createAsyncThunk(
 
 export const deleteCollectionAsync = createAsyncThunk(
     DELETE_COLLECTION.redux,
-    (collection, { rejectWithValue }) => {
+    async (collectionId, { rejectWithValue }) => {
         try {
-            return deleteCollection(collection)
+            return await deleteCollection(collectionId)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -37,9 +37,9 @@ export const deleteCollectionAsync = createAsyncThunk(
 
 export const getThemesAsync = createAsyncThunk(
     GET_THEMES.redux,
-    (_, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
-            return getThemes()
+            return await getThemes()
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -48,9 +48,9 @@ export const getThemesAsync = createAsyncThunk(
 
 export const getCollectionsAsync = createAsyncThunk(
     GET_COLLECTIONS.redux,
-    (_, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
-            return getCollections()
+            return await getCollections()
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -66,14 +66,14 @@ export const collectionsSlice = createSlice({
         themes: [],
         isProccess: false,
         isOpenedDialog: false,
-        editableCollection: null
+        editableCollection: {}
     }, 
     reducers: {
         openDialog: (state, action) => {
             state.isOpenedDialog = true
         },
         closeDialog: (state, action) => {
-            state.editableCollection = null
+            state.editableCollection = {}
             state.isOpenedDialog = false
         },
         setEditableCollection: (state, action) => {
@@ -84,7 +84,7 @@ export const collectionsSlice = createSlice({
         [modifyCollectionAsync.fulfilled]: (state, action) => {
             state.isProccess = false
             state.isOpenedDialog = false
-            state.editableCollection = null
+            state.editableCollection = {}
             const index = state.collections.map(c => c._id).indexOf(action.payload._id)
             if (index > -1) {
                 state.collections.splice(index, 1, action.payload)
@@ -100,13 +100,22 @@ export const collectionsSlice = createSlice({
             state.errorType = action.payload.type
         },
         [deleteCollectionAsync.fulfilled]: (state, action) => {
-            state.collections = state.collections.filter(c => c._id !== action.payload._id)
+            state.collections = state.collections.filter(c => c._id !== action.payload)
+        },
+        [deleteCollectionAsync.rejected]: (state, action) => {
+            state.errorType = action.payload.type
         },
         [getThemesAsync.fulfilled]: (state, action) => {
             state.themes = action.payload
         },
+        [getThemesAsync.rejected]: (state, action) => {
+            state.errorType = action.payload.type
+        },
         [getCollectionsAsync.fulfilled]: (state, action) => {
             state.collections = action.payload
+        },
+        [getCollectionsAsync.rejected]: (state, action) => {
+            state.errorType = action.payload.type
         }
     }
 })

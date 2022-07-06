@@ -20,7 +20,7 @@ export default function Comments() {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if(item) {
+        if(item._id) {
             socket.emit('join:item', item._id)
         }
 
@@ -29,16 +29,22 @@ export default function Comments() {
         })
 
         return () => {
-            if(item) {
+            if(item._id) {
                 socket.emit('leave:item', item._id)
             }
             socket.off('get:comment')
         }
     }, [item])
 
-    const content = isProccess ?
-        <LinearProgress /> :
-        (
+
+    return (
+        <Box sx={{ 
+            bgcolor: 'primary.main', 
+            color: 'primary.contrastText', 
+            p: 2, 
+            mt: 3, 
+            mx: 5 
+        }}>
             <Stack
                 direction='column'
                 spacing={1}
@@ -51,18 +57,6 @@ export default function Comments() {
                 ))}
                 <AddComment />
             </Stack>
-            
-        )
-
-    return (
-        <Box sx={{ 
-            bgcolor: 'primary.main', 
-            color: 'primary.contrastText', 
-            p: 2, 
-            mt: 3, 
-            mx: 5 
-        }}>
-            {content}
         </Box>
     )
 }

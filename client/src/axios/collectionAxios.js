@@ -29,17 +29,20 @@ export const getTypeFields = async () => {
     return await (await axios.get(GET_TYPE_FIELDS.axios, creatorOptions(token))).data
 }
 
-export const getSettingFields = async collection => {
-    return await (await axios.get(GET_COLLECTION_SETTING_FIELDS.axios, creatorOptions(token, null, collection))).data
+export const getSettingFields = async collectionId => {
+    const settingFields = await (
+        await axios.get(GET_COLLECTION_SETTING_FIELDS.axios, creatorOptions(token, null, { collectionId }))
+    ).data
+    return { settingFields, collectionId }
 }
 
 export const getCollections = async () => {
     return await (await axios.get(GET_COLLECTIONS.axios, creatorOptions(token))).data
 }
 
-export const deleteCollection = async collection => {
-    await axios.delete(DELETE_COLLECTION.axios, creatorOptions(token, collection))
-    return collection
+export const deleteCollection = async collectionId => {
+    await axios.delete(DELETE_COLLECTION.axios, creatorOptions(token, null, { collectionId }))
+    return collectionId
 }
 
 export const modifyCollection = async (_id, collection, newImg) => {
@@ -55,6 +58,8 @@ export const modifyCollection = async (_id, collection, newImg) => {
     return await (await axios.post(MODIFY_COLLECTION.axios, {_id, collection}, creatorOptions(token))).data
 }
 
-export const modifySettingFields = async (settingFields, collection) => {
-    return await (await axios.post(MODIFY_COLLECTION_SETTING_FIELDS.axios, {settingFields, collection}, creatorOptions(token))).data
+export const modifySettingFields = async (settingFields, collectionId) => {
+    return await (
+        await axios.post(MODIFY_COLLECTION_SETTING_FIELDS.axios, settingFields, creatorOptions(token, null, { collectionId }))
+    ).data
 }

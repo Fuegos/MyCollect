@@ -14,7 +14,7 @@ export default function Like() {
     
     return (
         <IconButton 
-            onClick={() => dispatch(modifyLikeAsync(item))}
+            onClick={() => dispatch(modifyLikeAsync(item._id))}
         >
             {
                 isLiked ?

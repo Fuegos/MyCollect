@@ -1,5 +1,7 @@
 const mongoose = require('mongoose')
+const deleteImage = require('../cloudinary/deleteImage')
 const Schema = mongoose.Schema
+
 
 const imageSchema = new Schema({
     path: {
@@ -10,6 +12,10 @@ const imageSchema = new Schema({
         type: String,
         required: true
     }
+})
+
+imageSchema.post('findOneAndDelete', result => {
+    deleteImage(result.filename)
 })
 
 const Image = mongoose.model('image', imageSchema)

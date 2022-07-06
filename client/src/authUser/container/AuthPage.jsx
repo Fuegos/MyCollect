@@ -10,7 +10,7 @@ export default function AuthPage() {
 
     useEffect(() => {
         if(isAuth) {
-            navigate('../success')
+            navigate('../home')
         }
     }, [isAuth])
 

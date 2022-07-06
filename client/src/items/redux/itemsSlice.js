@@ -15,9 +15,9 @@ import {
 
 export const getItemsAsync = createAsyncThunk(
     GET_COLLECTION_ITEMS.redux,
-    (collection, { rejectWithValue }) => {
+    async (collectionShortId, { rejectWithValue }) => {
         try {
-            return getItems(collection._id)
+            return await getItems(collectionShortId)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -26,9 +26,9 @@ export const getItemsAsync = createAsyncThunk(
 
 export const getTagsAsync = createAsyncThunk(
     GET_TAGS.redux,
-    (_, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
-            return getTags()
+            return await getTags()
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -37,9 +37,9 @@ export const getTagsAsync = createAsyncThunk(
 
 export const modifyItemAsync = createAsyncThunk(
     MODIFY_COLLECTION_ITEM.redux,
-    (item, { rejectWithValue }) => {
+    async (item, { rejectWithValue }) => {
         try {
-            return modifyItem(item)
+            return await modifyItem(item)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -48,9 +48,9 @@ export const modifyItemAsync = createAsyncThunk(
 
 export const deleteItemsAsync = createAsyncThunk(
     DELETE_COLLECTION_ITEMS.redux,
-    (items, { rejectWithValue }) => {
+    async (itemIds, { rejectWithValue }) => {
         try {
-            return deleteItems(items)
+            return await deleteItems(itemIds)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -64,10 +64,10 @@ export const itemsSlice = createSlice({
         errorType: "",
         items: [],
         isProccess: false,
-        collection: null,
-        itemFields: [],
+        collection: {},
+        settingFields: [],
         isOpenedDialog: false,
-        editableItem: null,
+        editableItem: {},
         selectedItems: []
     }, 
     reducers: {
@@ -75,7 +75,7 @@ export const itemsSlice = createSlice({
             state.isOpenedDialog = true
         },
         closeDialog: (state, action) => {
-            state.editableItem = null
+            state.editableItem = {}
             state.isOpenedDialog = false
         },
         setEditableItem: (state, action) => {
@@ -89,7 +89,7 @@ export const itemsSlice = createSlice({
         [getItemsAsync.fulfilled]: (state, action) => {
             state.items = action.payload.items
             state.collection = action.payload.collection
-            state.itemFields = action.payload.itemFields
+            state.settingFields= action.payload.collection.settingFields
             state.isProccess = false
         },
         [getItemsAsync.rejected]: (state, action) => {
@@ -102,7 +102,7 @@ export const itemsSlice = createSlice({
         [modifyItemAsync.fulfilled]: (state, action) => {
             state.isProccess = false
             state.isOpenedDialog = false
-            state.editableItem = null
+            state.editableItem = {}
             const index = state.items.map(i => i._id).indexOf(action.payload._id)
             if (index > -1) {
                 state.items.splice(index, 1, action.payload)
@@ -120,8 +120,14 @@ export const itemsSlice = createSlice({
         [getTagsAsync.fulfilled]: (state, action) => {
             state.tags = action.payload
         },
+        [getTagsAsync.rejected]: (state, action) => {
+            state.errorType = action.payload.type
+        },
         [deleteItemsAsync.fulfilled]: (state, action) => {
             state.items = state.items.filter(i => !action.payload.includes(i._id))
+        },
+        [deleteItemsAsync.rejected]: (state, action) => {
+            state.errorType = action.payload.type
         }
     }
 })

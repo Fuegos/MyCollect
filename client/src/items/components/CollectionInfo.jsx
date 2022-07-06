@@ -13,11 +13,6 @@ import TruncateMarkup from 'react-truncate-markup'
 
 export default function CollectionInfo(props) {
     const collection = props.collection
-    const [expand, setExpand] = useState(false)
-
-    const handleExpand = () => {
-        setExpand(!expand)
-    }
 
     return (
         <Stack

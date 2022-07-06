@@ -11,9 +11,9 @@ import {
 
 export const getCommentsAsync = createAsyncThunk(
     GET_COMMENTS.redux,
-    (item, { rejectWithValue }) => {
+    async (itemShortId, { rejectWithValue }) => {
         try {
-            return getComments(item._id)
+            return await getComments(itemShortId)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -22,9 +22,9 @@ export const getCommentsAsync = createAsyncThunk(
 
 export const addCommentAsync = createAsyncThunk(
     ADD_COMMENT.redux,
-    (comment, { rejectWithValue }) => {
+    async (comment, { rejectWithValue }) => {
         try {
-            return addComment(comment)
+            return await addComment(comment)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -37,7 +37,7 @@ export const commentsSlice = createSlice({
         errorType: "",
         isProccess: false,
         comments: [],
-        item: null
+        item: {}
     }, 
     reducers: {
         getComment: (state, action) => {
@@ -56,9 +56,6 @@ export const commentsSlice = createSlice({
         },
         [getCommentsAsync.pending]: (state, action) => {
             state.isProccess = true
-        },
-        [addCommentAsync.fulfilled]: (state, action) => {
-            //state.comments.push(action.payload)
         },
         [addCommentAsync.rejected]: (state, action) => {
             state.errorType = action.payload.type

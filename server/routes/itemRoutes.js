@@ -5,127 +5,103 @@ const { CODE_ERROR, ERROR, SUBJECT } = require('../error/dataError')
 const { sendErrorToClient } = require('../error/handlerError')
 const checkAuth = require('../middleware/checkAuth')
 const Collection = require('../models/collection')
-const FieldItems = require('../models/field_items')
 const Item = require('../models/item')
 const Tag = require('../models/tag')
-const TypeField = require('../models/type_field')
-const ValueField = require('../models/value_field')
+const Field = require('../models/field')
+const { deleteManyByIds } = require('../mongodb/queries')
 require('dotenv').config()
 
-router.get('/api/collection/items', checkAuth, async (req, res) => {
-    try {
-        const collection = await Collection.findById(req.query.collectionId)
-                                .populate('img')
-                                .populate('owner')
-                                .populate('theme')
+router.get('/api/items/last', async (req, res) => {
+    Item.find(
+        {}
+    ).sort({dateCreated: -1})
+    .limit(req.query.count)
+    .then(result => res.json(result))
+})
 
-        const itemFields = await FieldItems.find({collectionRef: collection})
-                                .populate('collectionRef')
-                                .populate('typeField')
-        
-        const items = await Item.find({collectionRef: collection})
-                                .populate('tags')
-                                .populate({
-                                    path: 'fields',
-                                    populate: {
-                                        path: 'fieldItem',
-                                        model: FieldItems,
-                                        populate: {
-                                            path: 'typeField',
-                                            model: TypeField
-                                        }
-                                    }
-                                })
-        
-        return res.json({items, collection, itemFields})
-    } catch(e) {
-        console.error(e)
-        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
-    }
+router.get('/api/collection/items', checkAuth, async (req, res) => {
+    const collection = await Collection.findOne(
+        { shortId: req.query.collectionShortId }
+    )
+
+    if(collection === null) 
+        return sendErrorToClient(res, CODE_ERROR.notFound, `${ERROR.notFound}.${SUBJECT.collection}`)
+    
+    Item.find(
+        { collectionRef: collection }
+    ).then(items => {
+        res.json({collection, items})
+    })
 })
 
 router.get('/api/tags', checkAuth, async (req, res) => {
-    try {
-        Tag.find({}).then(result => res.json(result))
-    } catch(e) {
-        console.error(e)
-        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
-    }
+    Tag.find({}).then(result => res.json(result))
 })
 
 router.delete('/api/collection/items', checkAuth, (req, res) => {
-    try {
-        Item.deleteMany({
-            _id: {
-                $in: req.body
-            }
-        }).then(result => res.json(result))
-    } catch(e) {
-        console.error(e)
-        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
-    }
+    deleteManyByIds(req.body, Item).then(result => res.json(result))
 })
 
 
-router.post('/api/collection/item', checkAuth, (req, res) => {
-    try {
-        const item = {
-            _id: req.body._id,
-            name: req.body.name,
-            collectionRef: req.body.collectionRef
-        }
-
-        const updateTag = async t => {
-            const tag = typeof t === 'string' ? { name: t } : t
-            return await Tag.findByIdAndUpdate(
-                tag._id ?? new mongoose.Types.ObjectId(), tag, { upsert: true, new: true }
-            )
-        }
-
-        const updateTags = async () => {
-            return Promise.all(
-                req.body.tags.map(t => updateTag(t))
-            )
-        }
-
-        const updateField = async f => {
-            return await ValueField.findByIdAndUpdate(
-                f._id ?? new mongoose.Types.ObjectId(), f, { upsert: true, new: true }
-            )
-        }
-
-        const updateFields = async () => {
-            return Promise.all(
-                req.body.fields.map(f => updateField(f))
-            )
-        }
-
-        updateTags().then(tags => {
-            updateFields().then(fields => {
-                item.tags = tags
-                item.fields = fields
-                Item.findByIdAndUpdate(
-                    item._id ?? new mongoose.Types.ObjectId(), item, { upsert: true, new: true }
-                ).populate('tags')
-                .populate({
-                    path: 'fields',
-                    populate: {
-                        path: 'fieldItem',
-                        model: FieldItems,
-                        populate: {
-                            path: 'typeField',
-                            model: TypeField
-                        }
-                    }
-                })
-                .populate('collectionRef')
-                .then(result => res.json(result))
-            })
-        })
-    } catch(e) {
-        console.error(e)
-        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
+router.post('/api/collection/item', checkAuth, async (req, res) => {
+    const item = {
+        _id: req.body._id,
+        name: req.body.name,
+        collectionRef: req.body.collectionRef
     }
+
+    const oldItem = await Item.findById(item._id)
+    
+    const updateTag = async t => {
+        if(typeof t === 'string') {
+            const tag = await Tag.findOne({ name: t})
+            if(tag) {
+                return tag
+            } else {
+                return await Tag.create({ name: t })
+            }  
+        }
+        return t
+    }
+
+    const updateTags = async () => {
+        return Promise.all(
+            req.body.tags.map(t => updateTag(t))
+        )
+    }
+
+    const updateField = async f => {
+        return await Field.findByIdAndUpdate(
+            f._id ?? new mongoose.Types.ObjectId(), 
+            f, 
+            { upsert: true, new: true }
+        )
+    }
+
+    const updateFields = async () => {
+        return Promise.all(
+            req.body.fields.map(f => updateField(f))
+        )
+    }
+
+
+    updateTags().then(tags => {
+        item.tags = tags
+        updateFields().then(async fields => {
+            item.fields = fields
+            const oldFields = oldItem ? oldItem.fields.map(f => f._id) : []
+            const newFields = fields.map(f => f._id.toString())
+            await Field.deleteMany({
+                _id: { $in: oldFields.filter(f => !newFields.includes(f.toString())) }
+            })
+
+            Item.findByIdAndUpdate(
+                item._id ?? new mongoose.Types.ObjectId(), 
+                item, 
+                { upsert: true, new: true }
+            ).then(result => res.json(result)) 
+        })
+    })
 })
 
 module.exports = router

@@ -28,7 +28,6 @@ import {
     openDialog as openDialogSettings,
     getSettingFieldsAsync
 } from '../redux/settingFieldsSlice'
-import { getItemsAsync } from '../../items/redux/itemsSlice'
 import { useNavigate } from 'react-router-dom'
 
 export default function Collection(props) {
@@ -58,8 +57,7 @@ export default function Collection(props) {
                 role={undefined} 
                 dense
                 onClick={() => {
-                    dispatch(getItemsAsync(collection))
-                    navigate('items')
+                    navigate(`../collection/${collection.shortId}`)
                 }}
             >
                 <ListItemAvatar>
@@ -106,7 +104,7 @@ export default function Collection(props) {
                     <MenuItem 
                         onClick={() => {
                         handleClose()
-                        dispatch(getSettingFieldsAsync(collection))
+                        dispatch(getSettingFieldsAsync(collection._id))
                     }}>
                         <ListItemIcon>
                             <SettingsIcon />
@@ -119,7 +117,7 @@ export default function Collection(props) {
                     <MenuItem 
                         onClick={() => {
                             handleClose()
-                            dispatch(deleteCollectionAsync(collection))
+                            dispatch(deleteCollectionAsync(collection._id))
                     }}>
                         <ListItemIcon>
                             <DeleteIcon />

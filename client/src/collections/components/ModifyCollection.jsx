@@ -42,12 +42,12 @@ export default function ModifyCollection() {
             name: data.name,
             theme: data.theme,
             description: data.description,
-            img: editableCollection && editableCollection.img
+            img: editableCollection.img
         }
 
         dispatch(
             modifyCollectionAsync(
-                { _id: editableCollection && editableCollection._id, collection, newImg }
+                { _id: editableCollection._id, collection, newImg }
             )
         )
     }
@@ -58,7 +58,7 @@ export default function ModifyCollection() {
 
     useEffect(() => {
         clearErrors()
-        if(editableCollection) {
+        if(editableCollection._id) {
             setValue("name", editableCollection.name)
             setValue("theme", editableCollection.theme)
             setValue("description", editableCollection.description)

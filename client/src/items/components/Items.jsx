@@ -1,6 +1,5 @@
 import { Box, Stack, Chip, IconButton } from "@mui/material"
 import { useDispatch, useSelector } from "react-redux"
-import CollectionInfo from "./CollectionInfo"
 import { DataGrid } from '@mui/x-data-grid'
 import { langLocaleDataGrid } from "../../lang/data/dataLangs"
 import React from "react"
@@ -9,18 +8,14 @@ import VisibilityIcon from '@mui/icons-material/Visibility'
 import EditIcon from '@mui/icons-material/Edit'
 import { openDialog, setEditableItem, setSelectedItems } from "../redux/itemsSlice"
 import { useNavigate } from "react-router-dom"
-import { getCommentsAsync } from "../../comments/redux/commentsSlice"
-import { getLikesAsync } from "../../like/redux/likeSlice"
 
 
 export default function Items() {
-    const collection = useSelector(state => state.items.collection)
-    const isProccess = useSelector(state => state.items.isProccess)
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const items = useSelector(state => state.items.items)
     const lang = useSelector(state => state.lang.lang)
-    const itemFields = useSelector(state => state.items.itemFields)
+    const settingFields = useSelector(state => state.items.settingFields)
     const selectedItems = useSelector(state => state.items.selectedItems)
 
     const columns = [
@@ -36,10 +31,7 @@ export default function Items() {
                 <IconButton
                     onClick={() => {
                         const selectedItem = items.filter(i => i._id === params.row._id)[0]
-                        dispatch(setEditableItem(selectedItem))
-                        dispatch(getCommentsAsync(selectedItem))
-                        dispatch(getLikesAsync(selectedItem))
-                        navigate(selectedItem.shortId)
+                        navigate(`../item/${selectedItem.shortId}`)
                     }}
                 >
                     <VisibilityIcon />
@@ -57,7 +49,8 @@ export default function Items() {
             renderCell: params => (
                 <IconButton
                     onClick={() => {
-                        dispatch(setEditableItem(items.filter(i => i._id === params.row._id)[0]))
+                        const selectedItem = items.filter(i => i._id === params.row._id)[0]
+                        dispatch(setEditableItem(selectedItem))
                         dispatch(openDialog())
                     }}
                 >
@@ -91,7 +84,7 @@ export default function Items() {
         }
     ]
 
-    itemFields.forEach(f => {
+    settingFields.forEach(f => {
         const options = {
             field: f._id,
             headerName: f.label
@@ -117,7 +110,6 @@ export default function Items() {
         }
 
         columns.push(options)
-
     })
 
     const rows = items.map(i => {
@@ -128,7 +120,7 @@ export default function Items() {
             tags: i.tags
         }
         i.fields.forEach(f => {
-            item[f.fieldItem._id] = f.value
+            item[f.settingField._id] = f.value
         })
         return item
     })
