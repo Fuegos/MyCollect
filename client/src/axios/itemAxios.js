@@ -16,8 +16,8 @@ export const getItems = async collectionShortId => {
     return await (await axios.get(GET_COLLECTION_ITEMS.axios, creatorOptions(token, null, {collectionShortId}))).data
 }
 
-export const getItemsLast = async count => {
-    return await (await axios.get(GET_ITEMS_LAST.axios, creatorOptions(null, null, {count}))).data
+export const getItemsLast = async limit => {
+    return await (await axios.get(GET_ITEMS_LAST.axios, creatorOptions(null, null, { limit }))).data
 }
 
 export const modifyItem = async item => {

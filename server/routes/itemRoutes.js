@@ -16,7 +16,7 @@ router.get('/api/items/last', async (req, res) => {
         {}
     ).populate('collectionRef', 'name')
     .sort({dateCreated: -1})
-    .limit(req.query.count)
+    .limit(req.query.limit)
     .then(result => res.json(result))
 })
 

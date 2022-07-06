@@ -23,3 +23,4 @@ export const GET_LIKES = creatorRoute(GET, '/likes')
 export const MODIFY_LIKE = creatorRoute(POST, '/like')
 
 export const GET_ITEMS_LAST = creatorRoute(GET, '/items/last')
+export const GET_COLLECTIONS_BIGGEST = creatorRoute(GET, '/collections/biggest')

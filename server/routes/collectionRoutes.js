@@ -11,6 +11,7 @@ const Image = require('../models/image')
 require('dotenv').config()
 const SettingField = require('../models/settingField')
 const TypeField = require('../models/type_field')
+const Item = require('../models/item')
 
 
 router.post('/api/image', checkAuth, uploadCloud.single('file'), (req, res) => {
@@ -49,6 +50,61 @@ router.get('/api/collections', checkAuth, (req, res) => {
     Collection.find(
         { owner: req.user }
     ).then(result => res.json(result))
+})
+
+router.get('/api/collections/biggest', (req, res) => {
+    const limit = Number(req.query.limit)
+    Collection.aggregate([
+        {
+            $lookup: {
+                from: "items",
+                localField: "_id",
+                foreignField: "collectionRef",
+                as: "item"
+            }
+        },
+        {
+            $lookup: {
+                from: "users",
+                localField: "owner",
+                foreignField: "_id",
+                as: "owner"
+            }
+        },
+        {
+            $lookup: {
+                from: "images",
+                localField: "img",
+                foreignField: "_id",
+                as: "img"
+            }
+        },
+        {
+            $unwind: '$item'
+        },
+        {
+            $group: {
+                _id: "$_id",
+                name: { $first: "$name" },
+                shortId: { $first: "$shortId" },
+                img: { $first: { $arrayElemAt: ['$img', 0] } },
+                owner: { $first: { $arrayElemAt: ['$owner', 0] } },
+                count: { $sum: 1 }
+            }
+        },
+        {
+            $sort: {
+                "count": -1
+            }
+        },
+        {
+            $limit: limit
+        }
+    ])
+    .then(result => {
+        console.log(result)
+        res.json(result)
+    })
 })
 
 router.post('/api/collection/setting/fields', checkAuth, async (req, res) => {

@@ -8,7 +8,8 @@ import {
     MODIFY_COLLECTION,
     DELETE_IMAGE,
     UPLOAD_IMAGE, 
-    MODIFY_COLLECTION_SETTING_FIELDS
+    MODIFY_COLLECTION_SETTING_FIELDS,
+    GET_COLLECTIONS_BIGGEST
 } from "./routes/routes"
 import creatorOptions from "./creatorOptions"
 
@@ -38,6 +39,10 @@ export const getSettingFields = async collectionId => {
 
 export const getCollections = async () => {
     return await (await axios.get(GET_COLLECTIONS.axios, creatorOptions(token))).data
+}
+
+export const getCollectionsBiggest = async limit => {
+    return await (await axios.get(GET_COLLECTIONS_BIGGEST.axios, creatorOptions(null, null, { limit }))).data
 }
 
 export const deleteCollection = async collectionId => {

@@ -28,9 +28,9 @@ export const getItemsAsync = createAsyncThunk(
 
 export const getItemsLastAsync = createAsyncThunk(
     GET_ITEMS_LAST.redux,
-    async (count, { rejectWithValue }) => {
+    async (limit, { rejectWithValue }) => {
         try {
-            return await getItemsLast(count)
+            return await getItemsLast(limit)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }

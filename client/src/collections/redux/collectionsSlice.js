@@ -3,11 +3,13 @@ import {
     getThemes,   
     getCollections,
     modifyCollection,
-    deleteCollection
+    deleteCollection,
+    getCollectionsBiggest
 } from '../../axios/collectionAxios'
 import { 
     DELETE_COLLECTION, 
     GET_COLLECTIONS,  
+    GET_COLLECTIONS_BIGGEST,  
     GET_THEMES, 
     MODIFY_COLLECTION
 } from '../../axios/routes/routes'
@@ -51,6 +53,17 @@ export const getCollectionsAsync = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             return await getCollections()
+        } catch(e) {
+            return rejectWithValue({ type: e.response.data.type})
+        }
+    }
+)
+
+export const getCollectionsBiggestAsync = createAsyncThunk(
+    GET_COLLECTIONS_BIGGEST.redux,
+    async (limit, { rejectWithValue }) => {
+        try {
+            return await getCollectionsBiggest(limit)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -112,6 +125,12 @@ export const collectionsSlice = createSlice({
             state.errorType = action.payload.type
         },
         [getCollectionsAsync.fulfilled]: (state, action) => {
+            state.collections = action.payload
+        },
+        [getCollectionsAsync.rejected]: (state, action) => {
+            state.errorType = action.payload.type
+        },
+        [getCollectionsBiggestAsync.fulfilled]: (state, action) => {
             state.collections = action.payload
         },
         [getCollectionsAsync.rejected]: (state, action) => {
