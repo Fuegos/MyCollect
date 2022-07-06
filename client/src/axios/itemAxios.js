@@ -3,7 +3,8 @@ import {
     GET_COLLECTION_ITEMS, 
     GET_TAGS, 
     MODIFY_COLLECTION_ITEM,
-    DELETE_COLLECTION_ITEMS
+    DELETE_COLLECTION_ITEMS,
+    GET_ITEMS_LAST
 } from "./routes/routes"
 import creatorOptions from "./creatorOptions"
 
@@ -13,6 +14,10 @@ const token = {
 
 export const getItems = async collectionShortId => {
     return await (await axios.get(GET_COLLECTION_ITEMS.axios, creatorOptions(token, null, {collectionShortId}))).data
+}
+
+export const getItemsLast = async count => {
+    return await (await axios.get(GET_ITEMS_LAST.axios, creatorOptions(null, null, {count}))).data
 }
 
 export const modifyItem = async item => {

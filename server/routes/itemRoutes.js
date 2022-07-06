@@ -14,7 +14,8 @@ require('dotenv').config()
 router.get('/api/items/last', async (req, res) => {
     Item.find(
         {}
-    ).sort({dateCreated: -1})
+    ).populate('collectionRef', 'name')
+    .sort({dateCreated: -1})
     .limit(req.query.count)
     .then(result => res.json(result))
 })

@@ -21,3 +21,5 @@ export const ADD_COMMENT = creatorRoute(POST, '/comment')
 
 export const GET_LIKES = creatorRoute(GET, '/likes')
 export const MODIFY_LIKE = creatorRoute(POST, '/like')
+
+export const GET_ITEMS_LAST = creatorRoute(GET, '/items/last')

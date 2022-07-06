@@ -3,11 +3,13 @@ import {
     getItems,
     modifyItem,
     getTags,
-    deleteItems
+    deleteItems,
+    getItemsLast
 } from '../../axios/itemAxios'
 import {  
     DELETE_COLLECTION_ITEMS,
     GET_COLLECTION_ITEMS, 
+    GET_ITEMS_LAST, 
     GET_TAGS, 
     MODIFY_COLLECTION_ITEM
 } from '../../axios/routes/routes'
@@ -18,6 +20,17 @@ export const getItemsAsync = createAsyncThunk(
     async (collectionShortId, { rejectWithValue }) => {
         try {
             return await getItems(collectionShortId)
+        } catch(e) {
+            return rejectWithValue({ type: e.response.data.type})
+        }
+    }
+)
+
+export const getItemsLastAsync = createAsyncThunk(
+    GET_ITEMS_LAST.redux,
+    async (count, { rejectWithValue }) => {
+        try {
+            return await getItemsLast(count)
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -98,6 +111,17 @@ export const itemsSlice = createSlice({
         },
         [getItemsAsync.pending]: (state, action) => {
             state.isProccess = true
+        },
+        [getItemsLastAsync.fulfilled]: (state, action) => {
+            state.items = action.payload
+            state.isProccess = false
+        },
+        [getItemsLastAsync.pending]: (state, action) => {
+            state.isProccess = true
+        },
+        [getItemsLastAsync.rejected]: (state, action) => {
+            state.isProccess = false
+            state.errorType = action.payload.type
         },
         [modifyItemAsync.fulfilled]: (state, action) => {
             state.isProccess = false
