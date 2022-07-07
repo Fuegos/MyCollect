@@ -1,8 +1,7 @@
 import { Grid, Button, LinearProgress, Box, Typography } from '@mui/material'
 import { useForm } from "react-hook-form"
 import { useDispatch, useSelector } from 'react-redux'
-import { clearErrorType, signInUserAsync } from '../redux/authUserSlice'
-import ErrorAlert from '../../errors/ErrorAlert'
+import { signInUserAsync } from '../redux/authUserSlice'
 import { signInYupResolver } from '../validation/authUserValidation'
 import TextFieldController from '../../components/TextFieldController'
 import { FormattedMessage } from 'react-intl'
@@ -22,8 +21,6 @@ export default function SignIn() {
 
     const isProccess = useSelector(state => state.authUser.isProccess)
 
-    const errorType = useSelector(state => state.authUser.errorType)
-
     const signIn = data => {
         dispatch(signInUserAsync(data))
     }
@@ -40,10 +37,6 @@ export default function SignIn() {
                             />
                         </Typography>
                     </Grid>
-                    <ErrorAlert
-                        errorType={errorType}  
-                        clearErrorType={clearErrorType}
-                    />
                     <Grid item xs={12}>
                         <TextFieldController 
                             name="email"

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import catchError from '../../axios/catchError'
 import { 
     getItems,
     modifyItem,
@@ -15,45 +16,29 @@ import {
 
 export const getItemsAsync = createAsyncThunk(
     GET_COLLECTION_ITEMS.redux,
-    async (collectionShortId, { rejectWithValue }) => {
-        try {
-            return await getItems(collectionShortId)
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (collectionShortId, thunkAPI) => {
+        return await catchError(thunkAPI, () => getItems(collectionShortId))
     }
 )
 
 export const getItemsLastAsync = createAsyncThunk(
     GET_ITEMS_LAST.redux,
-    async (limit, { rejectWithValue }) => {
-        try {
-            return await getItemsLast(limit)
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (limit, thunkAPI) => {
+        return await catchError(thunkAPI, () => getItemsLast(limit))
     }
 )
 
 export const modifyItemAsync = createAsyncThunk(
     MODIFY_COLLECTION_ITEM.redux,
-    async (item, { rejectWithValue }) => {
-        try {
-            return await modifyItem(item)
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (item, thunkAPI) => {
+        return await catchError(thunkAPI, () => modifyItem(item))
     }
 )
 
 export const deleteItemsAsync = createAsyncThunk(
     DELETE_COLLECTION_ITEMS.redux,
-    async (itemIds, { rejectWithValue }) => {
-        try {
-            return await deleteItems(itemIds)
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (itemIds, thunkAPI) => {
+        return await catchError(thunkAPI, () => deleteItems(itemIds))
     }
 )
 
@@ -61,7 +46,6 @@ export const deleteItemsAsync = createAsyncThunk(
 export const itemsSlice = createSlice({ 
     name: 'items',
     initialState: {
-        errorType: "",
         items: [],
         isProccess: false,
         collection: {},
@@ -97,7 +81,6 @@ export const itemsSlice = createSlice({
         },
         [getItemsAsync.rejected]: (state, action) => {
             state.isProccess = false
-            state.errorType = action.payload.type
         },
         [getItemsAsync.pending]: (state, action) => {
             state.isProccess = true
@@ -111,7 +94,6 @@ export const itemsSlice = createSlice({
         },
         [getItemsLastAsync.rejected]: (state, action) => {
             state.isProccess = false
-            state.errorType = action.payload.type
         },
         [modifyItemAsync.fulfilled]: (state, action) => {
             state.isProccess = false
@@ -126,7 +108,6 @@ export const itemsSlice = createSlice({
         },
         [modifyItemAsync.rejected]: (state, action) => {
             state.isProccess = false
-            state.errorType = action.payload.type
         },
         [modifyItemAsync.pending]: (state, action) => {
             state.isProccess = true
@@ -135,7 +116,6 @@ export const itemsSlice = createSlice({
             state.items = state.items.filter(i => !action.payload.includes(i._id))
         },
         [deleteItemsAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
         }
     }
 })

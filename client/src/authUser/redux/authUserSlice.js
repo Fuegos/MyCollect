@@ -1,47 +1,27 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from "axios"
+import { checkUserToken, signInUser, signUpUser } from '../../axios/authUserAxios'
+import catchError from '../../axios/catchError'
+import { CHECK_USER_TOKEN, SIGN_IN_USER, SIGN_UP_USER } from '../../axios/routes/routes'
 
 
 export const signUpUserAsync = createAsyncThunk(
-    'auth/user/sign/up',
-    async (user, { rejectWithValue }) => {
-        try {
-            return await (await axios.post('/api/auth/sign/up', user)).data
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    SIGN_UP_USER.redux,
+    async (user, thunkAPI) => {
+        return await catchError(thunkAPI, () => signUpUser(user))
     }
 )
 
 export const checkTokenUserAsync = createAsyncThunk(
-    'auth/user/token',
-    async (_, { rejectWithValue }) => {
-        try {
-            const token = {
-                headers: {
-                    "x-access-token": localStorage.getItem("token")
-                }
-            }
-            return await (await axios.get('/api/auth/token', token)).data
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    CHECK_USER_TOKEN.redux,
+    async (_, thunkAPI) => {
+        return await catchError(thunkAPI, () => checkUserToken())
     }
 )
 
 export const signInUserAsync = createAsyncThunk(
-    'auth/user/sign/in',
-    async (user, { rejectWithValue }) => {
-        try {
-            return await (await axios.get('/api/auth/sign/in', {
-                params: {
-                    email: user.email,
-                    password: user.password
-                }
-            })).data
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    SIGN_IN_USER.redux,
+    async (user, thunkAPI) => {
+        return await catchError(thunkAPI, async () => signInUser(user))
     }
 )
 
@@ -52,13 +32,9 @@ export const authUserSlice = createSlice({
         name: "",
         isAuth: false,
         isAdmin: false,
-        errorType: "",
         isProccess: false
     }, 
     reducers: {
-        clearErrorType: (state, action) => {
-            state.errorType = ""
-        },
         signOutUser: (state, action) => {
             localStorage.removeItem("token")
             state.isAuth = false
@@ -74,20 +50,17 @@ export const authUserSlice = createSlice({
             state.isProccess = false
         },
         [signUpUserAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
             state.isProccess = false
         },
         [signUpUserAsync.pending]: (state, action) => {
             state.isProccess = true
         },
-
         [checkTokenUserAsync.fulfilled]: (state, action) => {
             state.email = action.payload.email
             state.name = action.payload.name
             state.isAdmin = action.payload.isAdmin
             state.isAuth = true
         },
-
         [signInUserAsync.fulfilled]: (state, action) => {
             localStorage.setItem("token", action.payload.token)
             state.email = action.payload.email
@@ -97,7 +70,6 @@ export const authUserSlice = createSlice({
             state.isProccess = false
         },
         [signInUserAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
             state.isProccess = false
         },
         [signInUserAsync.pending]: (state, action) => {
@@ -106,6 +78,6 @@ export const authUserSlice = createSlice({
     }
 })
 
-export const { clearErrorType, signOutUser } = authUserSlice.actions
+export const { signOutUser } = authUserSlice.actions
 
 export default authUserSlice.reducer

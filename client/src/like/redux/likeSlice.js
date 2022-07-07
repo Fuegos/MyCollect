@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import catchError from '../../axios/catchError'
 import { 
     getLikes,
     modifyLike
@@ -11,23 +12,15 @@ import {
 
 export const getLikesAsync = createAsyncThunk(
     GET_LIKES.redux,
-    async (itemId, { rejectWithValue }) => {
-        try {
-            return await getLikes(itemId)
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (itemId, thunkAPI) => {
+        return await catchError(thunkAPI, () => getLikes(itemId))
     }
 )
 
 export const modifyLikeAsync = createAsyncThunk(
     MODIFY_LIKE.redux,
-    async (itemId, { rejectWithValue }) => {
-        try {
-            return await modifyLike(itemId)
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (itemId, thunkAPI) => {
+        return await catchError(thunkAPI, () => modifyLike(itemId))
     }
 )
 
@@ -47,7 +40,6 @@ export const likeSlice = createSlice({
             state.item = action.payload.item
         },
         [getLikesAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
         },
         [modifyLikeAsync.fulfilled]: (state, action) => {
             if(state.likes.some(l => l._id === action.payload._id)) {
@@ -57,7 +49,6 @@ export const likeSlice = createSlice({
             }
         },
         [modifyLikeAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
         }
     }
 })

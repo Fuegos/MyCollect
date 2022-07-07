@@ -9,6 +9,7 @@ import itemsReducer from '../items/redux/itemsSlice'
 import commentsReducer from '../comments/redux/commentsSlice'
 import likeReducer from '../like/redux/likeSlice'
 import tagsReducer from '../tag/redux/tagSlice'
+import errorsReducer from '../error/redux/errorsSlice'
 
 
 export default configureStore({
@@ -22,6 +23,7 @@ export default configureStore({
     items: itemsReducer,
     comments: commentsReducer,
     like: likeReducer,
-    tags: tagsReducer
+    tags: tagsReducer,
+    errors: errorsReducer
   },
 })

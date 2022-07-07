@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import catchError from '../../axios/catchError'
 import { 
     getThemes,   
     getCollections,
@@ -17,56 +18,36 @@ import {
 
 export const modifyCollectionAsync = createAsyncThunk(
     MODIFY_COLLECTION.redux,
-    async ({_id, collection, newImg}, { rejectWithValue }) => {
-        try {
-            return await modifyCollection(_id, collection, newImg)
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async ({_id, collection, newImg}, thunkAPI) => {
+        return await catchError(thunkAPI, () => modifyCollection(_id, collection, newImg))
     }
 )
 
 export const deleteCollectionAsync = createAsyncThunk(
     DELETE_COLLECTION.redux,
-    async (collectionId, { rejectWithValue }) => {
-        try {
-            return await deleteCollection(collectionId)
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (collectionId, thunkAPI) => {
+        return await catchError(thunkAPI, () => deleteCollection(collectionId))
     }
 )
 
 export const getThemesAsync = createAsyncThunk(
     GET_THEMES.redux,
-    async (_, { rejectWithValue }) => {
-        try {
-            return await getThemes()
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (_, thunkAPI) => {
+        return await catchError(thunkAPI, () => getThemes())
     }
 )
 
 export const getCollectionsAsync = createAsyncThunk(
     GET_COLLECTIONS.redux,
-    async (_, { rejectWithValue }) => {
-        try {
-            return await getCollections()
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (_, thunkAPI) => {
+        return await catchError(thunkAPI, () => getCollections())
     }
 )
 
 export const getCollectionsBiggestAsync = createAsyncThunk(
     GET_COLLECTIONS_BIGGEST.redux,
-    async (limit, { rejectWithValue }) => {
-        try {
-            return await getCollectionsBiggest(limit)
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (limit, thunkAPI) => {
+        return await catchError(thunkAPI, () => getCollectionsBiggest(limit))
     }
 )
 
@@ -74,7 +55,6 @@ export const getCollectionsBiggestAsync = createAsyncThunk(
 export const collectionsSlice = createSlice({ 
     name: 'collections',
     initialState: {
-        errorType: "",
         collections: [],
         themes: [],
         isProccess: false,
@@ -113,31 +93,26 @@ export const collectionsSlice = createSlice({
         },
         [modifyCollectionAsync.rejected]: (state, action) => {
             state.isProccess = false
-            state.errorType = action.payload.type
         },
         [deleteCollectionAsync.fulfilled]: (state, action) => {
             state.collections = state.collections.filter(c => c._id !== action.payload)
         },
         [deleteCollectionAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
         },
         [getThemesAsync.fulfilled]: (state, action) => {
             state.themes = action.payload
         },
         [getThemesAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
         },
         [getCollectionsAsync.fulfilled]: (state, action) => {
             state.collections = action.payload
         },
         [getCollectionsAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
         },
         [getCollectionsBiggestAsync.fulfilled]: (state, action) => {
             state.collections = action.payload
         },
         [getCollectionsAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
         }
     }
 })

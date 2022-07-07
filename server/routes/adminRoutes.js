@@ -9,35 +9,35 @@ const checkAdmin = require('../middleware/checkAdmin')
 const checkAuth = require('../middleware/checkAuth')
 
 
-router.get('/api/admin/users', checkAuth, checkAdmin, (req, res) => {
+router.get('/api/users', checkAuth, checkAdmin, (req, res) => {
     User.find(
         {}, {password: 0}
     ).then(users => res.json(users))
 })
 
-router.put('/api/admin/users/status/:status', checkAuth, checkAdmin, (req, res) => {
+router.put('/api/users/status', checkAuth, checkAdmin, (req, res) => {
     User.updateMany(
         {
             _id: {
                 $in: req.body.map(u => u._id)
             }
         },
-        { status: req.params.status }
+        { status: req.query.status }
     ).then(result => res.json(result))
 })
 
-router.put('/api/admin/users/role/:role', checkAuth, checkAdmin, (req, res) => {
+router.put('/api/users/role', checkAuth, checkAdmin, (req, res) => {
     User.updateMany(
         {
             _id: {
                 $in: req.body.map(u => u._id)
             }
         },
-        { role: req.params.role }
+        { role: req.query.role }
     ).then(result => res.json(result))
 })
 
-router.delete('/api/admin/users', checkAuth, checkAdmin, (req, res) => {
+router.delete('/api/users', checkAuth, checkAdmin, (req, res) => {
     User.deleteMany({
         _id: {
             $in: req.body.map(u => u._id)

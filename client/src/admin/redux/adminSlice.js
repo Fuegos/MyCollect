@@ -1,69 +1,44 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from "axios"
+import { 
+    changeUsersRole, 
+    changeUsersStatus, 
+    deleteUsers, 
+    getUsers 
+} from '../../axios/adminAxios'
+import catchError from '../../axios/catchError'
+import { 
+    CHANGE_USERS_ROLE, 
+    CHANGE_USERS_STATUS, 
+    DELETE_USERS, 
+    GET_USERS 
+} from '../../axios/routes/routes'
 
 
 export const getUsersAsync = createAsyncThunk(
-    'admin/users',
-    async (_, { rejectWithValue }) => {
-        try {
-            const token = {
-                headers: {
-                    "x-access-token": localStorage.getItem("token")
-                }
-            }
-            return await (await axios.get('/api/admin/users', token)).data
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    GET_USERS.redux,
+    async (_, thunkAPI) => {
+        return await catchError(thunkAPI, () => getUsers())
     }
 )
 
 export const changeStatusUsersAsync = createAsyncThunk(
-    'admin/users/change/status',
-    async ({users, status}, { rejectWithValue }) => {
-        try {
-            const token = {
-                headers: {
-                    "x-access-token": localStorage.getItem("token")
-                }
-            }
-            await axios.put(`/api/admin/users/status/${status}`, users, token)
-            return { users, status }
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    CHANGE_USERS_STATUS.redux,
+    async ({users, status}, thunkAPI) => {
+        return await catchError(thunkAPI, () => changeUsersStatus(users, status))
     }
 )
 
 export const changeRoleUsersAsync = createAsyncThunk(
-    'admin/users/change/role',
-    async ({users, role}, { rejectWithValue }) => {
-        try {
-            const token = {
-                headers: {
-                    "x-access-token": localStorage.getItem("token")
-                }
-            }
-            await axios.put(`/api/admin/users/role/${role}`, users, token)
-            return { users, role }
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    CHANGE_USERS_ROLE.redux,
+    async ({users, role}, thunkAPI) => {
+        return await catchError(thunkAPI, () => changeUsersRole(users, role))
     }
 )
 
 export const deleteUsersAsync = createAsyncThunk(
-    'admin/users/delete',
-    async (users, { rejectWithValue }) => {
-        try {
-            const headers = {
-                    "x-access-token": localStorage.getItem("token")
-            }
-            await axios.delete(`/api/admin/users`, {data: users, headers})
-            return users
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    DELETE_USERS.redux,
+    async (users, thunkAPI) => {
+        return await catchError(thunkAPI, () => deleteUsers(users))
     }
 )
 
@@ -73,7 +48,6 @@ export const adminSlice = createSlice({
     initialState: {
         users: [],
         isProccessUsers: false,
-        errorType: "",
         selectedUsers: [],
         isProccessToolBar: false
     }, 
@@ -89,9 +63,6 @@ export const adminSlice = createSlice({
         },
         removeAllSelectedUsers: (state, action) => {
             state.selectedUsers = []
-        },
-        clearErrorType: (state, action) => {
-            state.errorType = ""
         }
     },
     extraReducers: {
@@ -100,7 +71,6 @@ export const adminSlice = createSlice({
             state.users = action.payload
         },
         [getUsersAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
             state.isProccessUsers = false
         },
         [getUsersAsync.pending]: (state, action) => {
@@ -118,7 +88,6 @@ export const adminSlice = createSlice({
         },
         [changeStatusUsersAsync.rejected]: (state, action) => {
             state.isProccessToolBar = false
-            state.errorType = action.payload.type
         },
         [changeStatusUsersAsync.pending]: (state, action) => {
             state.isProccessToolBar = true
@@ -135,7 +104,6 @@ export const adminSlice = createSlice({
         },
         [changeRoleUsersAsync.rejected]: (state, action) => {
             state.isProccessToolBar = false
-            state.errorType = action.payload.type
         },
         [changeRoleUsersAsync.pending]: (state, action) => {
             state.isProccessToolBar = true
@@ -149,7 +117,6 @@ export const adminSlice = createSlice({
         },
         [deleteUsersAsync.rejected]: (state, action) => {
             state.isProccessToolBar = false
-            state.errorType = action.payload.type
         },
         [deleteUsersAsync.pending]: (state, action) => {
             state.isProccessToolBar = true
@@ -157,6 +124,12 @@ export const adminSlice = createSlice({
     }
 })
 
-export const { addSelectedUser, removeSelectedUser, addAllSelectedUsers, removeAllSelectedUsers, clearErrorType } = adminSlice.actions
+export const { 
+    addSelectedUser, 
+    removeSelectedUser, 
+    addAllSelectedUsers, 
+    removeAllSelectedUsers, 
+    clearErrorType 
+} = adminSlice.actions
 
 export default adminSlice.reducer

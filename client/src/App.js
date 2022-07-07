@@ -13,6 +13,7 @@ import CollectionsPage from './collections/container/CollectionsPage'
 import HomePage from './home/container/HomePage'
 import ItemsPage from './items/container/ItemsPage'
 import ItemPage from './items/container/ItemPage'
+import HandlerErrors from './error/HandlerErrors'
 
 
 function App() {
@@ -45,6 +46,7 @@ function App() {
                         <Route path="item/:itemShortId" element={<ItemPage />} />
                         <Route path="*" element={<Navigate replace to="home" />}/>
                     </Routes>
+                    <HandlerErrors />
                 </BrowserRouter>
             </ThemeProvider>
         </IntlProvider>

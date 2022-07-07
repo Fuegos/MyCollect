@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { TagCloud } from 'react-tagcloud'
 import { getTagsAsync } from './redux/tagSlice'
 import { useEffect } from 'react'
+import { Chip } from '@mui/material'
 
 export default function CloudTags() {
     const dispatch = useDispatch()
@@ -13,20 +14,15 @@ export default function CloudTags() {
     }))
 
     const customRenderer = (tag, size, color) => (
-        <span
-          key={tag.value}
-          style={{
-            border: `2px solid ${color}`,
-            margin: '5px',
-            padding: '5px',
-            display: 'inline-block',
-            color: 'white',
-            fontSize: `${size}px`
-          }}
-        >
-          {tag.value}
-        </span>
-      )
+        <Chip 
+            key={tag.value} 
+            label={tag.value} 
+            sx={{
+                m: 1,
+                bgcolor: `${color}`
+            }}
+        />
+    )
 
     useEffect(() => {
         dispatch(getTagsAsync())

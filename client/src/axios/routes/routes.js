@@ -24,3 +24,11 @@ export const MODIFY_LIKE = creatorRoute(POST, '/like')
 
 export const GET_ITEMS_LAST = creatorRoute(GET, '/items/last')
 export const GET_COLLECTIONS_BIGGEST = creatorRoute(GET, '/collections/biggest')
+
+export const GET_USERS = creatorRoute(GET, '/users')
+export const CHANGE_USERS_STATUS = creatorRoute(PUT, '/users/status')
+export const CHANGE_USERS_ROLE = creatorRoute(PUT, '/users/role')
+export const DELETE_USERS = creatorRoute(DELETE, '/users')
+export const SIGN_IN_USER = creatorRoute(GET, '/user/sign/in')
+export const SIGN_UP_USER = creatorRoute(POST, '/user/sign/up')
+export const CHECK_USER_TOKEN = creatorRoute(GET, '/user/token')

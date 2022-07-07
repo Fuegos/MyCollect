@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import catchError from '../../axios/catchError'
 import { 
     getComments,
     addComment
@@ -11,30 +12,21 @@ import {
 
 export const getCommentsAsync = createAsyncThunk(
     GET_COMMENTS.redux,
-    async (itemShortId, { rejectWithValue }) => {
-        try {
-            return await getComments(itemShortId)
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (itemShortId, thunkAPI) => {
+        return await catchError(thunkAPI, () => getComments(itemShortId))
     }
 )
 
 export const addCommentAsync = createAsyncThunk(
     ADD_COMMENT.redux,
-    async (comment, { rejectWithValue }) => {
-        try {
-            return await addComment(comment)
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (comment, thunkAPI) => {
+        return await catchError(thunkAPI, () => addComment(comment))
     }
 )
 
 export const commentsSlice = createSlice({ 
     name: 'comments',
     initialState: {
-        errorType: "",
         isProccess: false,
         comments: [],
         item: {}
@@ -52,13 +44,11 @@ export const commentsSlice = createSlice({
         },
         [getCommentsAsync.rejected]: (state, action) => {
             state.isProccess = false
-            state.errorType = action.payload.type
         },
         [getCommentsAsync.pending]: (state, action) => {
             state.isProccess = true
         },
         [addCommentAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
         }
     }
 })

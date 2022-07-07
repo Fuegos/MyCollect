@@ -11,7 +11,6 @@ const { getUserByName, getUserByEmail, getUserById, setDateLoginUser } = require
 
 const comparePassword = async user => await bcrypt.hash(user.password, 10)
 
-
 const authenticateUser = (res, user) => {
     const payload = {
         id: user._id
@@ -40,7 +39,7 @@ const authenticateUser = (res, user) => {
 }
 
 
-router.post('/api/auth/sign/up', async (req, res) => {
+router.post('/api/user/sign/up', async (req, res) => {
     const user = req.body
     if(await getUserByName(user.name)) {
         return sendErrorToClient(res, CODE_ERROR.forbidden, `${ERROR.forbidden}.${SUBJECT.name}`)
@@ -55,7 +54,7 @@ router.post('/api/auth/sign/up', async (req, res) => {
     })
 })
 
-router.get('/api/auth/token', (req, res) => {
+router.get('/api/user/token', (req, res) => {
     const token = req.headers["x-access-token"]?.split(' ')[1]
     if(token) {
         jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
@@ -75,7 +74,7 @@ router.get('/api/auth/token', (req, res) => {
     }
 })
 
-router.get('/api/auth/sign/in', async (req, res) => {
+router.get('/api/user/sign/in', async (req, res) => {
     const userParams = req.query
     const user = await getUserByEmail(userParams.email)
     if(!user) {

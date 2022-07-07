@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import catchError from '../../axios/catchError'
 import { 
     getTags
 } from '../../axios/itemAxios'
@@ -9,19 +10,14 @@ import {
 
 export const getTagsAsync = createAsyncThunk(
     GET_TAGS.redux,
-    async (_, { rejectWithValue }) => {
-        try {
-            return await getTags()
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (_, thunkAPI) => {
+        return await catchError(thunkAPI, () => getTags())
     }
 )
 
 export const tagsSlice = createSlice({ 
     name: 'tags',
     initialState: {
-        errorType: "",
         isProccess: false,
         tags: []
     }, 
@@ -37,7 +33,6 @@ export const tagsSlice = createSlice({
             state.isProccess = true
         },
         [getTagsAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
             state.isProccess = false
         }
     }
