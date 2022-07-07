@@ -1,12 +1,13 @@
-import { Grid, Avatar, Stack, Chip, Badge, Box } from "@mui/material"
+import { Grid, Avatar, Stack, Chip, Badge, Box, Typography } from "@mui/material"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getCollectionsBiggestAsync } from "../../collections/redux/collectionsSlice"
+import { getCollectionsBiggestAsync, resetCollections } from "../../collections/redux/collectionsSlice"
 import ListElements from "../../components/ListElements"
-import { getItemsLastAsync } from "../../items/redux/itemsSlice"
+import { getItemsLastAsync, resetItems } from "../../items/redux/itemsSlice"
 import ImageIcon from '@mui/icons-material/Image'
 import { FormattedMessage } from 'react-intl'
 import LabelIcon from '@mui/icons-material/Label'
+import CloudTags from "../../tag/CloudTags"
 
 
 export default function HomePage() {
@@ -74,6 +75,11 @@ export default function HomePage() {
     useEffect(() => {
         dispatch(getItemsLastAsync(5))
         dispatch(getCollectionsBiggestAsync(5))
+
+        return () => {
+            dispatch(resetCollections())
+            dispatch(resetItems())
+        }
     }, [])
 
     return (
@@ -100,6 +106,15 @@ export default function HomePage() {
                             />
                         }
                     />
+                </Grid>
+                <Grid item xs={12}>
+                    <Typography variant="h5" >
+                        <FormattedMessage
+                            id="tags"
+                            defaultMessage="Tags"
+                        />
+                    </Typography>
+                    <CloudTags />
                 </Grid>
             </Grid>
         </Box>

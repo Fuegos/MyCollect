@@ -2,7 +2,6 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { 
     getItems,
     modifyItem,
-    getTags,
     deleteItems,
     getItemsLast
 } from '../../axios/itemAxios'
@@ -10,7 +9,6 @@ import {
     DELETE_COLLECTION_ITEMS,
     GET_COLLECTION_ITEMS, 
     GET_ITEMS_LAST, 
-    GET_TAGS, 
     MODIFY_COLLECTION_ITEM
 } from '../../axios/routes/routes'
 
@@ -31,17 +29,6 @@ export const getItemsLastAsync = createAsyncThunk(
     async (limit, { rejectWithValue }) => {
         try {
             return await getItemsLast(limit)
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
-    }
-)
-
-export const getTagsAsync = createAsyncThunk(
-    GET_TAGS.redux,
-    async (_, { rejectWithValue }) => {
-        try {
-            return await getTags()
         } catch(e) {
             return rejectWithValue({ type: e.response.data.type})
         }
@@ -96,6 +83,9 @@ export const itemsSlice = createSlice({
         },
         setSelectedItems: (state, action) => {
             state.selectedItems = action.payload
+        },
+        resetItems: (state, action) => {
+            state.items = []
         }
     },
     extraReducers: {
@@ -141,12 +131,6 @@ export const itemsSlice = createSlice({
         [modifyItemAsync.pending]: (state, action) => {
             state.isProccess = true
         },
-        [getTagsAsync.fulfilled]: (state, action) => {
-            state.tags = action.payload
-        },
-        [getTagsAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
-        },
         [deleteItemsAsync.fulfilled]: (state, action) => {
             state.items = state.items.filter(i => !action.payload.includes(i._id))
         },
@@ -160,7 +144,8 @@ export const {
     openDialog,
     closeDialog,
     setEditableItem,
-    setSelectedItems
+    setSelectedItems,
+    resetItems
 } = itemsSlice.actions
 
 export default itemsSlice.reducer

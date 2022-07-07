@@ -8,6 +8,7 @@ import settingFieldsReducer from '../collections/redux/settingFieldsSlice'
 import itemsReducer from '../items/redux/itemsSlice'
 import commentsReducer from '../comments/redux/commentsSlice'
 import likeReducer from '../like/redux/likeSlice'
+import tagsReducer from '../tag/redux/tagSlice'
 
 
 export default configureStore({
@@ -20,6 +21,7 @@ export default configureStore({
     settingFields: settingFieldsReducer,
     items: itemsReducer,
     comments: commentsReducer,
-    like: likeReducer
+    like: likeReducer,
+    tags: tagsReducer
   },
 })

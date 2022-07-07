@@ -32,6 +32,7 @@
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-show-more-text": "^1.5.2",
+    "react-tagcloud": "^2.2.0",
     "react-truncate-markup": "^5.1.0",
     "react-world-flags": "^1.5.0",
     "read-more-react": "^1.0.10",

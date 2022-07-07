@@ -91,6 +91,9 @@ export const collectionsSlice = createSlice({
         },
         setEditableCollection: (state, action) => {
             state.editableCollection = action.payload
+        },
+        resetCollections: (state, action) => {
+            state.collections = []
         }
     },
     extraReducers: {
@@ -142,7 +145,8 @@ export const collectionsSlice = createSlice({
 export const { 
     openDialog, 
     closeDialog, 
-    setEditableCollection
+    setEditableCollection,
+    resetCollections
 } = collectionsSlice.actions
 
 export default collectionsSlice.reducer

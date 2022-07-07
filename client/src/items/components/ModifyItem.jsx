@@ -13,11 +13,12 @@ import {
 import { FormattedMessage } from 'react-intl'
 import { Controller, useForm, useFieldArray } from "react-hook-form"
 import { useDispatch, useSelector } from 'react-redux'
-import { closeDialog, getTagsAsync, modifyItemAsync } from '../redux/itemsSlice'
+import { closeDialog, modifyItemAsync } from '../redux/itemsSlice'
 import TextFieldController from '../../components/TextFieldController'
 import AutocompleteController from '../../components/AutocompleteController'
 import ItemField from './ItemField'
 import { itemYupResolver } from '../validation/itemValidation'
+import { getTagsAsync } from '../../tag/redux/tagSlice'
 
 
 export default function ModifyItem() {
@@ -40,7 +41,7 @@ export default function ModifyItem() {
     const isOpenedDialog = useSelector(state => state.items.isOpenedDialog)
     const isProccess = useSelector(state => state.items.isProccess)
     const editableItem = useSelector(state => state.items.editableItem)
-    const tags = useSelector(state => state.items.tags)
+    const tags = useSelector(state => state.tags.tags)
     const settingFields = useSelector(state => state.items.settingFields)
     const collection = useSelector(state => state.items.collection)
 

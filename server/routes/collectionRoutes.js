@@ -102,7 +102,6 @@ router.get('/api/collections/biggest', (req, res) => {
         }
     ])
     .then(result => {
-        console.log(result)
         res.json(result)
     })
 })
