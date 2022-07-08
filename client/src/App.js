@@ -14,6 +14,7 @@ import HomePage from './home/container/HomePage'
 import ItemsPage from './items/container/ItemsPage'
 import ItemPage from './items/container/ItemPage'
 import HandlerErrors from './error/HandlerErrors'
+import AccessProvider from './access/AccessProvider'
 
 
 function App() {
@@ -40,7 +41,11 @@ function App() {
                     <Routes>
                         <Route path="auth/*" element={<AuthPage />}/>
                         <Route path="home" element={<HomePage />}/>
-                        <Route path="admin" element={<AdminPage />}/>
+                        <Route path="admin" element={
+                            <AccessProvider component={
+                                () => <AdminPage />
+                            } /> 
+                        }/>
                         <Route path="collections" element={<CollectionsPage />}/>
                         <Route path="collection/:collectionShortId" element={<ItemsPage />} />
                         <Route path="item/:itemShortId" element={<ItemPage />} />

@@ -10,6 +10,7 @@ import { FormattedMessage } from 'react-intl'
 import { signOutUser } from '../authUser/redux/authUserSlice'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark'
+import AccessProvider from '../access/AccessProvider';
 
 
 export default function MenuBar() {
@@ -84,20 +85,24 @@ export default function MenuBar() {
             />
         </MenuItem>
     
-    const adminPanel = isAuth && isAdmin &&
-        <MenuItem
-            onClick={() => navigate('admin')}
-        >
-            <ListItemIcon>
-                <AdminPanelSettingsIcon />
-            </ListItemIcon>
+    const adminPanel = isAuth && 
+        <AccessProvider 
+            component={() =>
+                <MenuItem
+                    onClick={() => navigate('admin')}
+                >
+                    <ListItemIcon>
+                        <AdminPanelSettingsIcon />
+                    </ListItemIcon>
 
-            <FormattedMessage
-                id="nav.admin"
-                defaultMessage="Admin Panel"
-            />
-        </MenuItem>
-
+                    <FormattedMessage
+                        id="nav.admin"
+                        defaultMessage="Admin Panel"
+                    />
+                </MenuItem>
+            }
+        />
+    
     return (
         <React.Fragment>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>

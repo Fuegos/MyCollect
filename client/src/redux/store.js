@@ -10,7 +10,8 @@ import commentsReducer from '../comments/redux/commentsSlice'
 import likeReducer from '../like/redux/likeSlice'
 import tagsReducer from '../tag/redux/tagSlice'
 import errorsReducer from '../error/redux/errorsSlice'
-
+import collectionReducer from '../collections/redux/collectionSlice'
+import itemReducer from '../items/redux/itemSlice'
 
 export default configureStore({
   reducer: {
@@ -19,8 +20,10 @@ export default configureStore({
     lang: langReducer,
     themeMode: themeModeReducer,
     collections: collectionsReducer,
+    collection: collectionReducer,
     settingFields: settingFieldsReducer,
     items: itemsReducer,
+    item: itemReducer,
     comments: commentsReducer,
     like: likeReducer,
     tags: tagsReducer,

@@ -25,6 +25,8 @@
     "server.error.auth.data": "Invalid email or password",
     "server.error.notFound.collection": "This collection is not found",
     "server.error.notFound.item": "This item is not found",
+    "server.error.forbidden.collection": "This action is not allowed for collection",
+    "server.error.forbidden.item": "This action is not allowed for item",
     "admin.table.header.email": "Email",
     "admin.table.header.name": "Name",
     "admin.table.header.date.login": "Date Login",

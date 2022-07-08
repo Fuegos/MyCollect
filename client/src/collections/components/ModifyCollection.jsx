@@ -32,22 +32,22 @@ export default function ModifyCollection() {
     })
     const dispatch = useDispatch()
     const isOpenedDialog = useSelector(state => state.collections.isOpenedDialog)
-    const isProccess = useSelector(state => state.collections.isProccess)
+    const isLoading = useSelector(state => state.collections.isLoading)
     const themes = useSelector(state => state.collections.themes)
-    const editableCollection = useSelector(state => state.collections.editableCollection)
+    const collection = useSelector(state => state.collection.collection)
 
     const modifyCollection = data => {
         const newImg = data.img[0] && data.img[0].file
-        const collection = {
+        const newCollection = {
             name: data.name,
             theme: data.theme,
             description: data.description,
-            img: editableCollection.img
+            img: collection.img
         }
 
         dispatch(
             modifyCollectionAsync(
-                { _id: editableCollection._id, collection, newImg }
+                { _id: collection._id, collection: newCollection, newImg }
             )
         )
     }
@@ -58,10 +58,11 @@ export default function ModifyCollection() {
 
     useEffect(() => {
         clearErrors()
-        if(editableCollection._id) {
-            setValue("name", editableCollection.name)
-            setValue("theme", editableCollection.theme)
-            setValue("description", editableCollection.description)
+        if(collection._id) {
+            setValue("name", collection.name)
+            setValue("theme", collection.theme)
+            setValue("description", collection.description)
+            setValue("owner", collection.owner)
         } else {
             setValue("name", "")
             setValue("theme", null)
@@ -69,7 +70,7 @@ export default function ModifyCollection() {
         }
         
         setValue("img", [])
-    }, [editableCollection])
+    }, [collection])
 
     return (
         <Dialog 
@@ -154,7 +155,7 @@ export default function ModifyCollection() {
                 </DialogContent>
                 <DialogActions>
                 {
-                    isProccess ?
+                    isLoading ?
                     <Box sx={{ flex: '1 1 100%' }}>
                         <LinearProgress />
                     </Box> :

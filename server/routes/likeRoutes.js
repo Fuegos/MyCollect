@@ -8,20 +8,6 @@ const Like = require('../models/like')
 const Item = require('../models/item')
 require('dotenv').config()
 
-router.get('/api/likes', checkAuth, async (req, res) => {
-    const item = await Item.findOne(
-        { shortId: req.query.itemShortId }
-    )
-
-    if(item === null) 
-        return sendErrorToClient(res, CODE_ERROR.notFound, `${ERROR.notFound}.${SUBJECT.item}`)
-
-    Like.find(
-        { itemRef: item }
-    ).then(likes => {
-        res.json({ item, likes })
-    })
-})
 
 router.post('/api/like', checkAuth, async (req, res) => {
     const item = await Item.findById(req.body.itemId)

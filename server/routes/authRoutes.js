@@ -29,6 +29,7 @@ const authenticateUser = (res, user) => {
                 return sendErrorToClient(res, CODE_ERROR.forbidden, `${ERROR.forbidden}.${SUBJECT.block}`)
             }
             return res.json({
+                _id: user._id,
                 email: user.email,
                 name: user.name,
                 isAdmin: user.role === 'admin',

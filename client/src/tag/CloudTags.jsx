@@ -26,7 +26,7 @@ export default function CloudTags() {
 
     useEffect(() => {
         dispatch(getTagsAsync())
-    })
+    }, [])
 
     return (
         <TagCloud 

@@ -5,7 +5,7 @@ import Like from "../../like/Like"
 
 
 export default function Item() {
-    const item = useSelector(state => state.comments.item)
+    const item = useSelector(state => state.item.item)
 
     const fields = item.fields.map(f => {
         if(f.settingField.typeField.name === 'Checkbox') {
@@ -31,7 +31,6 @@ export default function Item() {
         }
     })
 
-    
 
     return (
         <Box sx={{ bgcolor: 'primary.main', color: 'primary.contrastText', p: 2, mt: 3, mx: 5 }}>

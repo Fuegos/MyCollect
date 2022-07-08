@@ -6,15 +6,17 @@ import { modifyLikeAsync } from "./redux/likeSlice"
 
 export default function Like() {
     const likes = useSelector(state => state.like.likes)
-    const item = useSelector(state => state.like.item)
-    const userEmail = useSelector(state => state.authUser.email)
+    const item = useSelector(state => state.item.item)
+    const userId = useSelector(state => state.authUser._id)
     const dispatch = useDispatch()
+    const isAuth = useSelector(state => state.authUser.isAuth)
 
-    const isLiked = likes.some(l => l.user.email === userEmail)
+    const isLiked = likes.some(l => l.user._id === userId)
     
     return (
         <IconButton 
             onClick={() => dispatch(modifyLikeAsync(item._id))}
+            disabled={!isAuth}
         >
             {
                 isLiked ?

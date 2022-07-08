@@ -21,7 +21,6 @@ import { FormattedMessage } from 'react-intl'
 import { useDispatch } from 'react-redux'
 import { 
     openDialog as openDialogCollection, 
-    setEditableCollection, 
     deleteCollectionAsync 
 } from '../redux/collectionsSlice'
 import {
@@ -29,6 +28,9 @@ import {
     getSettingFieldsAsync
 } from '../redux/settingFieldsSlice'
 import { useNavigate } from 'react-router-dom'
+import { setCollection } from '../redux/collectionSlice'
+import AccessProvider from '../../access/AccessProvider'
+import { GRANT_COLLECTION } from '../../access/accessTypes'
 
 export default function Collection(props) {
     const collection = props.collection
@@ -57,6 +59,7 @@ export default function Collection(props) {
                 role={undefined} 
                 dense
                 onClick={() => {
+                    dispatch(setCollection(collection))
                     navigate(`../collection/${collection.shortId}`)
                 }}
             >
@@ -82,51 +85,66 @@ export default function Collection(props) {
                 <Menu
                     id="long-menu"
                     MenuListProps={{
-                    'aria-labelledby': 'long-button',
+                        'aria-labelledby': 'long-button',
                     }}
                     anchorEl={anchorEl}
                     open={open}
                     onClose={handleClose}
                 >
-                    <MenuItem onClick={() => {
-                        handleClose()
-                        dispatch(setEditableCollection(collection))
-                        dispatch(openDialogCollection())
-                    }}>
-                        <ListItemIcon>
-                            <EditIcon />
-                        </ListItemIcon>
-                        <FormattedMessage
-                            id="collection.menu.edit"
-                            defaultMessage="Edit"
-                        />
-                    </MenuItem>
-                    <MenuItem 
-                        onClick={() => {
-                        handleClose()
-                        dispatch(getSettingFieldsAsync(collection._id))
-                    }}>
-                        <ListItemIcon>
-                            <SettingsIcon />
-                        </ListItemIcon>
-                        <FormattedMessage
-                            id="collection.menu.settings"
-                            defaultMessage="Settings"
-                        />
-                    </MenuItem>
-                    <MenuItem 
-                        onClick={() => {
-                            handleClose()
-                            dispatch(deleteCollectionAsync(collection._id))
-                    }}>
-                        <ListItemIcon>
-                            <DeleteIcon />
-                        </ListItemIcon>
-                        <FormattedMessage
-                            id="collection.menu.delete"
-                            defaultMessage="Delete"
-                        />
-                    </MenuItem>
+                    <AccessProvider 
+                        component={() =>
+                            <MenuItem onClick={() => {
+                                handleClose()
+                                dispatch(setCollection(collection))
+                                dispatch(openDialogCollection())
+                            }}>
+                                <ListItemIcon>
+                                    <EditIcon />
+                                </ListItemIcon>
+                                <FormattedMessage
+                                    id="collection.menu.edit"
+                                    defaultMessage="Edit"
+                                />
+                            </MenuItem>
+                        }
+                        collection={collection}
+                    />
+                    <AccessProvider 
+                        component={() => 
+                            <MenuItem 
+                                onClick={() => {
+                                handleClose()
+                                dispatch(getSettingFieldsAsync(collection._id))
+                            }}>
+                                <ListItemIcon>
+                                    <SettingsIcon />
+                                </ListItemIcon>
+                                <FormattedMessage
+                                    id="collection.menu.settings"
+                                    defaultMessage="Settings"
+                                />
+                            </MenuItem>
+                        }
+                        collection={collection}
+                    />
+                    <AccessProvider 
+                        component={() =>
+                            <MenuItem 
+                                onClick={() => {
+                                    handleClose()
+                                    dispatch(deleteCollectionAsync(collection._id))
+                            }}>
+                                <ListItemIcon>
+                                    <DeleteIcon />
+                                </ListItemIcon>
+                                <FormattedMessage
+                                    id="collection.menu.delete"
+                                    defaultMessage="Delete"
+                                />
+                            </MenuItem>
+                        }
+                        collection={collection}
+                    />
                 </Menu>
             </ListItemSecondaryAction>
         </ListItem>

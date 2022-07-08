@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import catchError from '../../axios/catchError'
 import { 
     getTypeFields, 
     getSettingFields, 
@@ -12,41 +13,28 @@ import {
 
 export const getSettingFieldsAsync = createAsyncThunk(
     GET_COLLECTION_SETTING_FIELDS.redux,
-    async (collectionId, { rejectWithValue }) => {
-        try {
-            return await getSettingFields(collectionId)
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (collectionId, thunkAPI) => {
+        return await catchError(thunkAPI, () => getSettingFields(collectionId))
     }
 )
 
 export const getTypeFieldsAsync = createAsyncThunk(
     GET_TYPE_FIELDS.redux,
-    async (_, { rejectWithValue }) => {
-        try {
-            return await getTypeFields()
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async (_, thunkAPI) => {
+        return await catchError(thunkAPI, () => getTypeFields())
     }
 )
 
 export const modifySettingFieldsAsync = createAsyncThunk(
     MODIFY_COLLECTION_SETTING_FIELDS.redux,
-    async ({settingFields, collectionId},{ rejectWithValue }) => {
-        try {
-            return await modifySettingFields(settingFields, collectionId)
-        } catch(e) {
-            return rejectWithValue({ type: e.response.data.type})
-        }
+    async ({ settingFields, collectionId }, thunkAPI) => {
+        return await catchError(thunkAPI, () => modifySettingFields(settingFields, collectionId))
     }
 )
 
 export const settingFieldsSlice = createSlice({ 
     name: 'settingFields',
     initialState: {
-        errorType: "",
         isProccess: false,
         isOpenedDialog: false,
         settingFields: [],
@@ -66,7 +54,6 @@ export const settingFieldsSlice = createSlice({
             state.typeFields = action.payload
         },
         [getTypeFieldsAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
         },
         [getSettingFieldsAsync.fulfilled]: (state, action) => {
             state.settingFields = action.payload.settingFields
@@ -74,7 +61,6 @@ export const settingFieldsSlice = createSlice({
             state.isOpenedDialog = true
         },
         [getSettingFieldsAsync.rejected]: (state, action) => {
-            state.errorType = action.payload.type
         },
         [modifySettingFieldsAsync.fulfilled]: (state, action) => {
             state.isOpenedDialog = false
@@ -86,7 +72,6 @@ export const settingFieldsSlice = createSlice({
         },
         [modifySettingFieldsAsync.rejected]: (state, action) => {
             state.isProccess = false
-            state.errorType = action.payload.type
         }
     }
 })

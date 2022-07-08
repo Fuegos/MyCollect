@@ -1,7 +1,7 @@
 import { Grid, Avatar, Stack, Chip, Badge, Box, Typography } from "@mui/material"
 import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getCollectionsBiggestAsync, resetCollections } from "../../collections/redux/collectionsSlice"
+import { getCollectionsBiggestAsync, resetCollections, willLoading } from "../../collections/redux/collectionsSlice"
 import ListElements from "../../components/ListElements"
 import { getItemsLastAsync, resetItems } from "../../items/redux/itemsSlice"
 import ImageIcon from '@mui/icons-material/Image'
@@ -12,8 +12,10 @@ import CloudTags from "../../tag/CloudTags"
 
 export default function HomePage() {
     const dispatch = useDispatch()
-    const collections = useSelector(state=> state.collections.collections)
+    const collections = useSelector(state => state.collections.collections)
     const items = useSelector(state => state.items.items)
+    const isLoadingItems = useSelector(state => state.items.isLoading)
+    const isLoadingCollections = useSelector(state => state.collections.isLoading)
 
     const itemElements = items.map(i => {
         return {
@@ -51,7 +53,8 @@ export default function HomePage() {
                 </Badge> :
                 <Badge
                     color="secondary"
-                    badgeContent={c.count} 
+                    badgeContent={c.count}
+                    min={0} 
                     max={99}
                     anchorOrigin={{
                         vertical: 'bottom',
@@ -77,6 +80,7 @@ export default function HomePage() {
         dispatch(getCollectionsBiggestAsync(5))
 
         return () => {
+            dispatch(willLoading())
             dispatch(resetCollections())
             dispatch(resetItems())
         }
@@ -94,6 +98,7 @@ export default function HomePage() {
                                 defaultMessage="Last Items"
                             />
                         }
+                        isLoading={isLoadingItems}
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -105,6 +110,7 @@ export default function HomePage() {
                                 defaultMessage="TOP-5 Biggest Collections"
                             />
                         }
+                        isLoading={isLoadingCollections}
                     />
                 </Grid>
                 <Grid item xs={12}>

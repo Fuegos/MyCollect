@@ -12,12 +12,16 @@ import {
     GET_ITEMS_LAST, 
     MODIFY_COLLECTION_ITEM
 } from '../../axios/routes/routes'
+import { setCollection } from '../../collections/redux/collectionSlice'
+import { resetItem } from './itemSlice'
 
 
 export const getItemsAsync = createAsyncThunk(
     GET_COLLECTION_ITEMS.redux,
     async (collectionShortId, thunkAPI) => {
-        return await catchError(thunkAPI, () => getItems(collectionShortId))
+        const result = await catchError(thunkAPI, () => getItems(collectionShortId))
+        thunkAPI.dispatch(setCollection(result.collection))
+        return result.items
     }
 )
 
@@ -31,7 +35,9 @@ export const getItemsLastAsync = createAsyncThunk(
 export const modifyItemAsync = createAsyncThunk(
     MODIFY_COLLECTION_ITEM.redux,
     async (item, thunkAPI) => {
-        return await catchError(thunkAPI, () => modifyItem(item))
+        const result = await catchError(thunkAPI, () => modifyItem(item))
+        thunkAPI.dispatch(resetItem())
+        return result
     }
 )
 
@@ -47,11 +53,8 @@ export const itemsSlice = createSlice({
     name: 'items',
     initialState: {
         items: [],
-        isProccess: false,
-        collection: {},
-        settingFields: [],
+        isLoading: false,
         isOpenedDialog: false,
-        editableItem: {},
         selectedItems: []
     }, 
     reducers: {
@@ -62,43 +65,40 @@ export const itemsSlice = createSlice({
             state.editableItem = {}
             state.isOpenedDialog = false
         },
-        setEditableItem: (state, action) => {
-            state.editableItem = action.payload
-        },
         setSelectedItems: (state, action) => {
             state.selectedItems = action.payload
         },
         resetItems: (state, action) => {
             state.items = []
+        },
+        willLoading: (state, action) => {
+            state.isLoading = true
         }
     },
     extraReducers: {
         [getItemsAsync.fulfilled]: (state, action) => {
-            state.items = action.payload.items
-            state.collection = action.payload.collection
-            state.settingFields= action.payload.collection.settingFields
-            state.isProccess = false
+            state.items = action.payload
+            state.isLoading = false
         },
         [getItemsAsync.rejected]: (state, action) => {
-            state.isProccess = false
+            state.isLoading = false
         },
         [getItemsAsync.pending]: (state, action) => {
-            state.isProccess = true
+            state.isLoading = true
         },
         [getItemsLastAsync.fulfilled]: (state, action) => {
             state.items = action.payload
-            state.isProccess = false
+            state.isLoading = false
         },
         [getItemsLastAsync.pending]: (state, action) => {
-            state.isProccess = true
+            state.isLoading = true
         },
         [getItemsLastAsync.rejected]: (state, action) => {
-            state.isProccess = false
+            state.isLoading = false
         },
         [modifyItemAsync.fulfilled]: (state, action) => {
-            state.isProccess = false
+            state.isLoading = false
             state.isOpenedDialog = false
-            state.editableItem = {}
             const index = state.items.map(i => i._id).indexOf(action.payload._id)
             if (index > -1) {
                 state.items.splice(index, 1, action.payload)
@@ -107,10 +107,10 @@ export const itemsSlice = createSlice({
             }
         },
         [modifyItemAsync.rejected]: (state, action) => {
-            state.isProccess = false
+            state.isLoading = false
         },
         [modifyItemAsync.pending]: (state, action) => {
-            state.isProccess = true
+            state.isLoading = true
         },
         [deleteItemsAsync.fulfilled]: (state, action) => {
             state.items = state.items.filter(i => !action.payload.includes(i._id))
@@ -123,9 +123,9 @@ export const itemsSlice = createSlice({
 export const { 
     openDialog,
     closeDialog,
-    setEditableItem,
     setSelectedItems,
-    resetItems
+    resetItems,
+    willLoading
 } = itemsSlice.actions
 
 export default itemsSlice.reducer

@@ -59,7 +59,7 @@ export default function ItemField(props) {
                         name={`fields[${props.index}].value`}
                         control={control}
                         defaultValue={field.value}
-                        label={field.label.settingField}
+                        label={field.settingField.label}
                     />
                 )
             }

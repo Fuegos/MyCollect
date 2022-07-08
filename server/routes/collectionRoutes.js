@@ -12,6 +12,7 @@ require('dotenv').config()
 const SettingField = require('../models/settingField')
 const TypeField = require('../models/type_field')
 const Item = require('../models/item')
+const { checkGrantCollection } = require('../middleware/checkGrant')
 
 
 router.post('/api/image', checkAuth, uploadCloud.single('file'), (req, res) => {
@@ -24,19 +25,32 @@ router.delete('/api/image', checkAuth, (req, res) => {
     Image.findOneAndDelete({ _id: req.body._id }).then(result => res.json(result))
 })
 
-router.post('/api/collection', checkAuth, (req, res) => {
-    req.body.collection.owner = req.user
-    Collection.findByIdAndUpdate(
-        req.body._id ?? new mongoose.Types.ObjectId(), 
-        req.body.collection, 
-        { upsert: true, new: true }
-    ).then(result => res.json(result))
+router.post(
+    '/api/collection', 
+    checkAuth, 
+    (req, res, next) => {
+        checkGrantCollection(req.body._id, req, res, next)
+    }, 
+    (req, res) => {
+        req.body.collection.owner = req.body.collection.owner || req.user
+        
+        Collection.findByIdAndUpdate(
+            req.body._id ?? new mongoose.Types.ObjectId(), 
+            req.body.collection, 
+            { upsert: true, new: true }
+        ).then(result => res.json(result))
 })
 
-router.delete('/api/collection', checkAuth, (req, res) => {
-    Collection.findOneAndDelete(
-        { _id: req.query.collectionId }
-    ).then(result => res.json(result))
+router.delete(
+    '/api/collection', 
+    checkAuth, 
+    (req, res, next) => {
+        checkGrantCollection(req.query.collectionId, req, res, next)
+    }, 
+    (req, res) => {
+        Collection.findOneAndDelete(
+            { _id: req.query.collectionId }
+        ).then(result => res.json(result))
 })
 
 router.get('/api/themes', checkAuth, (req, res) => {
@@ -80,7 +94,18 @@ router.get('/api/collections/biggest', (req, res) => {
             }
         },
         {
-            $unwind: '$item'
+            $lookup: {
+                from: "hobbies",
+                localField: "theme",
+                foreignField: "_id",
+                as: "theme"
+            }
+        },
+        {
+            $unwind: {
+                path: '$item',
+                preserveNullAndEmptyArrays: true
+            }
         },
         {
             $group: {
@@ -89,7 +114,10 @@ router.get('/api/collections/biggest', (req, res) => {
                 shortId: { $first: "$shortId" },
                 img: { $first: { $arrayElemAt: ['$img', 0] } },
                 owner: { $first: { $arrayElemAt: ['$owner', 0] } },
-                count: { $sum: 1 }
+                theme: { $first: { $arrayElemAt: ['$theme', 0] } },
+                count: { $sum: {
+                    $cond: [{ $eq: [ { $type: "$item" }, "object" ] }, 1, 0]
+                }}
             }
         },
         {
@@ -106,42 +134,53 @@ router.get('/api/collections/biggest', (req, res) => {
     })
 })
 
-router.post('/api/collection/setting/fields', checkAuth, async (req, res) => {
-    const collectionId = req.query.collectionId
-    const oldCollection = await Collection.findById(collectionId)
+router.post(
+    '/api/collection/setting/fields', 
+    checkAuth, 
+    (req, res, next) => {
+        checkGrantCollection(req.query.collectionId, req, res, next)
+    },
+    async (req, res) => {
+        const collectionId = req.query.collectionId
+        const oldCollection = await Collection.findById(collectionId)
 
-    const updateSettingField = async f => {
-        return await SettingField.findByIdAndUpdate(
-            f._id, f, { upsert: true, new: true }
-        )
-    }
+        const updateSettingField = async f => {
+            return await SettingField.findByIdAndUpdate(
+                f._id, f, { upsert: true, new: true }
+            )
+        }
 
-    const updateSettingFields  = async () => {
-        return Promise.all(
-            req.body.map(f => updateSettingField(f))
-        )
-    }
+        const updateSettingFields  = async () => {
+            return Promise.all(
+                req.body.map(f => updateSettingField(f))
+            )
+        }
 
-    updateSettingFields().then(async result => {
-        const oldFields = oldCollection.settingFields.map(f => f._id)
-        const newFields = result.map(f => f._id.toString())
+        updateSettingFields().then(async result => {
+            const oldFields = oldCollection.settingFields.map(f => f._id)
+            const newFields = result.map(f => f._id.toString())
 
-        console.log(oldFields, newFields)
-        await SettingField.deleteMany({
-            _id: { $in: oldFields.filter(f => !newFields.includes(f.toString())) }
+            await SettingField.deleteMany({
+                _id: { $in: oldFields.filter(f => !newFields.includes(f.toString())) }
+            })
+            Collection.findByIdAndUpdate(
+                collectionId, 
+                {settingFields: result}
+            ).then(collection => res.json(collection))
         })
-        Collection.findByIdAndUpdate(
-            collectionId, 
-            {settingFields: result}
-        ).then(collection => res.json(collection))
-    })
 })
 
 router.get('/api/type/fields', checkAuth, (req, res) => {
     TypeField.find({}).then(result => res.json(result))
 })
 
-router.get('/api/collection/setting/fields', checkAuth, (req, res) => {
+router.get(
+    '/api/collection/setting/fields', 
+    checkAuth, 
+    (req, res, next) => {
+        checkGrantCollection(req.query.collectionId, req, res, next)
+    },
+    (req, res) => {
     Collection.findById(
         req.query.collectionId
     ).then(result => res.json(result.settingFields))

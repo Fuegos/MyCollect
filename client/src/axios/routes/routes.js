@@ -15,11 +15,10 @@ export const GET_COLLECTION_ITEMS = creatorRoute(GET, '/collection/items')
 export const MODIFY_COLLECTION_ITEM = creatorRoute(POST, '/collection/item')
 export const GET_TAGS = creatorRoute(GET, '/tags')
 export const DELETE_COLLECTION_ITEMS = creatorRoute(DELETE, '/collection/items')
+export const GET_ITEM = creatorRoute(GET, '/item')
 
-export const GET_COMMENTS = creatorRoute(GET, '/comments')
 export const ADD_COMMENT = creatorRoute(POST, '/comment')
 
-export const GET_LIKES = creatorRoute(GET, '/likes')
 export const MODIFY_LIKE = creatorRoute(POST, '/like')
 
 export const GET_ITEMS_LAST = creatorRoute(GET, '/items/last')

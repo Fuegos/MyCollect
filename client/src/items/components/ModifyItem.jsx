@@ -39,15 +39,14 @@ export default function ModifyItem() {
 
     const dispatch = useDispatch()
     const isOpenedDialog = useSelector(state => state.items.isOpenedDialog)
-    const isProccess = useSelector(state => state.items.isProccess)
-    const editableItem = useSelector(state => state.items.editableItem)
+    const isLoading = useSelector(state => state.items.isLoading)
+    const item = useSelector(state => state.item.item)
     const tags = useSelector(state => state.tags.tags)
-    const settingFields = useSelector(state => state.items.settingFields)
-    const collection = useSelector(state => state.items.collection)
+    const settingFields = useSelector(state => state.collection.collection.settingFields)
+    const collection = useSelector(state => state.collection.collection)
 
     const modifyItem = data => {
         data.fields = data.fields.filter(f => f.value !== '' && f.value !== undefined && f.value !== null)
-        console.log(data)
         dispatch(modifyItemAsync(data, collection._id))
     }
 
@@ -57,14 +56,15 @@ export default function ModifyItem() {
 
     useEffect(() => {
         clearErrors()
-        if(editableItem._id) {
-            setValue("_id", editableItem._id)
-            setValue("name", editableItem.name)
-            setValue("tags", editableItem.tags)
-            setValue("collectionRef", editableItem.collectionRef)
+        if(item._id) {
+            setValue("_id", item._id)
+            setValue("name", item.name)
+            setValue("tags", item.tags)
+            setValue("collectionRef", item.collectionRef)
+            setValue("owner", item.owner)
             
             setValue('fields', settingFields.map(f => {                
-                const field = editableItem.fields.filter(ef => ef.settingField._id === f._id)[0]
+                const field = item.fields.filter(ef => ef.settingField._id === f._id)[0]
                 return {
                     value: field && field.value, 
                     settingField: f
@@ -77,7 +77,7 @@ export default function ModifyItem() {
             setValue('fields', settingFields.map(f => {return {value: undefined, settingField: f}}))
         }
         
-    }, [editableItem])
+    }, [item])
 
     return (
         <Dialog 
@@ -153,7 +153,7 @@ export default function ModifyItem() {
                 </DialogContent>
                 <DialogActions>
                 {
-                    isProccess ?
+                    isLoading ?
                     <Box sx={{ flex: '1 1 100%' }}>
                         <LinearProgress />
                     </Box> :

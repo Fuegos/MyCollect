@@ -15,9 +15,10 @@ import { getComment } from "../redux/commentsSlice"
 export default function Comments() {
     const comments = useSelector(state => state.comments.comments)
     const isProccess = useSelector(state => state.comments.isProccess)
-    const item = useSelector(state => state.comments.item)
+    const item = useSelector(state => state.item.item)
     const socket = useContext(SocketContext)
     const dispatch = useDispatch()
+    const isAuth = useSelector(state => state.authUser.isAuth)
 
     useEffect(() => {
         if(item._id) {
@@ -55,7 +56,7 @@ export default function Comments() {
                 {comments.map(c => (
                     <Comment key={c._id} comment={c} />
                 ))}
-                <AddComment />
+                {isAuth && <AddComment /> }
             </Stack>
         </Box>
     )

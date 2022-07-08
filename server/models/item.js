@@ -34,10 +34,17 @@ const itemSchema = new Schema({
         ref: 'field',
         autopopulate: true
     }],
+    owner: {
+        type: Schema.Types.ObjectId, 
+        ref: 'user',
+        required: true,
+        autopopulate: true
+    },
     collectionRef: {
         type: Schema.Types.ObjectId,
         ref: 'collection',
-        required: true
+        required: true,
+        autopopulate: true
     }
 })
 

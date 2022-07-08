@@ -6,8 +6,10 @@ import React from "react"
 import { FormattedMessage } from 'react-intl'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import EditIcon from '@mui/icons-material/Edit'
-import { openDialog, setEditableItem, setSelectedItems } from "../redux/itemsSlice"
+import { openDialog, setSelectedItems } from "../redux/itemsSlice"
 import { useNavigate } from "react-router-dom"
+import { setItem } from "../redux/itemSlice"
+import AccessProvider from "../../access/AccessProvider"
 
 
 export default function Items() {
@@ -15,7 +17,7 @@ export default function Items() {
     const navigate = useNavigate()
     const items = useSelector(state => state.items.items)
     const lang = useSelector(state => state.lang.lang)
-    const settingFields = useSelector(state => state.items.settingFields)
+    const settingFields = useSelector(state => state.collection.collection.settingFields)
     const selectedItems = useSelector(state => state.items.selectedItems)
 
     const columns = [
@@ -47,15 +49,20 @@ export default function Items() {
             align: 'center',
             width: 20,
             renderCell: params => (
-                <IconButton
-                    onClick={() => {
-                        const selectedItem = items.filter(i => i._id === params.row._id)[0]
-                        dispatch(setEditableItem(selectedItem))
-                        dispatch(openDialog())
-                    }}
-                >
-                    <EditIcon />
-                </IconButton>
+                <AccessProvider 
+                    component={() =>
+                        <IconButton
+                            onClick={() => {
+                                const selectedItem = items.filter(i => i._id === params.row._id)[0]
+                                dispatch(setItem(selectedItem))
+                                dispatch(openDialog())
+                            }}
+                        >
+                            <EditIcon />
+                        </IconButton>
+                    }
+                    item={items.filter(i => i._id === params.row._id)[0]}
+                />
             )
         },
         {

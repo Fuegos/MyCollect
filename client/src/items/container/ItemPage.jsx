@@ -6,16 +6,16 @@ import Comments from "../../comments/container/Comments"
 import { getCommentsAsync } from "../../comments/redux/commentsSlice"
 import { getLikesAsync } from "../../like/redux/likeSlice"
 import Item from "../components/Item"
+import { getItemAsync } from "../redux/itemSlice"
 
 export default function ItemPage() {
     const { itemShortId } = useParams()
     const dispatch = useDispatch()
-    const isLoadedLikes = !!useSelector(state => state.like.item._id)
-    const isLoadedComments = !!useSelector(state => state.comments.item._id)
+    const isLoadedLikes = !!useSelector(state => state.item.item._id)
+    const isLoadedComments = !!useSelector(state => state.item.item._id)
 
     useEffect(() => {
-        dispatch(getCommentsAsync(itemShortId))
-        dispatch(getLikesAsync(itemShortId))
+        dispatch(getItemAsync(itemShortId))
     }, [])
 
     return (

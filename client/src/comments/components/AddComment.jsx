@@ -15,7 +15,7 @@ export default function AddComment() {
     } = useForm()
 
     const dispatch = useDispatch()
-    const item = useSelector(state => state.comments.item)
+    const item = useSelector(state => state.item.item)
 
     const addComment = data => {
         data.itemRef = item

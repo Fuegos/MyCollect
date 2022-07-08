@@ -8,18 +8,6 @@ const Comment = require('../models/comment')
 const Item = require('../models/item')
 require('dotenv').config()
 
-router.get('/api/comments', checkAuth, async (req, res) => {
-    const item = await Item.findOne(
-        { shortId: req.query.itemShortId }
-    )
-    
-    if(item === null)
-        return sendErrorToClient(res, CODE_ERROR.server, `${ERROR.server}.${SUBJECT.server}`)
-
-    Comment.find(
-        { itemRef: item }
-    ).then(comments => res.json({ item, comments }))
-})
 
 router.post('/api/comment', checkAuth, async (req, res) => {
     req.body.user = req.user

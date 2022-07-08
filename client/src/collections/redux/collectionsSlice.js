@@ -14,12 +14,15 @@ import {
     GET_THEMES, 
     MODIFY_COLLECTION
 } from '../../axios/routes/routes'
+import { resetCollection } from './collectionSlice'
 
 
 export const modifyCollectionAsync = createAsyncThunk(
     MODIFY_COLLECTION.redux,
     async ({_id, collection, newImg}, thunkAPI) => {
-        return await catchError(thunkAPI, () => modifyCollection(_id, collection, newImg))
+        const result = await catchError(thunkAPI, () => modifyCollection(_id, collection, newImg))
+        thunkAPI.dispatch(resetCollection())
+        return result
     }
 )
 
@@ -57,9 +60,8 @@ export const collectionsSlice = createSlice({
     initialState: {
         collections: [],
         themes: [],
-        isProccess: false,
-        isOpenedDialog: false,
-        editableCollection: {}
+        isLoading: false,
+        isOpenedDialog: false
     }, 
     reducers: {
         openDialog: (state, action) => {
@@ -69,18 +71,17 @@ export const collectionsSlice = createSlice({
             state.editableCollection = {}
             state.isOpenedDialog = false
         },
-        setEditableCollection: (state, action) => {
-            state.editableCollection = action.payload
-        },
         resetCollections: (state, action) => {
             state.collections = []
+        },
+        willLoading: (state, action) => {
+            state.isLoading = true
         }
     },
     extraReducers: {
         [modifyCollectionAsync.fulfilled]: (state, action) => {
-            state.isProccess = false
+            state.isLoading = false
             state.isOpenedDialog = false
-            state.editableCollection = {}
             const index = state.collections.map(c => c._id).indexOf(action.payload._id)
             if (index > -1) {
                 state.collections.splice(index, 1, action.payload)
@@ -89,10 +90,10 @@ export const collectionsSlice = createSlice({
             }
         },
         [modifyCollectionAsync.pending]: (state, action) => {
-            state.isProccess = true
+            state.isLoading = true
         },
         [modifyCollectionAsync.rejected]: (state, action) => {
-            state.isProccess = false
+            state.isLoading = false
         },
         [deleteCollectionAsync.fulfilled]: (state, action) => {
             state.collections = state.collections.filter(c => c._id !== action.payload)
@@ -106,13 +107,23 @@ export const collectionsSlice = createSlice({
         },
         [getCollectionsAsync.fulfilled]: (state, action) => {
             state.collections = action.payload
+            state.isLoading = false
         },
         [getCollectionsAsync.rejected]: (state, action) => {
+            state.isLoading = false
+        },
+        [getCollectionsAsync.pending]: (state, action) => {
+            state.isLoading = true
         },
         [getCollectionsBiggestAsync.fulfilled]: (state, action) => {
             state.collections = action.payload
+            state.isLoading = false
         },
-        [getCollectionsAsync.rejected]: (state, action) => {
+        [getCollectionsBiggestAsync.rejected]: (state, action) => {
+            state.isLoading = false
+        },
+        [getCollectionsBiggestAsync.pending]: (state, action) => {
+            state.isLoading = true
         }
     }
 })
@@ -120,8 +131,8 @@ export const collectionsSlice = createSlice({
 export const { 
     openDialog, 
     closeDialog, 
-    setEditableCollection,
-    resetCollections
+    resetCollections,
+    willLoading
 } = collectionsSlice.actions
 
 export default collectionsSlice.reducer

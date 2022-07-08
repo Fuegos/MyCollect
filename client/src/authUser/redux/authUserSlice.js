@@ -28,6 +28,7 @@ export const signInUserAsync = createAsyncThunk(
 export const authUserSlice = createSlice({
     name: 'auth/user',
     initialState: {
+        _id: "",
         email: "",
         name: "",
         isAuth: false,
@@ -43,6 +44,7 @@ export const authUserSlice = createSlice({
     extraReducers: {
         [signUpUserAsync.fulfilled]: (state, action) => {
             localStorage.setItem("token", action.payload.token)
+            state._id = action.payload._id
             state.email = action.payload.email
             state.name = action.payload.name
             state.isAdmin = action.payload.isAdmin
@@ -56,6 +58,7 @@ export const authUserSlice = createSlice({
             state.isProccess = true
         },
         [checkTokenUserAsync.fulfilled]: (state, action) => {
+            state._id = action.payload._id
             state.email = action.payload.email
             state.name = action.payload.name
             state.isAdmin = action.payload.isAdmin
@@ -63,6 +66,7 @@ export const authUserSlice = createSlice({
         },
         [signInUserAsync.fulfilled]: (state, action) => {
             localStorage.setItem("token", action.payload.token)
+            state._id = action.payload._id
             state.email = action.payload.email
             state.name = action.payload.name
             state.isAdmin = action.payload.isAdmin

@@ -5,6 +5,7 @@ const SettingField = require('./settingField')
 const Image = require('./image')
 const Item = require('./item')
 const { deleteManyByIds } = require('../mongodb/queries')
+const User = require('./user')
 
 const collectionSchema = new Schema({
     img: {

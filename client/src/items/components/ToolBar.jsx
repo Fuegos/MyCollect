@@ -10,14 +10,14 @@ import { FormattedMessage } from 'react-intl'
 import { deleteItemsAsync, openDialog } from '../redux/itemsSlice'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { alpha } from '@mui/material/styles'
+import AccessProvider from '../../access/AccessProvider'
 
 
-export default function ToolBar() {
+export default function ToolBar({ selectedItems }) {
+    const numSelected = selectedItems.length
     const dispatch = useDispatch()
-    const numSelected = useSelector(state => state.items.selectedItems.length)
-    const selectedItems = useSelector(state => state.items.selectedItems)
-        
-    
+    const collection = useSelector(state => state.collection.collection)
+            
     return (
         <Toolbar
             sx={{
@@ -52,20 +52,25 @@ export default function ToolBar() {
                                 defaultMessage="Items"
                             />
                         </Typography>
-                        <Tooltip 
-                            title={
-                                <FormattedMessage
-                                    id="collection.item"
-                                    defaultMessage="Add Item"
-                                />
+                        <AccessProvider 
+                            component={() =>
+                                <Tooltip 
+                                    title={
+                                        <FormattedMessage
+                                            id="collection.item"
+                                            defaultMessage="Add Item"
+                                        />
+                                    }
+                                >
+                                    <IconButton
+                                        onClick={() => dispatch(openDialog())}
+                                    >
+                                        <AddCircleOutlineIcon fontSize='large' />
+                                    </IconButton>
+                                </Tooltip>
                             }
-                        >
-                            <IconButton
-                                onClick={() => dispatch(openDialog())}
-                            >
-                                <AddCircleOutlineIcon fontSize='large' />
-                            </IconButton>
-                        </Tooltip>
+                            collection={collection}
+                        />
                     </>
             }
             
