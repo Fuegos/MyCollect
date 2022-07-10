@@ -20,8 +20,13 @@ export const getItemsAsync = createAsyncThunk(
     GET_COLLECTION_ITEMS.redux,
     async (collectionShortId, thunkAPI) => {
         const result = await catchError(thunkAPI, () => getItems(collectionShortId))
-        thunkAPI.dispatch(setCollection(result.collection))
-        return result.items
+        if(result.items) {
+            thunkAPI.dispatch(setCollection(result.collection))
+            return result.items
+        } else {
+            return result
+        }
+        
     }
 )
 
@@ -36,7 +41,9 @@ export const modifyItemAsync = createAsyncThunk(
     MODIFY_COLLECTION_ITEM.redux,
     async (item, thunkAPI) => {
         const result = await catchError(thunkAPI, () => modifyItem(item))
-        thunkAPI.dispatch(resetItem())
+        if(result.payload) {
+            thunkAPI.dispatch(resetItem())
+        }
         return result
     }
 )

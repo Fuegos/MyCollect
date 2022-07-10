@@ -34,7 +34,7 @@ export default function ToolBar({ selectedItems }) {
                     <Tooltip 
                         title={
                             <FormattedMessage
-                                id="collection.items.toolbar.delete"
+                                id="item.toolbar.delete"
                                 defaultMessage="Delete"
                             />
                         }
@@ -48,7 +48,7 @@ export default function ToolBar({ selectedItems }) {
                     <>
                         <Typography variant="h4" >
                             <FormattedMessage
-                                id="collection.item"
+                                id="item.header"
                                 defaultMessage="Items"
                             />
                         </Typography>
@@ -57,7 +57,7 @@ export default function ToolBar({ selectedItems }) {
                                 <Tooltip 
                                     title={
                                         <FormattedMessage
-                                            id="collection.item"
+                                            id="item.toolbar.add"
                                             defaultMessage="Add Item"
                                         />
                                     }

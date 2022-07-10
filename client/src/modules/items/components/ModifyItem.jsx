@@ -88,7 +88,7 @@ export default function ModifyItem() {
             <form onSubmit={handleSubmit(modifyItem)} noValidate>
                 <DialogTitle>
                     <FormattedMessage
-                        id="collection.item.modify.header"
+                        id="item.modify.header"
                         defaultMessage="Modify Item"
                     />
                 </DialogTitle>
@@ -104,7 +104,7 @@ export default function ModifyItem() {
                                 error={errors.name}
                                 label={
                                     <FormattedMessage
-                                        id="collection.item.modify.label.name"
+                                        id="item.modify.label.name"
                                         defaultMessage="Name"
                                     />
                                 }
@@ -119,7 +119,7 @@ export default function ModifyItem() {
                                 error={errors.tags}
                                 label={
                                     <FormattedMessage
-                                        id="collection.item.modify.label.tags"
+                                        id="item.modify.label.tags"
                                         defaultMessage="Tags"
                                     />
                                 }
@@ -161,7 +161,7 @@ export default function ModifyItem() {
                         type='submit'
                     >
                         <FormattedMessage
-                            id="collection.item.modify.button.confirm"
+                            id="item.modify.button.confirm"
                             defaultMessage="Confirm"
                         />
                     </Button>

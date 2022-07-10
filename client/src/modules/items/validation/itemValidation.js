@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl'
 const nameYup = Yup.string()
     .required(
         <FormattedMessage
-            id="collection.item.validation.required.name"
+            id="item.validation.required.name"
             defaultMessage="Wrong"
         />
     )
@@ -13,7 +13,7 @@ const tagsYup = Yup.array()
     .min(
         1,
         <FormattedMessage
-            id="collection.item.validation.min.tags"
+            id="item.validation.min.tags"
             defaultMessage="Wrong"
         />
     )

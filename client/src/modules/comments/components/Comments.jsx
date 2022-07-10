@@ -10,6 +10,7 @@ import { SocketContext } from "../../../api/socket/socketContext"
 import AddComment from "../components/AddComment"
 import Comment from "./Comment"
 import { getComment } from "../redux/commentsSlice"
+import { FormattedMessage } from 'react-intl'
 
 
 export default function Comments() {
@@ -51,7 +52,10 @@ export default function Comments() {
                 spacing={1}
             >
                 <Typography variant="h4" >
-                    Comments
+                    <FormattedMessage
+                        id="comments.header"
+                        defaultMessage="Comments"
+                    />
                 </Typography>
                 {comments.map(c => (
                     <Comment key={c._id} comment={c} />

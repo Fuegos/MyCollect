@@ -5,21 +5,21 @@ import { FormattedMessage } from 'react-intl'
 const nameYup = Yup.string()
     .required(
         <FormattedMessage
-            id="collections.validation.required.name"
+            id="collection.validation.required.name"
             defaultMessage="Wrong"
         />
     )
 const descriptionYup = Yup.string()
     .required(
         <FormattedMessage
-            id="collections.validation.required.description"
+            id="collection.validation.required.description"
             defaultMessage="Wrong"
         />
     )
 const themeYup = Yup.object()
     .typeError(
         <FormattedMessage
-            id="collections.validation.required.theme"
+            id="collection.validation.required.theme"
             defaultMessage="Wrong"
         />
     )

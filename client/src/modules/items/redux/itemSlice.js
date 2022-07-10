@@ -9,9 +9,13 @@ export const getItemAsync = createAsyncThunk(
     GET_ITEM.redux,
     async (itemShortId, thunkAPI) => {
         const result = await catchError(thunkAPI, () => getItem(itemShortId))
-        thunkAPI.dispatch(setLikes(result.likes))
-        thunkAPI.dispatch(setComments(result.comments))
-        return result.item
+        if(result.item){
+            thunkAPI.dispatch(setLikes(result.likes))
+            thunkAPI.dispatch(setComments(result.comments))
+            return result.item
+        } else {
+            return result
+        }   
     }
 )
 

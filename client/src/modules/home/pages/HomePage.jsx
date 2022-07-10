@@ -8,6 +8,7 @@ import ImageIcon from '@mui/icons-material/Image'
 import { FormattedMessage } from 'react-intl'
 import LabelIcon from '@mui/icons-material/Label'
 import CloudTags from "../../../components/tags/CloudTags"
+import { COUNT_BIGGEST_COLLECTIONS, COUNT_LAST_ITEMS } from "../../../api/consts/consts"
 
 
 export default function HomePage() {
@@ -76,8 +77,8 @@ export default function HomePage() {
     })
 
     useEffect(() => {
-        dispatch(getItemsLastAsync(5))
-        dispatch(getCollectionsBiggestAsync(5))
+        dispatch(getItemsLastAsync(COUNT_LAST_ITEMS))
+        dispatch(getCollectionsBiggestAsync(COUNT_BIGGEST_COLLECTIONS))
 
         return () => {
             dispatch(willLoading())
@@ -94,11 +95,17 @@ export default function HomePage() {
                         elements={itemElements}
                         titleList={
                             <FormattedMessage
-                                id="item"
+                                id="item.last.header"
                                 defaultMessage="Last Items"
                             />
                         }
                         isLoading={isLoadingItems}
+                        noElemetsMessage={
+                            <FormattedMessage
+                                id="item.last.no"
+                                defaultMessage="No Items"
+                            />
+                        }
                     />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -106,17 +113,24 @@ export default function HomePage() {
                         elements={collectionElements}
                         titleList={
                             <FormattedMessage
-                                id="collection"
-                                defaultMessage="TOP-5 Biggest Collections"
+                                id="collection.biggest.header"
+                                defaultMessage="TOP-{num} Biggest Collections"
+                                values={{num: COUNT_BIGGEST_COLLECTIONS}}
                             />
                         }
                         isLoading={isLoadingCollections}
+                        noElemetsMessage={
+                            <FormattedMessage
+                                id="collection.biggest.no"
+                                defaultMessage="No Collections"
+                            />
+                        }
                     />
                 </Grid>
                 <Grid item xs={12}>
                     <Typography variant="h5" >
                         <FormattedMessage
-                            id="tags"
+                            id="tags.header"
                             defaultMessage="Tags"
                         />
                     </Typography>

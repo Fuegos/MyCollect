@@ -25,9 +25,10 @@ router.get('/api/search', async (req, res) => {
                 name: "$name",
                 shortId: "$shortId",
                 type: "collection",
+                avatar: "search.type.collection",
                 score: { $meta: "textScore" },
                 text: {
-                    head: "collection.description",
+                    head: "search.type.collection.description",
                     body: { $concat: ['$name', ' ', '$description']}
                 } 
             }
@@ -62,11 +63,12 @@ router.get('/api/search', async (req, res) => {
         {
             $project: {
                 type: 'collection',
+                avatar: "search.type.collection",
                 name: "$collection.name",
                 shortId: "$collection.shortId",
                 score: { $meta: "textScore" },
                 text: {
-                    head: "collection.theme",
+                    head: "search.type.collection.theme",
                     body: "$title"
                 }
             }
@@ -109,11 +111,12 @@ router.get('/api/search', async (req, res) => {
         {
             $project: {
                 type: 'item',
+                avatar: 'search.type.item',
                 name: "$item.name",
                 shortId: "$item.shortId",
                 score: { $meta: "textScore" },
                 text: {
-                    head: "item.tag",
+                    head: "search.type.item.tag",
                     body: "$name"
                 }
             }
@@ -156,11 +159,12 @@ router.get('/api/search', async (req, res) => {
         {
             $project: {
                 type: 'item',
+                avatar: 'search.type.item',
                 name: "$item.name",
                 shortId: "$item.shortId",
                 score: { $meta: "textScore" },
                 text: {
-                    head: "item.value",
+                    head: "search.type.item.value",
                     body: "$value"
                 } 
             }
@@ -176,11 +180,12 @@ router.get('/api/search', async (req, res) => {
         {
             $project: {
                 type: "item",
+                avatar: "search.type.item",
                 name: "$name",
                 shortId: "$shortId",
                 score: { $meta: "textScore" },
                 text: {
-                    head: "item.description",
+                    head: "search.type.item.description",
                     body: "$name"
                 } 
             }
@@ -211,11 +216,12 @@ router.get('/api/search', async (req, res) => {
         {
             $project: {
                 type: 'item',
+                avatar: "search.type.item",
                 name: "$item.name",
                 shortId: "$item.shortId",
                 score: { $meta: "textScore" },
                 text: {
-                    head: "item.comment",
+                    head: "search.type.item.comment",
                     body: "$text"
                 }
             }

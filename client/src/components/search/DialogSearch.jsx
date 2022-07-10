@@ -5,7 +5,8 @@ import {
     Box,
     Stack,
     IconButton,
-    Chip 
+    Chip, 
+    Avatar
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +15,6 @@ import { searchAsync } from "./redux/searchSlice";
 import SearchIcon from '@mui/icons-material/Search'
 import { FormattedMessage } from 'react-intl'
 import ListElements from "../ListElements";
-import { COUNT_SHOW_SEARCH_RESULT } from "../../api/consts/consts";
 import { closeDialog } from "../dialogs/redux/dialogsSlice";
 import { useEffect } from "react";
 import { SEARCH_DIALOG } from "../dialogs/data/dialogs";
@@ -42,14 +42,12 @@ export default function DialogSearch() {
             key: r._id,
             path: `../${r.type}/${r.shortId}`,
             avatar: 
-                <Chip 
-                    label={
-                        <FormattedMessage
-                            id={r.type}
-                            defaultMessage="Item"
-                        />
-                    } 
-                />
+                <Avatar>
+                    <FormattedMessage
+                        id={r.avatar}
+                        defaultMessage="ITM"
+                    />
+                </Avatar>
             ,
             primaryText: r.text.body,
             optionalComponent: 
@@ -116,14 +114,14 @@ export default function DialogSearch() {
                                 elements={resultContent}
                                 titleList={
                                     <FormattedMessage
-                                        id="search"
-                                        defaultMessage="Results"
+                                        id="search.result.header"
+                                        defaultMessage="Result"
                                     />
                                 }
                                 isLoading={isLoading}
                                 noElemetsMessage={
                                     <FormattedMessage
-                                        id="search"
+                                        id="search.result.no"
                                         defaultMessage="No results"
                                     />
                                 }

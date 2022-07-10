@@ -21,7 +21,9 @@ export const modifyCollectionAsync = createAsyncThunk(
     MODIFY_COLLECTION.redux,
     async ({_id, collection, newImg}, thunkAPI) => {
         const result = await catchError(thunkAPI, () => modifyCollection(_id, collection, newImg))
-        thunkAPI.dispatch(resetCollection())
+        if(result.payload) {
+            thunkAPI.dispatch(resetCollection())
+        }
         return result
     }
 )
