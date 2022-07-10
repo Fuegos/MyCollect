@@ -8,7 +8,10 @@ import { setLikes } from '../../../components/likes/redux/likeSlice'
 export const getItemAsync = createAsyncThunk(
     GET_ITEM.redux,
     async (itemShortId, thunkAPI) => {
-        const result = await catchError(thunkAPI, () => getItem(itemShortId))
+        const result = await catchError(
+            thunkAPI, 
+            () => getItem(itemShortId)
+        )
         if(result.item){
             thunkAPI.dispatch(setLikes(result.likes))
             thunkAPI.dispatch(setComments(result.comments))

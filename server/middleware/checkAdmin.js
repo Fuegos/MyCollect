@@ -2,7 +2,7 @@ const { CODE_ERROR, ERROR, SUBJECT } = require('../error/dataError')
 const { sendErrorToClient } = require('../error/handlerError')
 
 const checkAdmin = (req, res, next) => {
-    if(req.user.role === 'admin') {
+    if(req.user.isAdmin) {
         next()
     } else {
         return sendErrorToClient(res, CODE_ERROR.forbidden, `${ERROR.forbidden}.${SUBJECT.admin}`)

@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const mongoose = require('mongoose')
 
 const getUserByName = async name => await User.findOne({ name })
 const getUserByEmail = async email => await User.findOne({ email })
@@ -15,11 +16,25 @@ const deleteManyByIds = async (ids, model) => {
     )
 }
 
+const updateOne = async (data, model) => {
+    return await model.findByIdAndUpdate(
+        data._id ?? new mongoose.Types.ObjectId(),
+        data, 
+        { upsert: true, new: true }
+    )
+}
+
+const updateMany = async (data, model) => {
+    return Promise.all(
+        data.map(d => updateOne(d, model))
+    )
+}
+
 module.exports = {
     getUserByName,
     getUserByEmail,
     getUserById,
     setDateLoginUser,
-    deleteOneById,
-    deleteManyByIds
+    deleteManyByIds,
+    updateMany
 }

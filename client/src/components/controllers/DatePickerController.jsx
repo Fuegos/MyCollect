@@ -10,7 +10,7 @@ import { useSelector } from "react-redux"
 import { langLocaleDates } from "../langs/data/dataLangs";
 
 export default function DatePickerController({ name, control, defaultValue = null, label, ...rest}) {
-    const lang = useSelector(state => state.lang.lang)
+    const lang = useSelector(state => state.langs.lang)
 
     return(
         <Controller 

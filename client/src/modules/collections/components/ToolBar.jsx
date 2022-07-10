@@ -1,8 +1,9 @@
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { Typography, Tooltip, IconButton, Stack } from '@mui/material'
 import { useDispatch } from 'react-redux'
-import { openDialog } from '../redux/collectionsSlice'
 import { FormattedMessage } from 'react-intl'
+import { openDialog } from '../../../components/dialogs/redux/dialogsSlice'
+import { COLLECTION_DIALOG } from '../../../components/dialogs/data/dialogs'
 
 export default function ToolBar() {
     const dispatch = useDispatch()
@@ -31,7 +32,7 @@ export default function ToolBar() {
                 }
             >
                 <IconButton
-                    onClick={() => dispatch(openDialog())}
+                    onClick={() => dispatch(openDialog(COLLECTION_DIALOG))}
                 >
                     <AddCircleOutlineIcon fontSize='large' />
                 </IconButton>

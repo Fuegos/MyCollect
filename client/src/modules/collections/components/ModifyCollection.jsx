@@ -13,11 +13,14 @@ import TextFieldController from '../../../components/controllers/TextFieldContro
 import { FormattedMessage } from 'react-intl'
 import { Controller, useForm } from "react-hook-form"
 import { useDispatch, useSelector } from 'react-redux'
-import { closeDialog, modifyCollectionAsync, getThemesAsync } from '../redux/collectionsSlice'
+import { modifyCollectionAsync, getThemesAsync } from '../redux/collectionsSlice'
 import { collectionYupResolver } from '../validation/collectionValidation'
 import AutocompleteController from '../../../components/controllers/AutocompleteController'
 import { DropzoneAreaBase } from "mui-file-dropzone"
 import { PhotoCamera } from '@mui/icons-material'
+import { COLLECTION_DIALOG } from '../../../components/dialogs/data/dialogs';
+import { resetCollection } from '../redux/collectionSlice';
+import { closeDialog } from '../../../components/dialogs/redux/dialogsSlice';
 
 
 export default function ModifyCollection() {
@@ -31,8 +34,8 @@ export default function ModifyCollection() {
         resolver: collectionYupResolver
     })
     const dispatch = useDispatch()
-    const isOpenedDialog = useSelector(state => state.collections.isOpenedDialog)
-    const isLoading = useSelector(state => state.collections.isLoading)
+    const isOpenedDialog = useSelector(state => state.dialogs.dialogs.includes(COLLECTION_DIALOG))
+    const isLoading = useSelector(state => state.collections.modifyIsLoading)
     const themes = useSelector(state => state.collections.themes)
     const collection = useSelector(state => state.collection.collection)
 
@@ -75,7 +78,10 @@ export default function ModifyCollection() {
     return (
         <Dialog 
             open={isOpenedDialog} 
-            onClose={() => dispatch(closeDialog())}
+            onClose={() => {
+                dispatch(closeDialog(COLLECTION_DIALOG))
+                dispatch(resetCollection())
+            }}
             fullWidth
         >
             <form onSubmit={handleSubmit(modifyCollection)} noValidate>

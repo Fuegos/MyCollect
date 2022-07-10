@@ -1,8 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const router = express.Router()
-const { CODE_ERROR, ERROR, SUBJECT } = require('../error/dataError')
-const { sendErrorToClient } = require('../error/handlerError')
 const checkAuth = require('../middleware/checkAuth')
 const Collection = require('../models/collection')
 const Hobby = require('../models/hobby')
@@ -11,8 +9,8 @@ const Image = require('../models/image')
 require('dotenv').config()
 const SettingField = require('../models/settingField')
 const TypeField = require('../models/type_field')
-const Item = require('../models/item')
 const { checkGrantCollection } = require('../middleware/checkGrant')
+const { updateMany } = require('../mongodb/queries')
 
 
 router.post('/api/image', checkAuth, uploadCloud.single('file'), (req, res) => {
@@ -144,19 +142,8 @@ router.post(
         const collectionId = req.query.collectionId
         const oldCollection = await Collection.findById(collectionId)
 
-        const updateSettingField = async f => {
-            return await SettingField.findByIdAndUpdate(
-                f._id, f, { upsert: true, new: true }
-            )
-        }
 
-        const updateSettingFields  = async () => {
-            return Promise.all(
-                req.body.map(f => updateSettingField(f))
-            )
-        }
-
-        updateSettingFields().then(async result => {
+        updateMany(req.body, SettingField).then(async result => {
             const oldFields = oldCollection.settingFields.map(f => f._id)
             const newFields = result.map(f => f._id.toString())
 
@@ -181,9 +168,10 @@ router.get(
         checkGrantCollection(req.query.collectionId, req, res, next)
     },
     (req, res) => {
-    Collection.findById(
-        req.query.collectionId
-    ).then(result => res.json(result.settingFields))
-})
+        Collection.findById(
+            req.query.collectionId
+        ).then(result => res.json(result.settingFields))
+    }
+)
 
 module.exports = router

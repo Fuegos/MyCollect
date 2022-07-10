@@ -5,7 +5,6 @@ const { sendErrorToClient } = require('../error/handlerError')
 
 const checkAuth = async (req, res, next) => {
     const token = req.headers["x-access-token"]?.split(' ')[1]
-    console.log(token)
     if(token) {
         const user = await authUser(token)
         if(user.error) {

@@ -19,17 +19,13 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { FormattedMessage } from 'react-intl'
 import { useDispatch } from 'react-redux'
-import { 
-    openDialog as openDialogCollection, 
-    deleteCollectionAsync 
-} from '../redux/collectionsSlice'
-import {
-    openDialog as openDialogSettings,
-    getSettingFieldsAsync
-} from '../redux/settingFieldsSlice'
+import { deleteCollectionAsync } from '../redux/collectionsSlice'
+import { getSettingFieldsAsync } from '../redux/settingFieldsSlice'
 import { useNavigate } from 'react-router-dom'
 import { setCollection } from '../redux/collectionSlice'
 import AccessProvider from '../../../components/access/AccessProvider'
+import { openDialog } from '../../../components/dialogs/redux/dialogsSlice'
+import { COLLECTION_DIALOG } from '../../../components/dialogs/data/dialogs'
 
 export default function Collection(props) {
     const collection = props.collection
@@ -95,7 +91,7 @@ export default function Collection(props) {
                             <MenuItem onClick={() => {
                                 handleClose()
                                 dispatch(setCollection(collection))
-                                dispatch(openDialogCollection())
+                                dispatch(openDialog(COLLECTION_DIALOG))
                             }}>
                                 <ListItemIcon>
                                     <EditIcon />

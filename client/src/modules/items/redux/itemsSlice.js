@@ -14,6 +14,8 @@ import {
 } from '../../../api/routes/nameRoutes'
 import { setCollection } from '../../collections/redux/collectionSlice'
 import { resetItem } from './itemSlice'
+import { closeDialog } from '../../../components/dialogs/redux/dialogsSlice'
+import { ITEM_DIALOG } from '../../../components/dialogs/data/dialogs'
 
 
 export const getItemsAsync = createAsyncThunk(
@@ -22,6 +24,7 @@ export const getItemsAsync = createAsyncThunk(
         const result = await catchError(thunkAPI, () => getItems(collectionShortId))
         if(result.items) {
             thunkAPI.dispatch(setCollection(result.collection))
+            thunkAPI.dispatch(resetItem())
             return result.items
         } else {
             return result
@@ -40,11 +43,14 @@ export const getItemsLastAsync = createAsyncThunk(
 export const modifyItemAsync = createAsyncThunk(
     MODIFY_COLLECTION_ITEM.redux,
     async (item, thunkAPI) => {
-        const result = await catchError(thunkAPI, () => modifyItem(item))
-        if(result.payload) {
-            thunkAPI.dispatch(resetItem())
-        }
-        return result
+        return await catchError(
+            thunkAPI, 
+            () => modifyItem(item),
+            () => {
+                thunkAPI.dispatch(closeDialog(ITEM_DIALOG))
+                thunkAPI.dispatch(resetItem())
+            }
+        )
     }
 )
 
@@ -60,18 +66,11 @@ export const itemsSlice = createSlice({
     name: 'items',
     initialState: {
         items: [],
-        isLoading: false,
-        isOpenedDialog: false,
+        getIsLoading: false,
+        modifyIsLoading: false,
         selectedItems: []
     }, 
     reducers: {
-        openDialog: (state, action) => {
-            state.isOpenedDialog = true
-        },
-        closeDialog: (state, action) => {
-            state.editableItem = {}
-            state.isOpenedDialog = false
-        },
         setSelectedItems: (state, action) => {
             state.selectedItems = action.payload
         },
@@ -79,33 +78,32 @@ export const itemsSlice = createSlice({
             state.items = []
         },
         willLoading: (state, action) => {
-            state.isLoading = true
+            state.getIsLoading = true
         }
     },
     extraReducers: {
         [getItemsAsync.fulfilled]: (state, action) => {
             state.items = action.payload
-            state.isLoading = false
+            state.getIsLoading = false
         },
         [getItemsAsync.rejected]: (state, action) => {
-            state.isLoading = false
+            state.getIsLoading = false
         },
         [getItemsAsync.pending]: (state, action) => {
-            state.isLoading = true
+            state.getIsLoading = true
         },
         [getItemsLastAsync.fulfilled]: (state, action) => {
             state.items = action.payload
-            state.isLoading = false
+            state.getIsLoading = false
         },
         [getItemsLastAsync.pending]: (state, action) => {
-            state.isLoading = true
+            state.getIsLoading = true
         },
         [getItemsLastAsync.rejected]: (state, action) => {
-            state.isLoading = false
+            state.getIsLoading = false
         },
         [modifyItemAsync.fulfilled]: (state, action) => {
-            state.isLoading = false
-            state.isOpenedDialog = false
+            state.modifyIsLoading = false
             const index = state.items.map(i => i._id).indexOf(action.payload._id)
             if (index > -1) {
                 state.items.splice(index, 1, action.payload)
@@ -114,22 +112,18 @@ export const itemsSlice = createSlice({
             }
         },
         [modifyItemAsync.rejected]: (state, action) => {
-            state.isLoading = false
+            state.modifyIsLoading = false
         },
         [modifyItemAsync.pending]: (state, action) => {
-            state.isLoading = true
+            state.modifyIsLoading = true
         },
         [deleteItemsAsync.fulfilled]: (state, action) => {
             state.items = state.items.filter(i => !action.payload.includes(i._id))
-        },
-        [deleteItemsAsync.rejected]: (state, action) => {
         }
     }
 })
 
 export const { 
-    openDialog,
-    closeDialog,
     setSelectedItems,
     resetItems,
     willLoading

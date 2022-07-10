@@ -7,10 +7,12 @@ import {
 } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import { FormattedMessage } from 'react-intl'
-import { deleteItemsAsync, openDialog } from '../redux/itemsSlice'
+import { deleteItemsAsync } from '../redux/itemsSlice'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { alpha } from '@mui/material/styles'
 import AccessProvider from '../../../components/access/AccessProvider'
+import { openDialog } from '../../../components/dialogs/redux/dialogsSlice'
+import { ITEM_DIALOG } from '../../../components/dialogs/data/dialogs'
 
 
 export default function ToolBar({ selectedItems }) {
@@ -63,7 +65,7 @@ export default function ToolBar({ selectedItems }) {
                                     }
                                 >
                                     <IconButton
-                                        onClick={() => dispatch(openDialog())}
+                                        onClick={() => dispatch(openDialog(ITEM_DIALOG))}
                                     >
                                         <AddCircleOutlineIcon fontSize='large' />
                                     </IconButton>

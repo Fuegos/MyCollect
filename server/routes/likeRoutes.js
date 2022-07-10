@@ -1,8 +1,5 @@
 const express = require('express')
-const mongoose = require('mongoose')
 const router = express.Router()
-const { CODE_ERROR, ERROR, SUBJECT } = require('../error/dataError')
-const { sendErrorToClient } = require('../error/handlerError')
 const checkAuth = require('../middleware/checkAuth')
 const Like = require('../models/like')
 const Item = require('../models/item')

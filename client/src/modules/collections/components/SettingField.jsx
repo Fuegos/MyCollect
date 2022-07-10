@@ -12,9 +12,10 @@ export default function SettingField(props) {
     const settingField = props.settingField
     
     return (
-        <Grid container 
-            direction='row' 
-            spacing={1}
+        <Grid 
+            container 
+            justifyContent="space-between"
+            alignItems="center"
         >
             <Grid item xs={5}>
                 <AutocompleteController 
@@ -50,7 +51,7 @@ export default function SettingField(props) {
                     fullWidth
                 />
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={1}>
                 <IconButton
                     onClick={() => props.remove(props.index)}
                 >

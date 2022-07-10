@@ -6,10 +6,12 @@ import React from "react"
 import { FormattedMessage } from 'react-intl'
 import VisibilityIcon from '@mui/icons-material/Visibility'
 import EditIcon from '@mui/icons-material/Edit'
-import { openDialog, setSelectedItems } from "../redux/itemsSlice"
+import { setSelectedItems } from "../redux/itemsSlice"
 import { useNavigate } from "react-router-dom"
 import { setItem } from "../redux/itemSlice"
 import AccessProvider from "../../../components/access/AccessProvider"
+import { openDialog } from "../../../components/dialogs/redux/dialogsSlice"
+import { ITEM_DIALOG } from "../../../components/dialogs/data/dialogs"
 
 
 export default function Items() {
@@ -19,6 +21,7 @@ export default function Items() {
     const lang = useSelector(state => state.langs.lang)
     const settingFields = useSelector(state => state.collection.collection.settingFields)
     const selectedItems = useSelector(state => state.items.selectedItems)
+    const isLoading = useSelector(state => state.items.getIsLoading)
 
     const columns = [
         {
@@ -55,7 +58,7 @@ export default function Items() {
                             onClick={() => {
                                 const selectedItem = items.filter(i => i._id === params.row._id)[0]
                                 dispatch(setItem(selectedItem))
-                                dispatch(openDialog())
+                                dispatch(openDialog(ITEM_DIALOG))
                             }}
                         >
                             <EditIcon />
@@ -147,6 +150,7 @@ export default function Items() {
                 getEstimatedRowHeight={() => 10}
                 pageSize={20}
                 rowsPerPageOptions={[20]}
+                loading={isLoading}
                 checkboxSelection
                 disableSelectionOnClick
                 showColumnRightBorder

@@ -25,8 +25,8 @@ const io = socketIO(server, {
 app.set('socket', io)
 
 const urlencodeParser = bodyParser.urlencoded({ extended: false })
-app.use(bodyParser.json(), urlencodeParser);
 
+app.use(bodyParser.json(), urlencodeParser);
 app.use("/", authRoutes)
 app.use("/", adminRoutes)
 app.use("/", collectionRoutes)
@@ -34,26 +34,17 @@ app.use("/", itemRoutes)
 app.use("/", commentRoutes)
 app.use("/", likeRoutes)
 app.use("/", searchRoutes)
-
 app.use(express.static(path.join(__dirname, '../client', 'build')))
 
 const PORT = process.env.PORT || 5000
 
 io.on('connection', (socket) => {
-    console.log('I am user')
-
     socket.on('join:item', room => {
-        console.log("joined " + room)
         socket.join(room)     
     })
 
     socket.on('leave:item', room => {
-        console.log("leaved " + room)
         socket.leave(room)
-    })
-
-    socket.on('disconnect', () => {
-        console.log("Chaooo")
     })
 });
 

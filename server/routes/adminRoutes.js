@@ -1,10 +1,6 @@
 const express = require('express')
-const bcrypt = require('bcrypt')
-const mongoose = require('mongoose')
 const User = require('../models/user')
 const router = express.Router()
-const { CODE_ERROR, ERROR, SUBJECT } = require('../error/dataError')
-const { sendErrorToClient } = require('../error/handlerError')
 const checkAdmin = require('../middleware/checkAdmin')
 const checkAuth = require('../middleware/checkAuth')
 

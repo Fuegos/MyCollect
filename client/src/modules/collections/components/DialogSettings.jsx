@@ -14,10 +14,12 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline'
 import { FormattedMessage } from 'react-intl'
 import { useFieldArray, useForm } from "react-hook-form"
 import { useDispatch, useSelector } from 'react-redux'
-import { closeDialog, getTypeFieldsAsync, modifySettingFieldsAsync } from '../redux/settingFieldsSlice'
+import { getTypeFieldsAsync, modifySettingFieldsAsync } from '../redux/settingFieldsSlice'
 import { settingFieldYupResolver } from '../validation/settingFieldValidation'
 import SettingField from './SettingField'
 import { ObjectID } from 'bson'
+import { SETTING_FIELDS_DIALOG } from '../../../components/dialogs/data/dialogs';
+import { closeDialog } from '../../../components/dialogs/redux/dialogsSlice';
 
 
 export default function DialogSettings() {
@@ -38,8 +40,8 @@ export default function DialogSettings() {
         name: "settingFields"
     })
 
-    const isOpenedDialog = useSelector(state => state.settingFields.isOpenedDialog)
-    const isProccess = useSelector(state => state.settingFields.isProccess)
+    const isOpenedDialog = useSelector(state => state.dialogs.dialogs.includes(SETTING_FIELDS_DIALOG))
+    const isLoading = useSelector(state => state.settingFields.isLoading)
     const settingFields = useSelector(state => state.settingFields.settingFields)
     const typeFields = useSelector(state => state.settingFields.typeFields)
     const collectionId = useSelector(state => state.settingFields.collectionId)
@@ -61,7 +63,7 @@ export default function DialogSettings() {
     return (
         <Dialog 
             open={isOpenedDialog} 
-            onClose={() => dispatch(closeDialog())}
+            onClose={() => dispatch(closeDialog(SETTING_FIELDS_DIALOG))}
             fullWidth
         >
             <form onSubmit={handleSubmit(modifySettingFields)} noValidate>
@@ -77,7 +79,7 @@ export default function DialogSettings() {
                             direction='column' 
                             spacing={2}
                             justifyContent="center"
-                            alignItems="flex-start"
+                            alignItems="center"
                         >
                             {fields.map((f, index) => (
                                 <SettingField
@@ -106,13 +108,13 @@ export default function DialogSettings() {
                 </DialogContent>
                 <DialogActions>
                 {
-                    isProccess ?
+                    isLoading ?
                     <Box sx={{ flex: '1 1 100%' }}>
                         <LinearProgress />
                     </Box> :
                     <Stack direction='row' spacing={2}>
                         <Button
-                            onClick={() => dispatch(closeDialog())}
+                            onClick={() => dispatch(closeDialog(SETTING_FIELDS_DIALOG))}
                         >
                             <FormattedMessage
                                 id="collection.setting.fields.button.cancel"

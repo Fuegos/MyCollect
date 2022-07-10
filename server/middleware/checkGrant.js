@@ -7,7 +7,7 @@ const checkGrantCollection = async (collectionId, req, res, next) => {
     const collection = await Collection.findById(collectionId)
     if(collection) {
         if(collection.owner._id.toString() !== req.user._id.toString()
-            && req.user.role !== 'admin'
+            && !req.user.isAdmin
         ) {
             return sendErrorToClient(res, CODE_ERROR.forbidden, `${ERROR.forbidden}.${SUBJECT.collection}`)
         }
@@ -27,7 +27,7 @@ const checkGrantItem = async (itemId, req, res, next) => {
 
     if(item) {
         if(item.owner._id.toString() !== req.user._id.toString()
-            && req.user.role !== 'admin' 
+            && !req.user.isAdmin 
             && item.collectionRef.owner._id.toString() !== req.user._id.toString()
         ) {
             return sendErrorToClient(res, CODE_ERROR.forbidden, `${ERROR.forbidden}.${SUBJECT.item}`)
@@ -50,7 +50,7 @@ const checkGrantItems = async (itemIds, req, res, next) => {
 
     if(items.some(item =>
             item.owner._id.toString() !== req.user._id.toString()
-            && req.user.role !== 'admin' 
+            && !req.user.isAdmin 
             && item.collectionRef.owner._id.toString() !== req.user._id.toString()
     )) {
         return sendErrorToClient(res, CODE_ERROR.forbidden, `${ERROR.forbidden}.${SUBJECT.item}`)

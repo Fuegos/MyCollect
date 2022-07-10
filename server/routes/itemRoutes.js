@@ -8,7 +8,7 @@ const Collection = require('../models/collection')
 const Item = require('../models/item')
 const Tag = require('../models/tag')
 const Field = require('../models/field')
-const { deleteManyByIds } = require('../mongodb/queries')
+const { deleteManyByIds, updateMany } = require('../mongodb/queries')
 const { checkGrantItems, checkGrantItem, checkGrantCollection } = require('../middleware/checkGrant')
 const Comment = require('../models/comment')
 const Like = require('../models/like')
@@ -68,7 +68,8 @@ router.delete(
     },
     (req, res) => {
         deleteManyByIds(req.body, Item).then(result => res.json(result))
-})
+    }
+)
 
 
 router.post('/api/collection/item', 
@@ -106,24 +107,9 @@ router.post('/api/collection/item',
             )
         }
 
-        const updateField = async f => {
-            return await Field.findByIdAndUpdate(
-                f._id ?? new mongoose.Types.ObjectId(), 
-                f, 
-                { upsert: true, new: true }
-            )
-        }
-
-        const updateFields = async () => {
-            return Promise.all(
-                req.body.fields.map(f => updateField(f))
-            )
-        }
-
-
         updateTags().then(tags => {
             item.tags = tags
-            updateFields().then(async fields => {
+            updateMany(req.body.fields, Field).then(async fields => {
                 item.fields = fields
                 const oldFields = oldItem ? oldItem.fields.map(f => f._id) : []
                 const newFields = fields.map(f => f._id.toString())

@@ -10,11 +10,17 @@ import {
     GET_COLLECTION_SETTING_FIELDS, 
     GET_TYPE_FIELDS
 } from '../../../api/routes/nameRoutes'
+import { closeDialog, openDialog } from '../../../components/dialogs/redux/dialogsSlice'
+import { SETTING_FIELDS_DIALOG } from '../../../components/dialogs/data/dialogs'
 
 export const getSettingFieldsAsync = createAsyncThunk(
     GET_COLLECTION_SETTING_FIELDS.redux,
     async (collectionId, thunkAPI) => {
-        return await catchError(thunkAPI, () => getSettingFields(collectionId))
+        return await catchError(
+            thunkAPI, 
+            () => getSettingFields(collectionId),
+            () => thunkAPI.dispatch(openDialog(SETTING_FIELDS_DIALOG))
+        ) 
     }
 )
 
@@ -28,57 +34,42 @@ export const getTypeFieldsAsync = createAsyncThunk(
 export const modifySettingFieldsAsync = createAsyncThunk(
     MODIFY_COLLECTION_SETTING_FIELDS.redux,
     async ({ settingFields, collectionId }, thunkAPI) => {
-        return await catchError(thunkAPI, () => modifySettingFields(settingFields, collectionId))
+        return await catchError(
+            thunkAPI, 
+            () => modifySettingFields(settingFields, collectionId),
+            () => thunkAPI.dispatch(closeDialog(SETTING_FIELDS_DIALOG))
+        )
     }
 )
 
 export const settingFieldsSlice = createSlice({ 
     name: 'settingFields',
     initialState: {
-        isProccess: false,
-        isOpenedDialog: false,
+        isLoading: false,
         settingFields: [],
         typeFields: [],
         collectionId: null
     }, 
-    reducers: {
-        openDialog: (state, action) => {
-            state.isOpenedDialog = true
-        },
-        closeDialog: (state, action) => {
-            state.isOpenedDialog = false
-        }
-    },
     extraReducers: {
         [getTypeFieldsAsync.fulfilled]: (state, action) => {
             state.typeFields = action.payload
         },
-        [getTypeFieldsAsync.rejected]: (state, action) => {
-        },
         [getSettingFieldsAsync.fulfilled]: (state, action) => {
             state.settingFields = action.payload.settingFields
             state.collectionId = action.payload.collectionId
-            state.isOpenedDialog = true
-        },
-        [getSettingFieldsAsync.rejected]: (state, action) => {
         },
         [modifySettingFieldsAsync.fulfilled]: (state, action) => {
-            state.isOpenedDialog = false
-            state.isProccess = false
+            state.isLoading = false
             state.settingFields = []
         },
         [modifySettingFieldsAsync.pending]: (state, action) => {
-            state.isProccess = true
+            state.isLoading = true
         },
         [modifySettingFieldsAsync.rejected]: (state, action) => {
-            state.isProccess = false
+            state.isLoading = false
         }
     }
 })
 
-export const { 
-    openDialog, 
-    closeDialog
-} = settingFieldsSlice.actions
 
 export default settingFieldsSlice.reducer

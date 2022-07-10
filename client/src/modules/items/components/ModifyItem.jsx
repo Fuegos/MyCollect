@@ -13,12 +13,15 @@ import {
 import { FormattedMessage } from 'react-intl'
 import { useForm, useFieldArray } from "react-hook-form"
 import { useDispatch, useSelector } from 'react-redux'
-import { closeDialog, modifyItemAsync } from '../redux/itemsSlice'
+import { modifyItemAsync } from '../redux/itemsSlice'
 import TextFieldController from '../../../components/controllers/TextFieldController'
 import AutocompleteController from '../../../components/controllers/AutocompleteController'
 import ItemField from './ItemField'
 import { itemYupResolver } from '../validation/itemValidation'
 import { getTagsAsync } from '../../../components/tags/redux/tagSlice'
+import { ITEM_DIALOG } from '../../../components/dialogs/data/dialogs'
+import { closeDialog } from '../../../components/dialogs/redux/dialogsSlice'
+import { resetItem } from '../redux/itemSlice'
 
 
 export default function ModifyItem() {
@@ -27,7 +30,8 @@ export default function ModifyItem() {
         control, 
         formState: { errors }, 
         setValue, 
-        clearErrors 
+        clearErrors,
+        reset 
     } = useForm({
         resolver: itemYupResolver
     })
@@ -38,8 +42,8 @@ export default function ModifyItem() {
     })
 
     const dispatch = useDispatch()
-    const isOpenedDialog = useSelector(state => state.items.isOpenedDialog)
-    const isLoading = useSelector(state => state.items.isLoading)
+    const isOpenedDialog = useSelector(state => state.dialogs.dialogs.includes(ITEM_DIALOG))
+    const isLoading = useSelector(state => state.items.modifyIsLoading)
     const item = useSelector(state => state.item.item)
     const tags = useSelector(state => state.tags.tags)
     const settingFields = useSelector(state => state.collection.collection.settingFields)
@@ -82,7 +86,10 @@ export default function ModifyItem() {
     return (
         <Dialog 
             open={isOpenedDialog} 
-            onClose={() => dispatch(closeDialog())}
+            onClose={() => {
+                dispatch(closeDialog(ITEM_DIALOG))
+                dispatch(resetItem())
+            }}
             fullWidth
         >
             <form onSubmit={handleSubmit(modifyItem)} noValidate>

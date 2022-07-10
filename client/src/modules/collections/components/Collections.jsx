@@ -1,7 +1,5 @@
 import { List } from '@mui/material'
-import { useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { getCollectionsAsync } from '../redux/collectionsSlice'
 import Collection from './Collection'
 
 

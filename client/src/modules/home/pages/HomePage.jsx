@@ -15,8 +15,8 @@ export default function HomePage() {
     const dispatch = useDispatch()
     const collections = useSelector(state => state.collections.collections)
     const items = useSelector(state => state.items.items)
-    const isLoadingItems = useSelector(state => state.items.isLoading)
-    const isLoadingCollections = useSelector(state => state.collections.isLoading)
+    const isLoadingItems = useSelector(state => state.items.getIsLoading)
+    const isLoadingCollections = useSelector(state => state.collections.getIsLoading)
 
     const itemElements = items.map(i => {
         return {

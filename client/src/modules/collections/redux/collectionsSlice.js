@@ -15,16 +15,21 @@ import {
     MODIFY_COLLECTION
 } from '../../../api/routes/nameRoutes'
 import { resetCollection } from './collectionSlice'
+import { COLLECTION_DIALOG } from '../../../components/dialogs/data/dialogs'
+import { closeDialog } from '../../../components/dialogs/redux/dialogsSlice'
 
 
 export const modifyCollectionAsync = createAsyncThunk(
     MODIFY_COLLECTION.redux,
     async ({_id, collection, newImg}, thunkAPI) => {
-        const result = await catchError(thunkAPI, () => modifyCollection(_id, collection, newImg))
-        if(result.payload) {
-            thunkAPI.dispatch(resetCollection())
-        }
-        return result
+        return await catchError(
+            thunkAPI, 
+            () => modifyCollection(_id, collection, newImg),
+            () => {
+                thunkAPI.dispatch(resetCollection())
+                thunkAPI.dispatch(closeDialog(COLLECTION_DIALOG))
+            }
+        )
     }
 )
 
@@ -62,27 +67,20 @@ export const collectionsSlice = createSlice({
     initialState: {
         collections: [],
         themes: [],
-        isLoading: false,
-        isOpenedDialog: false
+        getIsLoading: false,
+        modifyIsLoading: false
     }, 
     reducers: {
-        openDialog: (state, action) => {
-            state.isOpenedDialog = true
-        },
-        closeDialog: (state, action) => {
-            state.isOpenedDialog = false
-        },
         resetCollections: (state, action) => {
             state.collections = []
         },
         willLoading: (state, action) => {
-            state.isLoading = true
+            state.getIsLoading = true
         }
     },
     extraReducers: {
         [modifyCollectionAsync.fulfilled]: (state, action) => {
-            state.isLoading = false
-            state.isOpenedDialog = false
+            state.modifyIsLoading = false
             const index = state.collections.map(c => c._id).indexOf(action.payload._id)
             if (index > -1) {
                 state.collections.splice(index, 1, action.payload)
@@ -91,47 +89,41 @@ export const collectionsSlice = createSlice({
             }
         },
         [modifyCollectionAsync.pending]: (state, action) => {
-            state.isLoading = true
+            state.modifyIsLoading = true
         },
         [modifyCollectionAsync.rejected]: (state, action) => {
-            state.isLoading = false
+            state.modifyIsLoading = false
         },
         [deleteCollectionAsync.fulfilled]: (state, action) => {
             state.collections = state.collections.filter(c => c._id !== action.payload)
         },
-        [deleteCollectionAsync.rejected]: (state, action) => {
-        },
         [getThemesAsync.fulfilled]: (state, action) => {
             state.themes = action.payload
         },
-        [getThemesAsync.rejected]: (state, action) => {
-        },
         [getCollectionsAsync.fulfilled]: (state, action) => {
             state.collections = action.payload
-            state.isLoading = false
+            state.getIsLoading = false
         },
         [getCollectionsAsync.rejected]: (state, action) => {
-            state.isLoading = false
+            state.getIsLoading = false
         },
         [getCollectionsAsync.pending]: (state, action) => {
-            state.isLoading = true
+            state.getIsLoading = true
         },
         [getCollectionsBiggestAsync.fulfilled]: (state, action) => {
             state.collections = action.payload
-            state.isLoading = false
+            state.getIsLoading = false
         },
         [getCollectionsBiggestAsync.rejected]: (state, action) => {
-            state.isLoading = false
+            state.getIsLoading = false
         },
         [getCollectionsBiggestAsync.pending]: (state, action) => {
-            state.isLoading = true
+            state.getIsLoading = true
         }
     }
 })
 
 export const { 
-    openDialog, 
-    closeDialog, 
     resetCollections,
     willLoading
 } = collectionsSlice.actions

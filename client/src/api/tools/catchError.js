@@ -1,9 +1,13 @@
 import { addError } from "../../components/errors/redux/errorsSlice"
 import { ObjectID } from 'bson'
 
-export default async function (thunkAPI, performFunction) {
+export default async function (thunkAPI, performFunction, execIfFulfilled) {
     try {
-        return await performFunction()
+        const result = await performFunction()
+        if(execIfFulfilled) {
+            execIfFulfilled()
+        }
+        return result
     } catch(e) {
         thunkAPI.dispatch(addError({
             _id: new ObjectID().toString(),
