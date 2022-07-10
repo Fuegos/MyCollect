@@ -33,3 +33,4 @@ export const SIGN_UP_USER = creatorRoute(POST, '/user/sign/up')
 export const CHECK_USER_TOKEN = creatorRoute(GET, '/user/token')
 
 export const SEARCH = creatorRoute(GET, '/search')
+export const SEARCH_BY_TAG = creatorRoute(GET, '/search/tag')

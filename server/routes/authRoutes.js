@@ -1,5 +1,4 @@
 const express = require('express')
-const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 require('dotenv').config()
@@ -7,37 +6,8 @@ const router = express.Router()
 const { CODE_ERROR, ERROR, SUBJECT } = require('../error/dataError')
 const { sendErrorToClient } = require('../error/handlerError')
 const { getUserByName, getUserByEmail, getUserById, setDateLoginUser } = require('../mongodb/queries')
-
-
-const comparePassword = async user => await bcrypt.hash(user.password, 10)
-
-const authenticateUser = (res, user) => {
-    const payload = {
-        id: user._id
-    }
-
-    jwt.sign(
-        payload,
-        process.env.JWT_SECRET,
-        {expiresIn: 86400},
-        (err, token) => {
-            if(err) {
-                console.error(err)
-                return sendErrorToClient(res, CODE_ERROR.auth, `${ERROR.auth}.${SUBJECT.auth}`)
-            }
-            if(user.status === 'blocked') {
-                return sendErrorToClient(res, CODE_ERROR.forbidden, `${ERROR.forbidden}.${SUBJECT.block}`)
-            }
-            return res.json({
-                _id: user._id,
-                email: user.email,
-                name: user.name,
-                isAdmin: user.role === 'admin',
-                token: "Bearer " + token
-            })
-        }
-    )
-}
+const { comparePassword, createTokenAndAuthUser, authUser } = require('../auth/auth')
+const checkAuth = require('../middleware/checkAuth')
 
 
 router.post('/api/user/sign/up', async (req, res) => {
@@ -49,30 +19,17 @@ router.post('/api/user/sign/up', async (req, res) => {
         return sendErrorToClient(res, CODE_ERROR.forbidden, `${ERROR.forbidden}.${SUBJECT.email}`)
     }
     user.password = await comparePassword(user)
-    User.create(user).then(createdUser => {
-        setDateLoginUser(createdUser)
-        return authenticateUser(res, createdUser)
+    User.create(user).then(async newUser => {
+        const result = await createTokenAndAuthUser(newUser)
+        if(result.error) {
+            return sendErrorToClient(res, result.error, result.type)
+        }
+        return res.json(result)
     })
 })
 
-router.get('/api/user/token', (req, res) => {
-    const token = req.headers["x-access-token"]?.split(' ')[1]
-    if(token) {
-        jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-            if(err) {
-                return sendErrorToClient(res, CODE_ERROR.auth, `${ERROR.auth}.${SUBJECT.auth}`)
-            }
-            const user = await getUserById(decoded.id)
-            if(user) {
-                setDateLoginUser(user)
-                return authenticateUser(res, user)
-            } else {
-                return sendErrorToClient(res, CODE_ERROR.auth, `${ERROR.auth}.${SUBJECT.auth}`)
-            }
-        })
-    } else {
-        return sendErrorToClient(res, CODE_ERROR.auth, `${ERROR.auth}.${SUBJECT.auth}`)
-    }
+router.get('/api/user/token', checkAuth, (req, res) => {
+    return res.json(req.user)
 })
 
 router.get('/api/user/sign/in', async (req, res) => {
@@ -81,12 +38,15 @@ router.get('/api/user/sign/in', async (req, res) => {
     if(!user) {
         return sendErrorToClient(res, CODE_ERROR.auth, `${ERROR.auth}.${SUBJECT.data}`)
     }
-    bcrypt.compare(userParams.password, user.password).then(result => {
+    bcrypt.compare(userParams.password, user.password).then(async result => {
         if(!result) {
             return sendErrorToClient(res, CODE_ERROR.auth, `${ERROR.auth}.${SUBJECT.data}`)
         }
-        setDateLoginUser(user)
-        return authenticateUser(res, user)
+        const newUser = await createTokenAndAuthUser(user)
+        if(newUser.error) {
+            return sendErrorToClient(res, newUser.error, newUser.type)
+        }
+        return res.json(newUser)
     })
 })
 

@@ -231,4 +231,58 @@ router.get('/api/search', async (req, res) => {
     return res.json(result.sort((a, b) => parseFloat(b.score) - parseFloat(a.score)).slice(0, 20))
 })
 
+router.get('/api/search/tag', async (req, res) => {
+    let result = []
+    
+    result = result.concat(await Tag.aggregate([
+        {
+            $match: {
+                $text: { $search: req.query.text }
+            }
+        },
+        {
+            $lookup: {
+                from: "items",
+                let: {'tag' : '$_id'},
+                pipeline: [
+                    {
+                        $match: {
+                            $expr: {
+                                $in: [ '$$tag', '$tags' ]
+                            }
+                        }
+                    }
+                ],
+                as: "item"
+            }
+        },
+        {
+            $project: {
+                item: { $arrayElemAt: ['$item', 0] },
+                name: 1
+            }
+        },
+        {
+            $match: {
+                item: { $exists: true }
+            }
+        },
+        {
+            $project: {
+                type: 'item',
+                avatar: 'search.type.item',
+                name: "$item.name",
+                shortId: "$item.shortId",
+                score: { $meta: "textScore" },
+                text: {
+                    head: "search.type.item.tag",
+                    body: "$name"
+                }
+            }
+        }
+    ]))
+
+    return res.json(result.sort((a, b) => parseFloat(b.score) - parseFloat(a.score)).slice(0, 20))
+})
+
 module.exports = router

@@ -4,10 +4,13 @@ import {
 } from "../routes/nameRoutes"
 import creatorOptions from "../tools/creatorOptions"
 
-const token = {
-    "x-access-token": localStorage.getItem("token")
-}
 
 export const addComment = async comment => {
-    return await (await axios.post(ADD_COMMENT.axios, comment, creatorOptions(token))).data
+    return await (
+        await axios.post(
+            ADD_COMMENT.axios, 
+            comment, 
+            creatorOptions( {token: true} )
+        )
+    ).data
 }

@@ -1,10 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import catchError from '../../../api/tools/catchError'
 import { 
-    search
+    search, searchByTag
 } from '../../../api/axios/searchAxios'
 import {  
-    SEARCH
+    SEARCH, SEARCH_BY_TAG
 } from '../../../api/routes/nameRoutes'
 
 
@@ -12,6 +12,13 @@ export const searchAsync = createAsyncThunk(
     SEARCH.redux,
     async (text, thunkAPI) => {
         return await catchError(thunkAPI, () => search(text))
+    }
+)
+
+export const searchByTagAsync = createAsyncThunk(
+    SEARCH_BY_TAG.redux,
+    async (text, thunkAPI) => {
+        return await catchError(thunkAPI, () => searchByTag(text))
     }
 )
 
@@ -36,6 +43,16 @@ export const searchSlice = createSlice({
             state.isLoading = true
         },
         [searchAsync.rejected]: (state, action) => {
+            state.isLoading = false
+        },
+        [searchByTagAsync.fulfilled]: (state, action) => {
+            state.result = action.payload
+            state.isLoading = false
+        },
+        [searchByTagAsync.pending]: (state, action) => {
+            state.isLoading = true
+        },
+        [searchByTagAsync.rejected]: (state, action) => {
             state.isLoading = false
         }
     }
