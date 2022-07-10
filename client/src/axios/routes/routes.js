@@ -31,3 +31,5 @@ export const DELETE_USERS = creatorRoute(DELETE, '/users')
 export const SIGN_IN_USER = creatorRoute(GET, '/user/sign/in')
 export const SIGN_UP_USER = creatorRoute(POST, '/user/sign/up')
 export const CHECK_USER_TOKEN = creatorRoute(GET, '/user/token')
+
+export const SEARCH = creatorRoute(GET, '/search')

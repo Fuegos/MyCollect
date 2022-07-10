@@ -68,7 +68,6 @@ export const collectionsSlice = createSlice({
             state.isOpenedDialog = true
         },
         closeDialog: (state, action) => {
-            state.editableCollection = {}
             state.isOpenedDialog = false
         },
         resetCollections: (state, action) => {

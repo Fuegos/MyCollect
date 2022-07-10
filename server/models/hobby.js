@@ -16,6 +16,10 @@ const hobbySchema = new Schema({
     }
 })
 
+hobbySchema.index({
+    title: 'text'
+})
+
 const Hobby = mongoose.model('hobby', hobbySchema)
 
 module.exports = Hobby

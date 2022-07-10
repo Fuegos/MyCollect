@@ -16,6 +16,7 @@ const settingFieldSchema = new Schema({
 
 settingFieldSchema.plugin(require('mongoose-autopopulate'))
 
+
 const SettingField = mongoose.model('setting_field', settingFieldSchema)
 
 module.exports = SettingField

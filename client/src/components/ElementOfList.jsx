@@ -4,12 +4,15 @@ import {
     ListItemAvatar,
     ListItemText 
 } from "@mui/material"
+import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
+import { closeAllDialogs } from "../dialogs/redux/dialogsSlice"
 
 export default function ElementOfList({
     element
 }) {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     
     return (
         <ListItem>
@@ -18,6 +21,8 @@ export default function ElementOfList({
                 dense
                 onClick={() => {
                     navigate(element.path)
+                    dispatch(closeAllDialogs())
+
                 }}
             >
                 <ListItemAvatar>

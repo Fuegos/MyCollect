@@ -12,6 +12,9 @@ import tagsReducer from '../tag/redux/tagSlice'
 import errorsReducer from '../error/redux/errorsSlice'
 import collectionReducer from '../collections/redux/collectionSlice'
 import itemReducer from '../items/redux/itemSlice'
+import searchReducer from '../search/redux/searchSlice'
+import dialogsReducer from '../dialogs/redux/dialogsSlice'
+
 
 export default configureStore({
   reducer: {
@@ -27,6 +30,8 @@ export default configureStore({
     comments: commentsReducer,
     like: likeReducer,
     tags: tagsReducer,
-    errors: errorsReducer
+    errors: errorsReducer,
+    search: searchReducer,
+    dialogs: dialogsReducer
   },
 })

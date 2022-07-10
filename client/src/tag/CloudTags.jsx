@@ -3,6 +3,9 @@ import { TagCloud } from 'react-tagcloud'
 import { getTagsAsync } from './redux/tagSlice'
 import { useEffect } from 'react'
 import { Chip } from '@mui/material'
+import { openDialog } from '../dialogs/redux/dialogsSlice'
+import { SEARCH_DIALOG } from '../dialogs/data/dialogs'
+import { searchAsync, setText } from '../search/redux/searchSlice'
 
 export default function CloudTags() {
     const dispatch = useDispatch()
@@ -34,7 +37,11 @@ export default function CloudTags() {
             maxSize={30}
             minSize={10}
             shuffle={true}
-            onClick={tag => console.log(tag.value, tag.count)}
+            onClick={tag => {
+                dispatch(searchAsync(tag.value))
+                dispatch(setText(tag.value))
+                dispatch(openDialog(SEARCH_DIALOG))
+            }}
             renderer={customRenderer}
         />
     )

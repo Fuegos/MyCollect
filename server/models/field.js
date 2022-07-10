@@ -16,6 +16,10 @@ const fieldSchema = new Schema({
 
 fieldSchema.plugin(require('mongoose-autopopulate'))
 
+fieldSchema.index({
+    value: 'text'
+})
+
 const Field = mongoose.model('field', fieldSchema)
 
 module.exports = Field

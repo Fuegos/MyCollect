@@ -50,6 +50,10 @@ const itemSchema = new Schema({
 
 itemSchema.plugin(require('mongoose-autopopulate'))
 
+itemSchema.index({
+    name: 'text'
+})
+
 itemSchema.post('findOneAndDelete', async result => {
     const comments = await Comment.find({ itemRef: result })
     await deleteManyByIds(comments.map(i => i._id), Comment)

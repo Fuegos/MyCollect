@@ -55,6 +55,11 @@ collectionSchema.post('findOneAndDelete', async result => {
     await deleteManyByIds(items.map(i => i._id), Item)
 })
 
+collectionSchema.index({
+    name: 'text',
+    description: 'text'
+})
+
 const Collection = mongoose.model('collection', collectionSchema)
 
 module.exports = Collection

@@ -8,6 +8,10 @@ const tagSchema = new Schema({
     }
 })
 
+tagSchema.index({
+    name: 'text'
+})
+
 const Tag = mongoose.model('tag', tagSchema)
 
 module.exports = Tag

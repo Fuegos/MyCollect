@@ -15,6 +15,7 @@ import ItemsPage from './items/container/ItemsPage'
 import ItemPage from './items/container/ItemPage'
 import HandlerErrors from './error/HandlerErrors'
 import AccessProvider from './access/AccessProvider'
+import DialogSearch from './search/components/DialogSearch'
 
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
                 <CssBaseline />
                 <BrowserRouter>
                     <NavigationBar />
+                    <DialogSearch />
                     <Routes>
                         <Route path="auth/*" element={<AuthPage />}/>
                         <Route path="home" element={<HomePage />}/>

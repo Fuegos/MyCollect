@@ -27,6 +27,10 @@ const commentSchema = new Schema({
 
 commentSchema.plugin(require('mongoose-autopopulate'))
 
+commentSchema.index({
+    text: 'text'
+})
+
 const Comment = mongoose.model('comment', commentSchema)
 
 module.exports = Comment

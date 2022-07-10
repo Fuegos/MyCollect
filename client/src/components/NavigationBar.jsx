@@ -12,10 +12,13 @@ import MenuBar from './MenuBar'
 import HomeIcon from '@mui/icons-material/Home'
 import SearchIcon from '@mui/icons-material/Search'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { openDialog } from '../dialogs/redux/dialogsSlice'
 
 
-export default function NavigationApp() {
+export default function NavigationBar() {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     return (
         <AppBar position="static">
@@ -48,7 +51,7 @@ export default function NavigationApp() {
                             <SelectorThemeMode />
                             <SelectorLand />
                             <IconButton
-                                onClick={() => {}}
+                                onClick={() => dispatch(openDialog('search'))}
                             >
                                 <SearchIcon fontSize='large' />
                             </IconButton>
