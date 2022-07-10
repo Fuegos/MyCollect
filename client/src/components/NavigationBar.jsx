@@ -6,14 +6,14 @@ import {
     IconButton,
     Stack 
 } from '@mui/material'
-import SelectorLand from '../lang/components/SelectorLang'
-import SelectorThemeMode from '../themeMode/components/SelectorThemeMode'
+import SelectorLand from './langs/SelectorLang'
+import SelectorThemeMode from './themes/SelectorThemeMode'
 import MenuBar from './MenuBar'
 import HomeIcon from '@mui/icons-material/Home'
 import SearchIcon from '@mui/icons-material/Search'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { openDialog } from '../dialogs/redux/dialogsSlice'
+import { openDialog } from './dialogs/redux/dialogsSlice'
 
 
 export default function NavigationBar() {

@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import './css/index.css';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
+import reportWebVitals from './tests/reportWebVitals';
 import { Provider } from 'react-redux'
 import store from './redux/store'
-import { SocketContext, socket } from './socket/socketContext'
+import { SocketContext, socket } from './api/socket/socketContext'
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

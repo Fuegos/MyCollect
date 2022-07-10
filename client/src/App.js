@@ -1,26 +1,26 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
-import AuthPage from './authUser/container/AuthPage'
+import AuthPage from './modules/authUsers/pages/AuthPage'
 import NavigationBar from './components/NavigationBar'
 import { IntlProvider } from "react-intl"
 import { useSelector, useDispatch } from 'react-redux'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
-import { langMessages } from './lang/data/dataLangs'
-import AdminPage from './admin/container/AdminPage'
+import { langMessages } from './components/langs/data/dataLangs'
+import AdminPage from './modules/admin/pages/AdminPage'
 import { useEffect } from "react"
-import { checkTokenUserAsync } from "./authUser/redux/authUserSlice"
-import CollectionsPage from './collections/container/CollectionsPage'
-import HomePage from './home/container/HomePage'
-import ItemsPage from './items/container/ItemsPage'
-import ItemPage from './items/container/ItemPage'
-import HandlerErrors from './error/HandlerErrors'
-import AccessProvider from './access/AccessProvider'
-import DialogSearch from './search/components/DialogSearch'
+import { checkTokenUserAsync } from "./modules/authUsers/redux/authUsersSlice"
+import CollectionsPage from './modules/collections/pages/CollectionsPage'
+import HomePage from './modules/home/pages/HomePage'
+import ItemsPage from './modules/items/pages/ItemsPage'
+import ItemPage from './modules/items/pages/ItemPage'
+import HandlerErrors from './components/errors/HandlerErrors'
+import AccessProvider from './components/access/AccessProvider'
+import DialogSearch from './components/search/DialogSearch'
 
 
 function App() {
-    const language = useSelector(state => state.lang.lang)
-    const themeMode = useSelector(state => state.themeMode.mode)
+    const language = useSelector(state => state.langs.lang)
+    const themeMode = useSelector(state => state.themes.mode)
     const theme = createTheme({
         palette: {
             mode: themeMode

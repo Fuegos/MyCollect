@@ -7,17 +7,17 @@ import LoginIcon from '@mui/icons-material/Login'
 import HowToRegIcon from '@mui/icons-material/HowToReg'
 import LogoutIcon from '@mui/icons-material/Logout'
 import { FormattedMessage } from 'react-intl'
-import { signOutUser } from '../authUser/redux/authUserSlice'
+import { signOutUser } from '../modules/authUsers/redux/authUsersSlice'
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
 import CollectionsBookmarkIcon from '@mui/icons-material/CollectionsBookmark'
-import AccessProvider from '../access/AccessProvider';
+import AccessProvider from './access/AccessProvider';
 
 
 export default function MenuBar() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const isAuth = useSelector(state => state.authUser.isAuth)
-    const isAdmin = useSelector(state => state.authUser.isAdmin)
+    const isAuth = useSelector(state => state.authUsers.isAuth)
+    const isAdmin = useSelector(state => state.authUsers.isAdmin)
     
     const [anchorEl, setAnchorEl] = React.useState(null)
     const open = Boolean(anchorEl)

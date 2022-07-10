@@ -1,34 +1,34 @@
 import { configureStore } from '@reduxjs/toolkit'
-import authUserReducer from '../authUser/redux/authUserSlice'
-import langReducer from '../lang/redux/langSlice'
-import themeModeReducer from '../themeMode/redux/themeModeSlice'
-import adminReducer from '../admin/redux/adminSlice'
-import collectionsReducer from '../collections/redux/collectionsSlice'
-import settingFieldsReducer from '../collections/redux/settingFieldsSlice'
-import itemsReducer from '../items/redux/itemsSlice'
-import commentsReducer from '../comments/redux/commentsSlice'
-import likeReducer from '../like/redux/likeSlice'
-import tagsReducer from '../tag/redux/tagSlice'
-import errorsReducer from '../error/redux/errorsSlice'
-import collectionReducer from '../collections/redux/collectionSlice'
-import itemReducer from '../items/redux/itemSlice'
-import searchReducer from '../search/redux/searchSlice'
-import dialogsReducer from '../dialogs/redux/dialogsSlice'
+import authUsersReducer from '../modules/authUsers/redux/authUsersSlice'
+import langsReducer from '../components/langs/redux/langSlice'
+import themesReducer from '../components/themes/redux/themeModeSlice'
+import adminReducer from '../modules/admin/redux/adminSlice'
+import collectionsReducer from '../modules/collections/redux/collectionsSlice'
+import settingFieldsReducer from '../modules/collections/redux/settingFieldsSlice'
+import itemsReducer from '../modules/items/redux/itemsSlice'
+import commentsReducer from '../modules/comments/redux/commentsSlice'
+import likesReducer from '../components/likes/redux/likeSlice'
+import tagsReducer from '../components/tags/redux/tagSlice'
+import errorsReducer from '../components/errors/redux/errorsSlice'
+import collectionReducer from '../modules/collections/redux/collectionSlice'
+import itemReducer from '../modules/items/redux/itemSlice'
+import searchReducer from '../components/search/redux/searchSlice'
+import dialogsReducer from '../components/dialogs/redux/dialogsSlice'
 
 
 export default configureStore({
   reducer: {
-    authUser: authUserReducer,
+    authUsers: authUsersReducer,
     admin: adminReducer,
-    lang: langReducer,
-    themeMode: themeModeReducer,
+    langs: langsReducer,
+    themes: themesReducer,
     collections: collectionsReducer,
     collection: collectionReducer,
     settingFields: settingFieldsReducer,
     items: itemsReducer,
     item: itemReducer,
     comments: commentsReducer,
-    like: likeReducer,
+    likes: likesReducer,
     tags: tagsReducer,
     errors: errorsReducer,
     search: searchReducer,

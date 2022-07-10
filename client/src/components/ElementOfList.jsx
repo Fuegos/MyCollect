@@ -6,7 +6,7 @@ import {
 } from "@mui/material"
 import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router-dom"
-import { closeAllDialogs } from "../dialogs/redux/dialogsSlice"
+import { closeAllDialogs } from "./dialogs/redux/dialogsSlice"
 
 export default function ElementOfList({
     element
