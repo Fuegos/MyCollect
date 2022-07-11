@@ -77,7 +77,7 @@ export default function DialogSearch() {
             onClose={() => dispatch(closeDialog(SEARCH_DIALOG))}
             fullWidth
         >
-            <form onSubmit={handleSubmit(search)} noValidate>
+            <form onSubmit={handleSubmit(search)} noValidate autoComplete="off">
                 <DialogTitle>
                     <FormattedMessage
                         id="search.header"
