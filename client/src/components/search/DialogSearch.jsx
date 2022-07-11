@@ -89,14 +89,13 @@ export default function DialogSearch() {
                         <Stack
                             direction='column' 
                             spacing={2}
-                            justifyContent="center"
-                            alignItems="flex-start"
+                            justifyContent="space-evenly"
                         >
                             <Stack 
                                 direction='row' 
                                 spacing={1}
-                                justifyContent="center"
-                                alignItems="flex-start"
+                                justifyContent="space-evenly"
+                                alignItems="center"
                             >
                                 <TextFieldController 
                                     name="text"
@@ -107,7 +106,7 @@ export default function DialogSearch() {
                                 <IconButton
                                     type="submit"
                                 >
-                                    <SearchIcon />
+                                    <SearchIcon fontSize="large" />
                                 </IconButton>
                             </Stack>
                             <ListElements 
