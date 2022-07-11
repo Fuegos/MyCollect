@@ -17,6 +17,7 @@ export default function ItemsPage() {
     const selectedItemIds = useSelector(state => state.items.selectedItems)
     const items = useSelector(state => state.items.items)
     const selectedItems = items.filter(item => selectedItemIds.includes(item._id))
+    const isLoading = useSelector(state => state.items.getIsLoading)
 
     useEffect(() => {
         dispatch(getItemsAsync(collectionShortId))
@@ -24,7 +25,7 @@ export default function ItemsPage() {
 
     return (
         <Box mx={3} mt={3}>
-            {!collection._id ?
+            {isLoading || !collection._id ?
                 <Grid item xs={12}>
                     <LinearProgress />
                 </Grid> :

@@ -24,7 +24,7 @@ export default function AddComment() {
     }
 
     return (
-        <form onSubmit={handleSubmit(addComment)} noValidate>
+        <form onSubmit={handleSubmit(addComment)} noValidate autoComplete="off">
             <Stack 
                 direction="row"
                 spacing={2}

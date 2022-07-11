@@ -25,7 +25,8 @@ export const getItemAsync = createAsyncThunk(
 export const itemSlice = createSlice({ 
     name: 'item',
     initialState: {
-        item: {}
+        item: {},
+        isLoading: false
     }, 
     reducers: {
         setItem: (state, action) => {
@@ -38,7 +39,14 @@ export const itemSlice = createSlice({
     extraReducers: {
         [getItemAsync.fulfilled]: (state, action) => {
             state.item = action.payload
+            state.isLoading = false
         },
+        [getItemAsync.pending]: (state, action) => {
+            state.isLoading = true
+        },
+        [getItemAsync.rejected]: (state, action) => {
+            state.isLoading = false
+        }
     }
 })
 
