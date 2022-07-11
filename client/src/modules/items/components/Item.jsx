@@ -2,6 +2,7 @@ import { useSelector } from "react-redux"
 import { Box, Chip, Typography, Stack } from "@mui/material"
 import { FormattedMessage } from 'react-intl'
 import Like from "../../../components/likes/Like"
+import dateFormat, { masks } from 'dateformat'
 
 
 export default function Item() {
@@ -22,6 +23,12 @@ export default function Item() {
                         defaultMessage="No"
                     />
             }   
+        } else if(f.settingField.typeField.name === 'Date') {
+            return {
+                _id: f._id,
+                label: f.settingField.label,
+                value: dateFormat(f.value, "dd mmmm yyyy")
+            }
         } else {
             return {
                 _id: f._id,
