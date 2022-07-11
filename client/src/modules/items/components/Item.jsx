@@ -33,7 +33,7 @@ export default function Item() {
 
 
     return (
-        <Box sx={{ bgcolor: 'primary.main', color: 'primary.contrastText', p: 2, mt: 3, mx: 5 }}>
+        <Box sx={{ bgcolor: 'primary.main', color: 'primary.contrastText', p: 2 }}>
             <Stack
                 direction='row'
                 spacing={1}
@@ -54,8 +54,8 @@ export default function Item() {
             </Stack>
             {
                 fields.map(f => (
-                    <Typography variant="h6" key={f._id}>
-                        {f.label}:{f.value}
+                    <Typography variant="subtitle1" key={f._id}>
+                        {f.label}: {f.value}
                     </Typography>
                 ))
             }

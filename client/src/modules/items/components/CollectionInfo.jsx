@@ -7,8 +7,6 @@ import {
 } from "@mui/material"
 import ImageIcon from '@mui/icons-material/Image'
 import ReactMarkdown from 'react-markdown'
-import { useState } from "react"
-import TruncateMarkup from 'react-truncate-markup'
 
 
 export default function CollectionInfo(props) {
@@ -17,7 +15,7 @@ export default function CollectionInfo(props) {
     return (
         <Stack
             direction='column'
-            spacing={1}
+            spacing={2}
         >
             <Stack
                 direction='row'
@@ -40,6 +38,7 @@ export default function CollectionInfo(props) {
                 }
                 <Stack 
                     direction='column'
+                    justifyContent="flex-start"
                     spacing={2}
                 >
                     <Stack

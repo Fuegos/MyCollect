@@ -17,7 +17,7 @@ export default function ItemPage() {
     }, [])
 
     return (
-        <Box mx={3} mt={3}>
+        <Box mx={{xs:3, sm:8}} mt={5}>
             {isLoadedComments && isLoadedLikes ?
                 <React.Fragment>
                     <Item />

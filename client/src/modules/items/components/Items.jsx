@@ -12,6 +12,7 @@ import { setItem } from "../redux/itemSlice"
 import AccessProvider from "../../../components/access/AccessProvider"
 import { openDialog } from "../../../components/dialogs/redux/dialogsSlice"
 import { ITEM_DIALOG } from "../../../components/dialogs/data/dialogs"
+import dateFormat, { masks } from 'dateformat'
 
 
 export default function Items() {
@@ -77,6 +78,10 @@ export default function Items() {
             headerName: 'Name'
         },
         {
+            field: 'owner',
+            headerName: 'Owner'
+        },
+        {
             field: 'tags',
             headerName: 'Tags',
             renderCell: params => (
@@ -95,31 +100,16 @@ export default function Items() {
     ]
 
     settingFields.forEach(f => {
-        const options = {
-            field: f._id,
-            headerName: f.label
+        if(f.typeField.name === 'Date' || f.typeField.name === 'Text Line') {
+            const options = {
+                field: f._id,
+                headerName: f.label
+            }
+            if(f.typeField.name === 'Date') {
+                options.type = 'date'
+            }
+            columns.push(options)
         }
-        if(f.typeField.name === 'Date') {
-            options.type = 'date'
-        }
-        if(f.typeField.name === 'Number') {
-            options.type = 'number'
-            options.align = 'center'
-        }
-        if(f.typeField.name === 'Checkbox') {
-            options.align = 'center'
-            options.renderCell = params => params.value ?
-                <FormattedMessage
-                    id="component.yesno.yes"
-                    defaultMessage="Yes"
-                /> : 
-                <FormattedMessage
-                    id="component.yesno.no"
-                    defaultMessage="No"
-                />
-        }
-
-        columns.push(options)
     })
 
     const rows = items.map(i => {
@@ -127,10 +117,14 @@ export default function Items() {
             _id: i._id,
             shortId: i.shortId,
             name: i.name,
+            owner: i.owner.name,
             tags: i.tags
         }
         i.fields.forEach(f => {
-            item[f.settingField._id] = f.value
+            if(f.settingField.typeField.name === 'Date')
+                item[f.settingField._id] = dateFormat(f.value, "dd mmmm yyyy")
+            else if(f.settingField.typeField.name === 'Text Line')
+                item[f.settingField._id] = f.value
         })
         return item
     })

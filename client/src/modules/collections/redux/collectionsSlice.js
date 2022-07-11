@@ -50,7 +50,11 @@ export const getThemesAsync = createAsyncThunk(
 export const getCollectionsAsync = createAsyncThunk(
     GET_COLLECTIONS.redux,
     async (_, thunkAPI) => {
-        return await catchError(thunkAPI, () => getCollections())
+        return await catchError(
+            thunkAPI, 
+            () => getCollections(),
+            () => thunkAPI.dispatch(resetCollection())
+        )
     }
 )
 

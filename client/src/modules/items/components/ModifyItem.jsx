@@ -75,6 +75,8 @@ export default function ModifyItem() {
                 }
             }))
         } else {
+            setValue("_id", undefined)
+            setValue("owner", undefined)
             setValue("name", "")
             setValue("tags", [])
             setValue("collectionRef", collection)

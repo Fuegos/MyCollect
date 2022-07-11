@@ -32,6 +32,7 @@ export default function HomePage() {
                     direction='row'
                 >
                     <Chip label={i.collectionRef.name} size="small" />
+                    <Chip label={i.owner.name} size="small" />
                 </Stack>
         }
     })

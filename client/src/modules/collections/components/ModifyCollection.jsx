@@ -29,7 +29,7 @@ export default function ModifyCollection() {
         control, 
         formState: { errors }, 
         setValue, 
-        clearErrors 
+        clearErrors
     } = useForm({
         resolver: collectionYupResolver
     })
@@ -70,6 +70,7 @@ export default function ModifyCollection() {
             setValue("name", "")
             setValue("theme", null)
             setValue("description", "")
+            setValue("owner", undefined)
         }
         
         setValue("img", [])

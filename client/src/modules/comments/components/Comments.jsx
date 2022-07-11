@@ -42,10 +42,8 @@ export default function Comments() {
     return (
         <Box sx={{ 
             bgcolor: 'primary.main', 
-            color: 'primary.contrastText', 
             p: 2, 
-            mt: 3, 
-            mx: 5 
+            mt: 2
         }}>
             <Stack
                 direction='column'
